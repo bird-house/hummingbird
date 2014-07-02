@@ -1,8 +1,6 @@
-ClimDaPs
-========
+malleefowl-cdo
+==============
 
-ClimDaPs is a Project for Climate Data Processing with Web Processing Services.
+This project contains a collection of cdo WPS processes based on PyWPS/malleefowl.
 
-It runs on Python 2.6 and 2.7.
 
-Please see docs/source/index.rst for further documentation.
