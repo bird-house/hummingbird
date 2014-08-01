@@ -9,6 +9,7 @@ CHANGES = open(os.path.join(here, 'CHANGES.rst')).read()
 requires = [
     'malleefowl',
     'cdo',
+    'netcdf4',
     'nose',
     ]
 
