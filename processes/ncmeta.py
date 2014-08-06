@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 class NetcdfMetadata(WorkerProcess):
     def __init__(self):
         WorkerProcess.__init__(self,
-            identifier = "org.malleefowl.ncmeta",
+            identifier = "ncmeta",
             title = "NetCDF Metadata",
             version = "0.1",
             metadata=[

@@ -17,7 +17,7 @@ class CDOOperation(malleefowl.process.WorkerProcess):
     def __init__(self):
         malleefowl.process.WorkerProcess.__init__(
             self,
-            identifier = "de.dkrz.cdo.operation",
+            identifier = "cdo_operation",
             title = "CDO Operation",
             version = "0.1",
             metadata=[
@@ -80,7 +80,7 @@ class CDOInfo(malleefowl.process.WorkerProcess):
     def __init__(self):
         malleefowl.process.WorkerProcess.__init__(
             self,
-            identifier = "de.dkrz.cdo.sinfo",
+            identifier = "cdo_sinfo",
             title = "CDO sinfo",
             version = "0.1",
             metadata=[
