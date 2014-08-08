@@ -1,25 +1,32 @@
 import os
 
-from malleefowl.process import WorkerProcess
+from malleefowl.process import WPSProcess
 
 from malleefowl import wpslogging as logging
 logger = logging.getLogger(__name__)
 
-class NetcdfMetadata(WorkerProcess):
+class NetcdfMetadata(WPSProcess):
     def __init__(self):
-        WorkerProcess.__init__(self,
+        WPSProcess.__init__(self,
             identifier = "ncmeta",
             title = "NetCDF Metadata",
             version = "0.1",
-            metadata=[
-                ],
             abstract="Retrieve Metadata of NetCDF File")
+
+        self.netcdf_file = self.addComplexInput(
+            identifier="netcdf_file",
+            title="NetCDF File",
+            abstract="NetCDF File",
+            minOccurs=1,
+            maxOccurs=100,
+            maxmegabites=5000,
+            formats=[{"mimeType":"application/x-netcdf"}],
+            )
 
         self.output = self.addComplexOutput(
             identifier="output",
             title="NetCDF Metadata",
             abstract="NetCDF Metadata",
-            metadata=[],
             formats=[{"mimeType":"application/json"}],
             asReference=True,
             )
@@ -27,7 +34,7 @@ class NetcdfMetadata(WorkerProcess):
     def execute(self):
         self.show_status("starting netcdf metadata retrieval", 5)
 
-        nc_file = self.get_nc_files()[0]
+        nc_file = self.getInputValues(identifier='netcdf_file')[0]
 
         from netCDF4 import Dataset
         ds = Dataset(nc_file)

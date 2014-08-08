@@ -4,18 +4,17 @@ Processes with cdo commands
 Author: Carsten Ehbrecht (ehbrecht@dkrz.de)
 """
 
-#from malleefowl.process import WorkerProcess
-import malleefowl.process
+from malleefowl.process import WPSProcess
 
 from cdo import Cdo
 
 from malleefowl import wpslogging as logging
 logger = logging.getLogger(__name__)
 
-class CDOOperation(malleefowl.process.WorkerProcess):
+class CDOOperation(WPSProcess):
     """This process calls cdo with operation on netcdf file"""
     def __init__(self):
-        malleefowl.process.WorkerProcess.__init__(
+        WPSProcess.__init__(
             self,
             identifier = "cdo_operation",
             title = "CDO Operation",
@@ -26,9 +25,17 @@ class CDOOperation(malleefowl.process.WorkerProcess):
             abstract="calling cdo operation ...",
             )
 
+        self.netcdf_file = self.addComplexInput(
+            identifier="netcdf_file",
+            title="NetCDF File",
+            abstract="NetCDF File",
+            minOccurs=1,
+            maxOccurs=100,
+            maxmegabites=5000,
+            formats=[{"mimeType":"application/x-netcdf"}],
+            )
 
-        # operators
-        self.operator_in = self.addLiteralInput(
+        self.operator = self.addLiteralInput(
             identifier="operator",
             title="CDO Operator",
             abstract="Choose a CDO Operator",
@@ -38,14 +45,6 @@ class CDOOperation(malleefowl.process.WorkerProcess):
             maxOccurs=1,
             allowedValues=['merge', 'dayavg', 'daymax', 'daymean', 'daymin','daysum', 'dayvar',    'daystd', 'monmax', 'monmin', 'monmean', 'monavg', 'monsum', 'monvar', 'monstd', 'ymonmin', 'ymonmax', 'ymonsum', 'ymonmean', 'ymonavg', 'ymonvar', 'ymonstd', 'yearavg', 'yearmax', 'yearmean', 'yearmin', 'yearsum', 'yearvar', 'yearstd', 'yseasvar']
             )
-
-        # netcdf input
-        # -------------
-
-        # defined in WorkflowProcess ...
-
-        # complex output
-        # -------------
 
         self.output = self.addComplexOutput(
             identifier="output",
@@ -57,11 +56,9 @@ class CDOOperation(malleefowl.process.WorkerProcess):
             )
 
     def execute(self):
-        logger.debug("running cdo operator")
-        
         self.show_status("starting cdo operator", 10)
 
-        nc_files = self.get_nc_files()
+        nc_files = self.getInputValues(identifier='netcdf_file')
         operator = self.operator_in.getValue()
 
         cdo = Cdo()
@@ -74,11 +71,11 @@ class CDOOperation(malleefowl.process.WorkerProcess):
         self.output.setValue( outfile )
 
 
-class CDOInfo(malleefowl.process.WorkerProcess):
+class CDOInfo(WPSProcess):
     """This process calls cdo sinfo on netcdf file"""
 
     def __init__(self):
-        malleefowl.process.WorkerProcess.__init__(
+        WPSProcess.__init__(
             self,
             identifier = "cdo_sinfo",
             title = "CDO sinfo",
@@ -89,13 +86,15 @@ class CDOInfo(malleefowl.process.WorkerProcess):
             abstract="calling cdo sinfo ...",
             )
 
-        # complex input
-        # -------------
-
-        # comes from workflow process ...
-
-        # complex output
-        # -------------
+        self.netcdf_file = self.addComplexInput(
+            identifier="netcdf_file",
+            title="NetCDF File",
+            abstract="NetCDF File",
+            minOccurs=1,
+            maxOccurs=100,
+            maxmegabites=5000,
+            formats=[{"mimeType":"application/x-netcdf"}],
+            )
 
         self.output = self.addComplexOutput(
             identifier="output",
@@ -109,12 +108,9 @@ class CDOInfo(malleefowl.process.WorkerProcess):
     def execute(self):
         self.show_status("starting cdo sinfo", 10)
 
-        logger.debug('running cdo sinfo')
-
         cdo = Cdo()
 
-        from os import curdir, path
-        nc_files = self.get_nc_files()
+        nc_files = self.getInputValues(identifier='netcdf_file')
 
         outfile = self.mktempfile(suffix='.txt')
         with open(outfile, 'w') as fp: 
@@ -125,7 +121,5 @@ class CDOInfo(malleefowl.process.WorkerProcess):
                 fp.write('\n\n')
 
         self.show_status("cdo sinfo done", 90)
-
-        logger.debug("cdo sinfo done")
 
         self.output.setValue( outfile )
