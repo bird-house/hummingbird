@@ -22,7 +22,7 @@ class CDOOperation(WPSProcess):
             metadata=[
                 {"title":"CDO","href":"https://code.zmaw.de/projects/cdo"},
                 ],
-            abstract="calling cdo operation ...",
+            abstract="Apply CDO Operation like monmax on NetCDF File.",
             )
 
         self.netcdf_file = self.addComplexInput(
@@ -83,7 +83,7 @@ class CDOInfo(WPSProcess):
             metadata=[
                 {"title":"CDO","href":"https://code.zmaw.de/projects/cdo"},
                 ],
-            abstract="calling cdo sinfo ...",
+            abstract="Apply CDO sinfo on NetCDF File.",
             )
 
         self.netcdf_file = self.addComplexInput(
