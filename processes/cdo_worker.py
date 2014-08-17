@@ -59,7 +59,7 @@ class CDOOperation(WPSProcess):
         self.show_status("starting cdo operator", 10)
 
         nc_files = self.getInputValues(identifier='netcdf_file')
-        operator = self.operator_in.getValue()
+        operator = self.operator.getValue()
 
         cdo = Cdo()
         cdo_op = getattr(cdo, operator)
