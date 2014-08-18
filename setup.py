@@ -25,7 +25,7 @@ classifiers=[
         ]
 
 setup(name='malleefowl-cdo',
-      version='0.1',
+      version='0.1.0',
       description='CDO processes for PyWPS',
       long_description=README + '\n\n' + CHANGES,
       classifiers=classifiers,
