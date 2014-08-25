@@ -1,7 +1,5 @@
 """
 Processes with cdo commands
-
-Author: Carsten Ehbrecht (ehbrecht@dkrz.de)
 """
 
 from malleefowl.process import WPSProcess
@@ -106,7 +104,7 @@ class CDOInfo(WPSProcess):
             )
 
     def execute(self):
-        self.show_status("starting cdo sinfo", 10)
+        self.show_status("starting cdo sinfo", 0)
 
         cdo = Cdo()
 
