@@ -6,4 +6,6 @@ elif [ -f /etc/redhat-release ] ; then
     sudo yum -y install wget gcc-c++
 elif [ `uname -s` = "Darwin" ] ; then
     brew install wget
+    brew tap homebrew/science
+    brew install cdo
 fi
