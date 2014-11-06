@@ -21,7 +21,7 @@ endif
 
 # Buildout files and folders
 DOWNLOAD_CACHE := $(APP_ROOT)/downloads
-BUILDOUT_FILES := parts eggs develop-eggs bin .installed.cfg .mr.developer.cfg *.egg-info bootstrap.py $(DOWNLOAD_CACHE)
+BUILDOUT_FILES := parts eggs develop-eggs bin .installed.cfg .mr.developer.cfg *.egg-info bootstrap.py *.bak.* $(DOWNLOAD_CACHE)
 
 # Docker
 DOCKER_IMAGE := $(APP_NAME)
