@@ -20,9 +20,8 @@ For other install options run ``make help`` and read the documention for the `Ma
 
 After successful installation you need to start the services. Hummingbird is using `Anaconda http://www.continuum.io/`_ Python distribution system. All installed files (config etc ...) are below the Anaconda root folder which is by default in your home directory ``~/anaconda``. Now, start the services::
 
-   $ cd ~/anaconda
-   $ etc/init.d/supervisor start
-   $ etc/init.d/nginx start
+   $ make start    # starts supervisor services
+   $ make status   # shows supervisor status
 
 The depolyed WPS service is by default available on http://localhost:8092/wps?service=WPS&version=1.0.0&request=GetCapabilities.
 
@@ -46,7 +45,7 @@ If you want to run on a different hostname or port then change the default value
 After any change to your ``custom.cfg`` you **need** to run ``make install`` again and restart the ``supervisor`` service::
 
   $ make install
-  $  ~/anaconda/etc/init.d/supervisor restart
+  $ make restart
 
 
 
