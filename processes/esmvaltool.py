@@ -43,6 +43,17 @@ class ESMValTool(WPSProcess):
             type=type(True)
             )
 
+        self.limit = self.addLiteralInput(
+            identifier = "limit",
+            title = "Limit",
+            abstract = "Maximum number of datasets in search result",
+            default = 20,
+            minOccurs=1,
+            maxOccurs=1,
+            type=type(1),
+            allowedValues=[0,1,2,5,10,20,50,100,200]
+            )
+
         self.model = self.addLiteralInput(
             identifier="model",
             title="Model",
@@ -185,7 +196,7 @@ class ESMValTool(WPSProcess):
             start = "%d-01-01" % self.start_year.getValue(),
             end = "%d-12-31" % self.end_year.getValue(),
             search_type = "File",
-            limit = 20,
+            limit = self.limit.getValue(),
             offset = 0,
             temporal = False)
         return result
