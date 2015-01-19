@@ -13,6 +13,16 @@ class ESMValTool(WPSProcess):
             version = "0.1",
             abstract="Test Process for ESMValTool")
 
+        self.credentials = self.addComplexInput(
+            identifier = "credentials",
+            title = "X509 Certificate",
+            abstract = "X509 proxy certificate to access ESGF data.",
+            minOccurs=0,
+            maxOccurs=1,
+            maxmegabites=1,
+            formats=[{"mimeType":"application/x-pkcs7-mime"}],
+            )
+
         self.model = self.addLiteralInput(
             identifier="model",
             title="Model",
@@ -98,14 +108,19 @@ class ESMValTool(WPSProcess):
 
     def execute(self):
         self.show_status("starting netcdf metadata retrieval", 0)
-        result = self.search()
+        urls = self.search()
+
+        from malleefowl.download import download_files
+        files = download_files(
+            urls = urls,
+            credentials = self.credentials.getValue(),
+            monitor=self.show_status)
 
         import json
         outfile = self.mktempfile(suffix='.json')
         with open(outfile, 'w') as fp:
-            json.dump(obj=result, fp=fp, indent=4, sort_keys=True)
+            json.dump(obj=files, fp=fp, indent=4, sort_keys=True)
             self.output.setValue( outfile )
-
 
     def search(self):
         from malleefowl.esgf.search import ESGSearch
@@ -135,5 +150,8 @@ class ESMValTool(WPSProcess):
             offset = 0,
             temporal = False)
         return result
+
+        
+
 
 
