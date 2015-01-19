@@ -111,15 +111,30 @@ class ESMValTool(WPSProcess):
         urls = self.search()
 
         from malleefowl.download import download_files
-        files = download_files(
+        file_urls = download_files(
             urls = urls,
             credentials = self.credentials.getValue(),
             monitor=self.show_status)
 
+        # symlink files to data dir
+        from urlparse import urlparse
+        from os import mkdir
+        from os.path import exists, basename, join
+        data_dir = 'input-data'
+        mkdir(data_dir)
+        results = []
+        for url in file_urls:
+            filename = urlparse(url).path
+            logger.debug('filename = %s', filename)
+            if exists(filename):
+                new_name = join(data_dir, basename(filename))
+                os.symlink(filename, new_name)
+                results.append(new_name)
+                
         import json
         outfile = self.mktempfile(suffix='.json')
         with open(outfile, 'w') as fp:
-            json.dump(obj=files, fp=fp, indent=4, sort_keys=True)
+            json.dump(obj=results, fp=fp, indent=4, sort_keys=True)
             self.output.setValue( outfile )
 
     def search(self):
