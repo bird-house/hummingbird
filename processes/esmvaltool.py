@@ -161,14 +161,30 @@ class ESMValTool(WPSProcess):
             logger.debug('filename = %s', filename)
             if exists(filename):
                 new_name = join(data_dir, basename(filename))
-                os.symlink(filename, new_name)
+                # TODO: docker does not like symlinks
+                #os.symlink(filename, new_name)
+                os.link(filename, new_name)
                 results.append(new_name)
+
+        self.esmvaltool()
                 
         import json
         outfile = self.mktempfile(suffix='.json')
         with open(outfile, 'w') as fp:
             json.dump(obj=results, fp=fp, indent=4, sort_keys=True)
             self.output.setValue( outfile )
+
+    def esmvaltool(self):
+        from os.path import abspath, curdir
+        mountpoint = "%s:/data" % abspath(curdir)
+        from subprocess import check_call
+        try:
+            check_call(["docker", "run", "--rm", "-v", mountpoint, "-t", "birdhouse/esmvaltool"])
+        except:
+            logger.exception('docker failed')
+            import time
+            time.sleep(60)
+        logger.debug('esmvaltool done')
 
     def search(self):
         from malleefowl.esgf.search import ESGSearch
