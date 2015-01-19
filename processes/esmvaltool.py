@@ -27,7 +27,7 @@ class ESMValTool(WPSProcess):
             identifier = "distrib",
             title = "Distributed",
             abstract = "If flag is set then a distributed search will be run.",
-            default = False,
+            default = True,
             minOccurs=1,
             maxOccurs=1,
             type=type(True)
@@ -171,8 +171,10 @@ class ESMValTool(WPSProcess):
 
         constraints = []
         constraints.append( ("project", "CMIP5" ) )
-        constraints.append( ("model", self.model.getValue() ) )
-        constraints.append( ("variable", self.variable.getValue() ) )
+        for model in self.getInputValues(identifier='model'):
+            constraints.append( ("model", model ) )
+        for variable in self.getInputValues(identifier='variable'):
+            constraints.append( ("variable", variable )
         constraints.append( ("cmor_table", self.cmor_table.getValue() ) )
         constraints.append( ("experiment", self.experiment.getValue() ) )
         constraints.append( ("ensemble", self.ensemble.getValue() ) )
