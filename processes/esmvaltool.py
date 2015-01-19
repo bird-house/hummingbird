@@ -185,7 +185,7 @@ class ESMValTool(WPSProcess):
             start = "%d-01-01" % self.start_year.getValue(),
             end = "%d-12-31" % self.end_year.getValue(),
             search_type = "File",
-            limit = 1,
+            limit = 20,
             offset = 0,
             temporal = False)
         return result
