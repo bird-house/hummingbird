@@ -27,11 +27,11 @@ class ESMValTool(WPSProcess):
             identifier="model",
             title="Model",
             abstract="",
-            default="IPSL-CM5B-LR",
+            default="IPSL-CM5A-LR",
             type=type(''),
             minOccurs=1,
             maxOccurs=1,
-            allowedValues=['IPSL-CM5B-LR']
+            allowedValues=["IPSL-CM5A-LR", "IPSL-CM5A-MR", "IPSL-CM5B-LR"]
             )
 
         self.variable = self.addLiteralInput(
