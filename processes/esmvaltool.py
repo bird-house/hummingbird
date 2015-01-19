@@ -23,6 +23,26 @@ class ESMValTool(WPSProcess):
             formats=[{"mimeType":"application/x-pkcs7-mime"}],
             )
 
+        self.distrib = self.addLiteralInput(
+            identifier = "distrib",
+            title = "Distributed",
+            abstract = "If flag is set then a distributed search will be run.",
+            default = False,
+            minOccurs=1,
+            maxOccurs=1,
+            type=type(True)
+            )
+
+        self.replica = self.addLiteralInput(
+            identifier = "replica",
+            title = "Replica",
+            abstract = "If flag is set then search will include replicated datasets.",
+            default = False,
+            minOccurs=1,
+            maxOccurs=1,
+            type=type(True)
+            )
+
         self.model = self.addLiteralInput(
             identifier="model",
             title="Model",
@@ -30,8 +50,8 @@ class ESMValTool(WPSProcess):
             default="IPSL-CM5A-MR",
             type=type(''),
             minOccurs=1,
-            maxOccurs=1,
-            allowedValues=["GFDL-CM2.1", "IPSL-CM5A-LR", "IPSL-CM5A-MR", "IPSL-CM5B-LR"]
+            maxOccurs=10,
+            allowedValues=["ACCESS1-0", "ACCESS1-3", "CMCC-CMS", "CanCM4", "EC-EARTH", "GFDL-CM2.1", "IPSL-CM5A-LR", "IPSL-CM5A-MR", "IPSL-CM5B-LR"]
             )
 
         self.variable = self.addLiteralInput(
@@ -41,8 +61,8 @@ class ESMValTool(WPSProcess):
             default="tas",
             type=type(''),
             minOccurs=1,
-            maxOccurs=1,
-            allowedValues=['tas']
+            maxOccurs=10,
+            allowedValues=['ta', 'tas', 'ua', 'va', 'zg', 'pr', 'rlut', 'rsut']
             )
 
         self.cmor_table = self.addLiteralInput(
@@ -143,8 +163,8 @@ class ESMValTool(WPSProcess):
         from malleefowl.esgf.search import ESGSearch
         esgsearch = ESGSearch(
             url = "http://localhost:8081/esg-search",
-            distrib = True,
-            replica = False,
+            distrib = self.distrib.getValue(),
+            replica = self.replica.getValue(),
             latest = True,
             monitor = self.show_status,
         )
