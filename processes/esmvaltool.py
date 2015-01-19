@@ -152,7 +152,7 @@ class ESMValTool(WPSProcess):
         # symlink files to data dir
         from urlparse import urlparse
         from os import mkdir
-        from os.path import exists, basename, join
+        from os.path import exists, basename, join, realpath
         data_dir = 'input-data'
         mkdir(data_dir)
         results = []
@@ -160,7 +160,7 @@ class ESMValTool(WPSProcess):
             filename = urlparse(url).path
             logger.debug('filename = %s', filename)
             if exists(filename):
-                new_name = join(data_dir, basename(filename))
+                new_name = realpath(join(data_dir, basename(filename)))
                 # TODO: docker does not like symlinks
                 #os.symlink(filename, new_name)
                 os.link(filename, new_name)
