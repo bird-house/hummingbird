@@ -27,11 +27,11 @@ class ESMValTool(WPSProcess):
             identifier="model",
             title="Model",
             abstract="",
-            default="GFDL-CM2p1",
+            default="IPSL-CM5A-MR",
             type=type(''),
             minOccurs=1,
             maxOccurs=1,
-            allowedValues=["GFDL-CM2p1", "IPSL-CM5A-LR", "IPSL-CM5A-MR", "IPSL-CM5B-LR"]
+            allowedValues=["GFDL-CM2.1", "IPSL-CM5A-LR", "IPSL-CM5A-MR", "IPSL-CM5B-LR"]
             )
 
         self.variable = self.addLiteralInput(
@@ -111,6 +111,8 @@ class ESMValTool(WPSProcess):
         urls = self.search()
 
         from malleefowl.download import download_files
+        from os import environ
+        environ['ESGF_ARCHIVE_ROOT'] = "/gpfs_750/projects/CORDEX/data:/gpfs_750/projects/CMIP5/data"
         file_urls = download_files(
             urls = urls,
             credentials = self.credentials.getValue(),
