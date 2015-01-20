@@ -162,8 +162,10 @@ class ESMValTool(WPSProcess):
             if exists(filename):
                 new_name = realpath(join(data_dir, basename(filename)))
                 # TODO: docker does not like symlinks
-                #os.symlink(filename, new_name)
-                os.link(filename, new_name)
+                try:
+                    os.link(filename, new_name)
+                except:
+                    os.symlink(filename, new_name)
                 results.append(new_name)
 
         self.esmvaltool()
