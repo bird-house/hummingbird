@@ -1,6 +1,7 @@
 import os
 
 from malleefowl.process import WPSProcess
+from malleefowl import config
 
 from malleefowl import wpslogging as logging
 logger = logging.getLogger(__name__)
@@ -31,7 +32,7 @@ def download(urls, credentials, monitor):
     # TODO: dont use hard coded path
     from os import environ
     if not environ.has_key('ESGF_ARCHIVE_ROOT'):
-        environ['ESGF_ARCHIVE_ROOT'] = "/gpfs_750/projects/CMIP5/data:/home/Shared/pingu/var/cache/pywps"
+        environ['ESGF_ARCHIVE_ROOT'] = "/gpfs_750/projects/CMIP5/data"
     file_urls = download_files(
         urls = urls,
         credentials = credentials,
@@ -66,12 +67,16 @@ def esmvaltool():
     from os import environ
     archives = [path.strip() for path in environ['ESGF_ARCHIVE_ROOT'].split(':')]
 
-    from os.path import abspath, curdir, join
+    from os.path import abspath, curdir, join, realpath
     mountpoint = "%s:/data" % abspath(join(curdir, 'data'))
     cmd = ["docker", "run", "--rm"]
     cmd.extend([ "-v", mountpoint])
+    # archive path
     for archive in archives:
         cmd.extend(["-v", "%s:%s:ro" % (archive, archive)])
+    # cache path
+    cache_path = realpath(config.cache_path())
+    cmd.extend(["-v", "%s:%s:ro" % (cache_path, cache_path)])
     cmd.extend(["-t", "birdhouse/esmvaltool"])
 
     from subprocess import check_call
