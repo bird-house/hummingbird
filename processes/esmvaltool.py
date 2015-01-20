@@ -142,6 +142,7 @@ class ESMValTool(WPSProcess):
         urls = self.search()
 
         from malleefowl.download import download_files
+        # TODO: dont use hard coded path
         from os import environ
         environ['ESGF_ARCHIVE_ROOT'] = "/gpfs_750/projects/CORDEX/data:/gpfs_750/projects/CMIP5/data"
         file_urls = download_files(
@@ -157,7 +158,7 @@ class ESMValTool(WPSProcess):
         mkdir(data_dir)
         # TODO: docker needs full access to create new files
         import stat
-        chmod('tmp', stat.S_IRWXU|stat.S_IRWXG|stat.S_IRWXO)
+        chmod(data_dir, stat.S_IRWXU|stat.S_IRWXG|stat.S_IRWXO)
         input_dir = join('data', 'input-data')
         mkdir(input_dir)
         results = []
@@ -165,7 +166,7 @@ class ESMValTool(WPSProcess):
             filename = realpath(urlparse(url).path)
             logger.debug('filename = %s', filename)
             if exists(filename):
-                new_name = basename(filename)
+                new_name = join(input_dir, basename(filename))
                 # TODO: make sure symlinks work in docker container
                 logger.debug("new name: %s", new_name)
                 os.symlink(filename, new_name)
@@ -185,7 +186,8 @@ class ESMValTool(WPSProcess):
         mountpoint = "%s:/data" % abspath(join(curdir, 'data'))
         from subprocess import check_call
         try:
-            check_call(["docker", "run", "--rm", "-v", mountpoint, "-t", "birdhouse/esmvaltool"])
+            # TODO: dont use hard coded path
+            check_call(["docker", "run", "--rm", "-v", mountpoint, "-v", "/gpfs_750:/gpfs_750:ro", "-t", "birdhouse/esmvaltool"])
         except:
             logger.exception('docker failed')
             import time
