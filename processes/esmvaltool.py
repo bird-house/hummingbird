@@ -151,18 +151,22 @@ class ESMValTool(WPSProcess):
 
         # symlink files to data dir
         from urlparse import urlparse
-        from os import mkdir
+        from os import mkdir,chmod
         from os.path import exists, basename, join, realpath
-        data_dir = 'input-data'
+        data_dir = 'data'
         mkdir(data_dir)
+        # TODO: docker needs full access to create new files
+        chmod('tmp', stat.S_IRWXU|stat.S_IRWXG|stat.S_IRWXO)
+        input_dir = join('data', 'input-data')
+        mkdir(input_dir)
         results = []
         for url in file_urls:
-            filename = urlparse(url).path
+            filename = realpath(urlparse(url).path)
             logger.debug('filename = %s', filename)
             if exists(filename):
-                new_name = realpath(join(data_dir, basename(filename)))
+                new_name = basename(filename)
                 # TODO: make sure symlinks work in docker container
-                logger.debug("make symlink: %s", new_name)
+                logger.debug("new name: %s", new_name)
                 os.symlink(filename, new_name)
                 results.append(new_name)
 
@@ -176,8 +180,8 @@ class ESMValTool(WPSProcess):
             self.output.setValue( outfile )
 
     def esmvaltool(self):
-        from os.path import abspath, curdir
-        mountpoint = "%s:/data" % abspath(curdir)
+        from os.path import abspath, curdir, join
+        mountpoint = "%s:/data" % abspath(join(curdir, 'data'))
         from subprocess import check_call
         try:
             check_call(["docker", "run", "--rm", "-v", mountpoint, "-t", "birdhouse/esmvaltool"])
