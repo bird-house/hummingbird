@@ -26,6 +26,42 @@ def search(distrib, replica, limit, constraints, start_year, end_year, monitor):
         temporal = False)
     return result
 
+def download(urls, credentials, monitor):
+    from malleefowl.download import download_files
+    # TODO: dont use hard coded path
+    from os import environ
+    if not environ.has_key('ESGF_ARCHIVE_ROOT'):
+        environ['ESGF_ARCHIVE_ROOT'] = "/gpfs_750/projects/CMIP5/data:/home/Shared/pingu/var/cache/pywps"
+    file_urls = download_files(
+        urls = urls,
+        credentials = credentials,
+        monitor = monitor)
+    return file_urls
+
+def prepare(file_urls):
+    # symlink files to data dir
+    from urlparse import urlparse
+    from os import mkdir,chmod
+    from os.path import exists, basename, join, realpath
+    data_dir = 'data'
+    mkdir(data_dir)
+    # TODO: docker needs full access to create new files
+    import stat
+    chmod(data_dir, stat.S_IRWXU|stat.S_IRWXG|stat.S_IRWXO)
+    input_dir = join('data', 'input-data')
+    mkdir(input_dir)
+    results = []
+    for url in file_urls:
+        filename = realpath(urlparse(url).path)
+        logger.debug('filename = %s', filename)
+        if exists(filename):
+            new_name = join(input_dir, basename(filename))
+            # TODO: make sure symlinks work in docker container
+            logger.debug("new name: %s", new_name)
+            os.symlink(filename, new_name)
+            results.append(new_name)
+    return data_dir
+
 def esmvaltool():
     from os import environ
     archives = [path.strip() for path in environ['ESGF_ARCHIVE_ROOT'].split(':')]
@@ -201,6 +237,7 @@ class ESMValToolProcess(WPSProcess):
         constraints.append( ("experiment", self.experiment.getValue() ) )
         constraints.append( ("ensemble", self.ensemble.getValue() ) )
 
+        self.show_status("search", 5)
         urls = search(
             distrib=self.distrib.getValue(),
             replica=self.replica.getValue(),
@@ -210,41 +247,20 @@ class ESMValToolProcess(WPSProcess):
             end_year=self.end_year.getValue(),
             monitor=self.show_status
             )
-
-        from malleefowl.download import download_files
-        # TODO: dont use hard coded path
-        from os import environ
-        if not environ.has_key('ESGF_ARCHIVE_ROOT'):
-            environ['ESGF_ARCHIVE_ROOT'] = "/gpfs_750/projects/CMIP5/data:/home/Shared/pingu/var/cache/pywps"
-        file_urls = download_files(
+        
+        # download
+        self.show_status("download", 10)
+        file_urls = download(
             urls = urls,
             credentials = self.credentials.getValue(),
             monitor=self.show_status)
 
         # symlink files to data dir
-        from urlparse import urlparse
-        from os import mkdir,chmod
-        from os.path import exists, basename, join, realpath
-        data_dir = 'data'
-        mkdir(data_dir)
-        # TODO: docker needs full access to create new files
-        import stat
-        chmod(data_dir, stat.S_IRWXU|stat.S_IRWXG|stat.S_IRWXO)
-        input_dir = join('data', 'input-data')
-        mkdir(input_dir)
-        results = []
-        for url in file_urls:
-            filename = realpath(urlparse(url).path)
-            logger.debug('filename = %s', filename)
-            if exists(filename):
-                new_name = join(input_dir, basename(filename))
-                # TODO: make sure symlinks work in docker container
-                logger.debug("new name: %s", new_name)
-                os.symlink(filename, new_name)
-                results.append(new_name)
+        self.show_status("prepare", 10)
+        data_dir = prepare(file_urls)
 
         # run esmvaltool
-        self.show_status("esmvaltool started", 10)
+        self.show_status("esmvaltool started", 20)
         esmvaltool()
         self.show_status("esmvaltool done", 100)
 
@@ -252,6 +268,7 @@ class ESMValToolProcess(WPSProcess):
         # TODO: permisson problem with generated files within docker container
         import shutil
         out = 'output.ps'
+        from os.path import join
         shutil.copyfile(join(data_dir, 'plots', 'MyDiag', 'MyDiag_MyVar.ps'), out)
         self.output.setValue(out)
         
@@ -259,7 +276,7 @@ class ESMValToolProcess(WPSProcess):
         import json
         outfile = self.mktempfile(suffix='.json')
         with open(outfile, 'w') as fp:
-            json.dump(obj=results, fp=fp, indent=4, sort_keys=True)
+            json.dump(obj=file_urls, fp=fp, indent=4, sort_keys=True)
             self.summary.setValue( outfile )
 
  
