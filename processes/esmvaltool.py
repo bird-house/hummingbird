@@ -137,9 +137,9 @@ class ESMValTool(WPSProcess):
             asReference=True,
             )
 
-        self.info = self.addComplexOutput(
-            identifier="info",
-            title="info",
+        self.summary = self.addComplexOutput(
+            identifier="summary",
+            title="summary",
             abstract="",
             formats=[{"mimeType":"application/json"}],
             asReference=True,
