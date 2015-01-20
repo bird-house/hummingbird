@@ -32,7 +32,7 @@
 </GLOBAL>
 
 <MODELS>
-    <model>  CMIP5 MPI-ESM-LR Amon historical r1i1p1  2000 2004   /data/input-data/  </model>
+    <model>  CMIP5 ${model} ${cmor_table} ${experiment} ${ensemble} ${start_year} ${end_year} /data/input-data/  </model>
 </MODELS>
 
 <!-- Please do not change anything below this line, 

@@ -59,22 +59,37 @@ def prepare(file_urls):
             results.append(new_name)
     return data_dir
 
-def generate_namelist(name, constraints, start_year, end_year):
+def generate_namelist(name, model, experiment, cmor_table, ensemble, start_year, end_year):
+    logger.info("generate namelist %s", name)
+    
     from os.path import join, dirname
-    from mako.lookup import TemplateLookup
-    mylookup = TemplateLookup(
-        directories=[join(dirname(__file__), 'templates')],
-        output_encoding='ascii', input_encoding='utf-8', encoding_errors='replace',
-        module_directory=config.mako_cache())
-
     from mako.template import Template
-    mytemplate = mylookup.get_template('namelist_%s.xml' % name)
-    return mytemplate.render(constraints)
+    mytemplate = Template(
+        filename=join(dirname(__file__), 'templates', 'namelist_%s.xml' % name),
+        output_encoding='utf-8',
+        encoding_errors='replace')
+    result = mytemplate.render_unicode(
+        model=model,
+        experiment=experiment,
+        cmor_table=cmor_table,
+        ensemble=ensemble,
+        start_year=start_year,
+        end_year=end_year,
+        )
+   
+    from os import curdir
+    from tempfile import mkstemp
+    #_,outfile = mkstemp(prefix='namelist_', suffix='.xml', dir=curdir)
+    outfile = 'namelist_%s.xml' % name
+    logger.info("namelist=%s", outfile)
+    with open(outfile, 'w') as fp:
+        fp.write(result)
+    return outfile
 
-def esmvaltool():
+def esmvaltool(namelist):
     from os.path import abspath, curdir, join, realpath
     mountpoint = "%s:/data" % abspath(join(curdir, 'data'))
-    cmd = ["docker", "run", "--rm"]
+    cmd = ["docker", "run", "--rm", "-t"]
     cmd.extend([ "-v", mountpoint])
     # archive path
     for archive in config.archive_root():
@@ -86,7 +101,9 @@ def esmvaltool():
     # cache path
     cache_path = realpath(config.cache_path())
     cmd.extend(["-v", "%s:%s:ro" % (cache_path, cache_path)])
-    cmd.extend(["-t", "birdhouse/esmvaltool"])
+    # mount namelist
+    cmd.extend(["-v", "%s:/home/esmval/esmvaltool/nml/namelist_MyDiag_docker.xml" % realpath(namelist)])
+    cmd.extend(["birdhouse/esmvaltool"])
 
     from subprocess import check_call
     try:
@@ -228,6 +245,14 @@ class ESMValToolProcess(WPSProcess):
             asReference=True,
             )
 
+        self.namelist = self.addComplexOutput(
+            identifier="namelist",
+            title="namelist",
+            abstract="",
+            formats=[{"mimeType":"application/xml"}],
+            asReference=True,
+            )
+
         self.summary = self.addComplexOutput(
             identifier="summary",
             title="summary",
@@ -278,9 +303,21 @@ class ESMValToolProcess(WPSProcess):
         self.show_status("prepare", 10)
         data_dir = prepare(file_urls)
 
+        # generate namelist
+        f_namelist = generate_namelist(
+            name="MyDiag",
+            model=self.getInputValues(identifier='model')[0],
+            cmor_table=self.cmor_table.getValue(),
+            experiment=self.experiment.getValue(),
+            ensemble=self.ensemble.getValue(),
+            start_year=self.start_year.getValue(),
+            end_year=self.end_year.getValue(),
+            )
+        self.namelist.setValue(f_namelist)
+
         # run esmvaltool
         self.show_status("esmvaltool started", 20)
-        esmvaltool()
+        esmvaltool(f_namelist)
         self.show_status("esmvaltool done", 100)
 
         # output: postscript
