@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 def search(distrib, replica, limit, constraints, start_year, end_year, monitor):
     from malleefowl.esgf.search import ESGSearch
     esgsearch = ESGSearch(
-        url = "http://localhost:8081/esg-search",
+        url = config.getConfigValue("hummingbird", "esgsearch_url"),
         distrib = distrib,
         replica = replica,
         latest = True,
