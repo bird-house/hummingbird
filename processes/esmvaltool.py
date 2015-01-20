@@ -161,13 +161,12 @@ class ESMValTool(WPSProcess):
             logger.debug('filename = %s', filename)
             if exists(filename):
                 new_name = realpath(join(data_dir, basename(filename)))
-                # TODO: docker does not like symlinks
-                try:
-                    os.link(filename, new_name)
-                except:
-                    os.symlink(filename, new_name)
+                # TODO: make sure symlinks work in docker container
+                logger.debug("make symlink: %s", new_name)
+                os.symlink(filename, new_name)
                 results.append(new_name)
 
+        # run esmvaltool
         self.esmvaltool()
                 
         import json
