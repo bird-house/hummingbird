@@ -137,9 +137,9 @@ class ESMValTool(WPSProcess):
             asReference=True,
             )
 
-        self.metadata = self.addComplexOutput(
-            identifier="metadata",
-            title="metadata",
+        self.info = self.addComplexOutput(
+            identifier="info",
+            title="info",
             abstract="",
             formats=[{"mimeType":"application/json"}],
             asReference=True,
@@ -193,7 +193,7 @@ class ESMValTool(WPSProcess):
         outfile = self.mktempfile(suffix='.json')
         with open(outfile, 'w') as fp:
             json.dump(obj=results, fp=fp, indent=4, sort_keys=True)
-            self.metadata.setValue( outfile )
+            self.info.setValue( outfile )
 
     def esmvaltool(self):
         from os.path import abspath, curdir, join
