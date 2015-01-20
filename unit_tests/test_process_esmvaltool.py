@@ -5,7 +5,7 @@ from nose.plugins.attrib import attr
 
 from owslib.wps import monitorExecution
 
-from __init__ import TESTDATA, SERVICE
+from __init__ import TESTDATA, SERVICE, CREDENTIALS
 
 class WpsTestCase(TestCase):
     """
@@ -22,6 +22,7 @@ class EsgValToolTestCase(WpsTestCase):
     @attr('online')
     def test_mydiag(self):
         inputs = []
+        inputs.append(('credentials', CREDENTIALS))
         inputs.append(('distrib', 'False'))
         inputs.append(('replica', 'False'))
         inputs.append(('limit', '10'))
