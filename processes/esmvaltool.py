@@ -59,6 +59,18 @@ def prepare(file_urls):
             results.append(new_name)
     return data_dir
 
+def generate_namelist(name, constraints, start_year, end_year):
+    from os.path import join, dirname
+    from mako.lookup import TemplateLookup
+    mylookup = TemplateLookup(
+        directories=[join(dirname(__file__), 'templates')],
+        output_encoding='ascii', input_encoding='utf-8', encoding_errors='replace',
+        module_directory=config.mako_cache())
+
+    from mako.template import Template
+    mytemplate = mylookup.get_template('namelist_%s.xml' % name)
+    return mytemplate.render(constraints)
+
 def esmvaltool():
     from os.path import abspath, curdir, join, realpath
     mountpoint = "%s:/data" % abspath(join(curdir, 'data'))
@@ -78,7 +90,6 @@ def esmvaltool():
 
     from subprocess import check_call
     try:
-        # TODO: dont use hard coded path
         check_call(cmd)
     except:
         logger.exception('docker failed')
