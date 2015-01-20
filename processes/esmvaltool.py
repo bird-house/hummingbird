@@ -156,6 +156,7 @@ class ESMValTool(WPSProcess):
         data_dir = 'data'
         mkdir(data_dir)
         # TODO: docker needs full access to create new files
+        import stat
         chmod('tmp', stat.S_IRWXU|stat.S_IRWXG|stat.S_IRWXO)
         input_dir = join('data', 'input-data')
         mkdir(input_dir)
