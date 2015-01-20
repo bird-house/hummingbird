@@ -6,10 +6,10 @@ from malleefowl import config
 from malleefowl import wpslogging as logging
 logger = logging.getLogger(__name__)
 
-def search(distrib, replica, limit, constraints, start_year, end_year, monitor):
+def search(url, distrib, replica, limit, constraints, start_year, end_year, monitor):
     from malleefowl.esgf.search import ESGSearch
     esgsearch = ESGSearch(
-        url = config.getConfigValue("hummingbird", "esgsearch_url"),
+        url = url,
         distrib = distrib,
         replica = replica,
         latest = True,
@@ -246,6 +246,7 @@ class ESMValToolProcess(WPSProcess):
 
         self.show_status("search", 5)
         urls = search(
+            url = config.getConfigValue("hummingbird", "esgsearch_url"),
             distrib=self.distrib.getValue(),
             replica=self.replica.getValue(),
             limit=self.limit.getValue(),
