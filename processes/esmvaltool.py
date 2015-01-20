@@ -152,7 +152,8 @@ class ESMValTool(WPSProcess):
         from malleefowl.download import download_files
         # TODO: dont use hard coded path
         from os import environ
-        environ['ESGF_ARCHIVE_ROOT'] = "/gpfs_750/projects/CORDEX/data:/gpfs_750/projects/CMIP5/data"
+        if not environ.has_key('ESGF_ARCHIVE_ROOT'):
+            environ['ESGF_ARCHIVE_ROOT'] = "/gpfs_750/projects/CMIP5/data:/home/Shared/pingu/var/cache/pywps"
         file_urls = download_files(
             urls = urls,
             credentials = self.credentials.getValue(),
@@ -192,20 +193,29 @@ class ESMValTool(WPSProcess):
         shutil.copyfile(join(data_dir, 'plots', 'MyDiag', 'MyDiag_MyVar.ps'), out)
         self.output.setValue(out)
         
-        # output: metadata
+        # output: summary
         import json
         outfile = self.mktempfile(suffix='.json')
         with open(outfile, 'w') as fp:
             json.dump(obj=results, fp=fp, indent=4, sort_keys=True)
-            self.info.setValue( outfile )
+            self.summary.setValue( outfile )
 
     def esmvaltool(self):
+        from os import environ
+        archives = [path.strip() for path in environ['ESGF_ARCHIVE_ROOT'].split(':')]
+        
         from os.path import abspath, curdir, join
         mountpoint = "%s:/data" % abspath(join(curdir, 'data'))
+        cmd = ["docker", "run", "--rm"]
+        cmd.extend([ "-v", mountpoint])
+        for archive in archives:
+            cmd.extend(["-v", "%s:%s:ro" % (archive, archive)])
+        cmd.extend(["-t", "birdhouse/esmvaltool"])
+        
         from subprocess import check_call
         try:
             # TODO: dont use hard coded path
-            check_call(["docker", "run", "--rm", "-v", mountpoint, "-v", "/gpfs_750:/gpfs_750:ro", "-t", "birdhouse/esmvaltool"])
+            check_call(cmd)
         except:
             logger.exception('docker failed')
             import time
