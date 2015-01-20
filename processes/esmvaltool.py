@@ -30,9 +30,9 @@ def search(distrib, replica, limit, constraints, start_year, end_year, monitor):
 def download(urls, credentials, monitor):
     from malleefowl.download import download_files
     # TODO: dont use hard coded path
-    from os import environ
-    if not environ.has_key('ESGF_ARCHIVE_ROOT'):
-        environ['ESGF_ARCHIVE_ROOT'] = "/gpfs_750/projects/CMIP5/data"
+    #from os import environ
+    #if not environ.has_key('ESGF_ARCHIVE_ROOT'):
+    #    environ['ESGF_ARCHIVE_ROOT'] = "/gpfs_750/projects/CMIP5/data"
     file_urls = download_files(
         urls = urls,
         credentials = credentials,
@@ -64,15 +64,12 @@ def prepare(file_urls):
     return data_dir
 
 def esmvaltool():
-    from os import environ
-    archives = [path.strip() for path in environ['ESGF_ARCHIVE_ROOT'].split(':')]
-
     from os.path import abspath, curdir, join, realpath
     mountpoint = "%s:/data" % abspath(join(curdir, 'data'))
     cmd = ["docker", "run", "--rm"]
     cmd.extend([ "-v", mountpoint])
     # archive path
-    for archive in archives:
+    for archive in config.archive_root():
         cmd.extend(["-v", "%s:%s:ro" % (archive, archive)])
     # cache path
     cache_path = realpath(config.cache_path())
