@@ -186,7 +186,11 @@ class ESMValTool(WPSProcess):
         self.show_status("esmvaltool done", 100)
 
         # output: postscript
-        self.output.setValue(join(data_dir, 'plots', 'MyDiag', 'MyDiag_MyVar.ps'))
+        # TODO: permisson problem with generated files within docker container
+        import shutil
+        out = 'output.ps'
+        shutil.copyfile(join(data_dir, 'plots', 'MyDiag', 'MyDiag_MyVar.ps'), out)
+        self.output.setValue(out)
         
         # output: metadata
         import json
