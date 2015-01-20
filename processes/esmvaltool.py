@@ -29,10 +29,6 @@ def search(distrib, replica, limit, constraints, start_year, end_year, monitor):
 
 def download(urls, credentials, monitor):
     from malleefowl.download import download_files
-    # TODO: dont use hard coded path
-    #from os import environ
-    #if not environ.has_key('ESGF_ARCHIVE_ROOT'):
-    #    environ['ESGF_ARCHIVE_ROOT'] = "/gpfs_750/projects/CMIP5/data"
     file_urls = download_files(
         urls = urls,
         credentials = credentials,
@@ -70,6 +66,10 @@ def esmvaltool():
     cmd.extend([ "-v", mountpoint])
     # archive path
     for archive in config.archive_root():
+        if len(archive.strip()) < 3:
+            logger.warn('suspicious archive root: %s', archive)
+            continue
+        logger.debug("mount archive root: %s", archive)
         cmd.extend(["-v", "%s:%s:ro" % (archive, archive)])
     # cache path
     cache_path = realpath(config.cache_path())
@@ -227,6 +227,11 @@ class ESMValToolProcess(WPSProcess):
 
     def execute(self):
         self.show_status("starting", 0)
+
+        # TODO: configure archive_root only in malleefowl
+        from os import environ
+        if not environ.has_key('ESGF_ARCHIVE_ROOT'):
+            environ['ESGF_ARCHIVE_ROOT'] = config.getConfigValue("hummingbird", "archive_root")
 
         # search
         constraints = []
