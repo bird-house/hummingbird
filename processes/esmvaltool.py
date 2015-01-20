@@ -132,7 +132,15 @@ class ESMValTool(WPSProcess):
         self.output = self.addComplexOutput(
             identifier="output",
             title="output",
-            abstract="output",
+            abstract="",
+            formats=[{"mimeType":"application/postscript"}],
+            asReference=True,
+            )
+
+        self.metadata = self.addComplexOutput(
+            identifier="metadata",
+            title="metadata",
+            abstract="",
             formats=[{"mimeType":"application/json"}],
             asReference=True,
             )
@@ -173,13 +181,19 @@ class ESMValTool(WPSProcess):
                 results.append(new_name)
 
         # run esmvaltool
+        self.show_status("esmvaltool started", 10)
         self.esmvaltool()
-                
+        self.show_status("esmvaltool done", 100)
+
+        # output: postscript
+        self.output.setValue(join(data_dir, 'plots', 'MyDiag', 'MyDiag_MyVar.ps'))
+        
+        # output: metadata
         import json
         outfile = self.mktempfile(suffix='.json')
         with open(outfile, 'w') as fp:
             json.dump(obj=results, fp=fp, indent=4, sort_keys=True)
-            self.output.setValue( outfile )
+            self.metadata.setValue( outfile )
 
     def esmvaltool(self):
         from os.path import abspath, curdir, join
