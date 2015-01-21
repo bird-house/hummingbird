@@ -5,6 +5,27 @@ from malleefowl.process import WPSProcess
 from malleefowl import wpslogging as logging
 logger = logging.getLogger(__name__)
 
+def cf_check(nc_file, version):
+    # TODO: maybe use local file path
+    if not nc_file.endswith(".nc"):
+        new_name = nc_file + ".nc"
+        from os import rename
+        rename(nc_file, new_name)
+        nc_file = new_name
+    from subprocess import check_output, CalledProcessError
+    cmd = ["cfchecks"]
+    cmd.extend( ["--cf_standard_names", "http://cfconventions.org/Data/cf-standard-names/28/src/cf-standard-name-table.xml"] )
+    cmd.extend( ["--area_types", "http://cfconventions.org/Data/area-type-table/2/src/area-type-table.xml"] )
+    #cmd.extend( ["--udunits", "/home/pingu/anaconda/share/udunits/udunits2.xml"])
+    cmd.extend( ["--version", version] ) 
+    cmd.append(nc_file)
+    try:
+        cf_report = check_output(cmd)
+    except CalledProcessError as e:
+        logger.exception("cfchecker failed! output=%s", e.output)
+        cf_report = e.output
+    return cf_report
+
 class CFCheckerProcess(WPSProcess):
     def __init__(self):
         WPSProcess.__init__(self,
@@ -48,33 +69,17 @@ class CFCheckerProcess(WPSProcess):
 
         # TODO: iterate input files ... run parallel 
         # TODO: generate html report with links to cfchecker output ...
-        nc_file = self.getInputValues(identifier='resource')[0]
-        # TODO: maybe use local file path
-        if not nc_file.endswith(".nc"):
-            new_name = nc_file + ".nc"
-            from os import rename
-            rename(nc_file, new_name)
-            nc_file = new_name
-        from subprocess import check_output, CalledProcessError
-        cmd = ["cfchecks"]
-        cmd.extend( ["--cf_standard_names", "http://cfconventions.org/Data/cf-standard-names/28/src/cf-standard-name-table.xml"] )
-        cmd.extend( ["--area_types", "http://cfconventions.org/Data/area-type-table/2/src/area-type-table.xml"] )
-        #cmd.extend( ["--udunits", "/home/pingu/anaconda/share/udunits/udunits2.xml"])
-        cmd.extend( ["--version", self.cf_version.getValue()] ) 
-        cmd.append(nc_file)
-        try:
-            cf_report = check_output(cmd)
-        except CalledProcessError as e:
-            logger.exception("cfchecker failed! output=%s", e.output)
-            cf_report = e.output
-        
-        self.show_status("writing report ...", 80)
-
         outfile = self.mktempfile(suffix='.txt')
-        with open(outfile, 'w') as fp:
-            fp.write(cf_report)
         self.output.setValue( outfile )
-        
+        nc_files = self.getInputValues(identifier='resource')
+        count = 0
+        max_count = len(nc_files)
+        for nc_file in nc_files:
+            cf_report = cf_check(nc_file, version=self.cf_version.getValue())
+            with open(outfile, 'a') as fp:
+                fp.write(cf_report)
+                count = count + 1
+                self.show_status("cfchecker: %d/%d" % (count, max_count), count)
         self.show_status("cfchecker: done", 100)
 
 
