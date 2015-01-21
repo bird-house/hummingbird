@@ -15,6 +15,7 @@ def search(url, distrib, replica, limit, constraints, start_year, end_year, moni
         latest = True,
         monitor = monitor,
     )
+    logger.info("constraints: %s", constraints)
 
     (result, summary, facet_counts) = esgsearch.search(
         constraints = constraints,
@@ -110,8 +111,8 @@ def esmvaltool(namelist):
         check_call(cmd)
     except:
         logger.exception('docker failed')
-        import time
-        time.sleep(60)
+        #import time
+        #time.sleep(60)
 
 class ESMValToolProcess(WPSProcess):
     def __init__(self):
@@ -135,7 +136,7 @@ class ESMValToolProcess(WPSProcess):
             identifier = "distrib",
             title = "Distributed",
             abstract = "If flag is set then a distributed search will be run.",
-            default = True,
+            default = False,
             minOccurs=1,
             maxOccurs=1,
             type=type(True)
@@ -166,10 +167,10 @@ class ESMValToolProcess(WPSProcess):
             identifier="model",
             title="Model",
             abstract="",
-            default="IPSL-CM5A-MR",
+            default="MPI-ESM-LR",
             type=type(''),
             minOccurs=1,
-            maxOccurs=10,
+            maxOccurs=1,
             allowedValues=["ACCESS1-0", "ACCESS1-3", "CMCC-CMS", "CanCM4", "EC-EARTH", "GFDL-CM2.1", "IPSL-CM5A-LR", "IPSL-CM5A-MR", "IPSL-CM5B-LR", "MPI-ESM-LR"]
             )
 
@@ -177,10 +178,10 @@ class ESMValToolProcess(WPSProcess):
             identifier="variable",
             title="Variable",
             abstract="",
-            default="tas",
+            default="ta",
             type=type(''),
             minOccurs=1,
-            maxOccurs=10,
+            maxOccurs=1,
             allowedValues=['ta', 'tas', 'ua', 'va', 'zg', 'pr', 'rlut', 'rsut']
             )
 
@@ -272,10 +273,8 @@ class ESMValToolProcess(WPSProcess):
         # search
         constraints = []
         constraints.append( ("project", "CMIP5" ) )
-        for model in self.getInputValues(identifier='model'):
-            constraints.append( ("model", model ) )
-        for variable in self.getInputValues(identifier='variable'):
-            constraints.append( ("variable", variable ) )
+        constraints.append( ("model", self.model.getValue() ) )
+        constraints.append( ("variable", self.variable.getValue() ) )
         constraints.append( ("cmor_table", self.cmor_table.getValue() ) )
         constraints.append( ("experiment", self.experiment.getValue() ) )
         constraints.append( ("ensemble", self.ensemble.getValue() ) )
@@ -306,7 +305,7 @@ class ESMValToolProcess(WPSProcess):
         # generate namelist
         f_namelist = generate_namelist(
             name="MyDiag",
-            model=self.getInputValues(identifier='model')[0],
+            model=self.model.getValue(),
             cmor_table=self.cmor_table.getValue(),
             experiment=self.experiment.getValue(),
             ensemble=self.ensemble.getValue(),
