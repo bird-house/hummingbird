@@ -113,6 +113,7 @@ def esmvaltool(namelist):
         logger.exception('docker failed')
         #import time
         #time.sleep(60)
+    return join(curdir, 'workspace', 'log.txt')
 
 class ESMValToolProcess(WPSProcess):
     def __init__(self):
@@ -258,7 +259,7 @@ class ESMValToolProcess(WPSProcess):
             identifier="summary",
             title="summary",
             abstract="",
-            formats=[{"mimeType":"application/json"}],
+            formats=[{"mimeType":"text/plain"}],
             asReference=True,
             )
 
@@ -316,9 +317,8 @@ class ESMValToolProcess(WPSProcess):
 
         # run esmvaltool
         self.show_status("esmvaltool started", 20)
-        esmvaltool(f_namelist)
-        #import time
-        #time.sleep(60)
+        log_file = esmvaltool(f_namelist)
+        self.summary.setValue( log_file )
         self.show_status("esmvaltool done", 100)
 
         # output: postscript
@@ -329,11 +329,5 @@ class ESMValToolProcess(WPSProcess):
         shutil.copyfile(join(workspace_dir, 'plots', 'MyDiag', 'MyDiag_MyVar.ps'), out)
         self.output.setValue(out)
         
-        # output: summary
-        import json
-        outfile = self.mktempfile(suffix='.json')
-        with open(outfile, 'w') as fp:
-            json.dump(obj=file_urls, fp=fp, indent=4, sort_keys=True)
-            self.summary.setValue( outfile )
 
  
