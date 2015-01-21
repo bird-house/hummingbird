@@ -37,16 +37,16 @@ def download(urls, credentials, monitor):
     return file_urls
 
 def prepare(file_urls):
-    # symlink files to data dir
+    # symlink files to workspace dir
     from urlparse import urlparse
     from os import mkdir,chmod
     from os.path import exists, basename, join, realpath
-    data_dir = 'data'
-    mkdir(data_dir)
+    workspace_dir = 'workspace'
+    mkdir(workspace_dir)
     # TODO: docker needs full access to create new files
     import stat
-    chmod(data_dir, stat.S_IRWXU|stat.S_IRWXG|stat.S_IRWXO)
-    input_dir = join('data', 'input-data')
+    chmod(workspace_dir, stat.S_IRWXU|stat.S_IRWXG|stat.S_IRWXO)
+    input_dir = join(workspace_dir, 'input-data')
     mkdir(input_dir)
     results = []
     for url in file_urls:
@@ -58,7 +58,7 @@ def prepare(file_urls):
             logger.debug("new name: %s", new_name)
             os.symlink(filename, new_name)
             results.append(new_name)
-    return data_dir
+    return workspace_dir
 
 def generate_namelist(name, model, experiment, cmor_table, ensemble, start_year, end_year):
     logger.info("generate namelist %s", name)
@@ -89,7 +89,7 @@ def generate_namelist(name, model, experiment, cmor_table, ensemble, start_year,
 
 def esmvaltool(namelist):
     from os.path import abspath, curdir, join, realpath
-    mountpoint = "%s:/data" % abspath(join(curdir, 'data'))
+    mountpoint = "%s:/workspace" % abspath(join(curdir, 'workspace'))
     cmd = ["docker", "run", "--rm", "-t"]
     cmd.extend([ "-v", mountpoint])
     # archive path
@@ -103,7 +103,7 @@ def esmvaltool(namelist):
     cache_path = realpath(config.cache_path())
     cmd.extend(["-v", "%s:%s:ro" % (cache_path, cache_path)])
     # mount namelist
-    cmd.extend(["-v", "%s:/home/esmval/esmvaltool/nml/namelist_MyDiag_docker.xml" % realpath(namelist)])
+    cmd.extend(["-v", "%s:/home/esmval/esmvaltool/nml/namelist_MyDiag_generated.xml" % realpath(namelist)])
     cmd.extend(["birdhouse/esmvaltool"])
 
     from subprocess import check_call
@@ -298,9 +298,9 @@ class ESMValToolProcess(WPSProcess):
             credentials = self.credentials.getValue(),
             monitor=self.show_status)
 
-        # symlink files to data dir
+        # prepare workspace dir
         self.show_status("prepare", 10)
-        data_dir = prepare(file_urls)
+        workspace_dir = prepare(file_urls)
 
         # generate namelist
         f_namelist = generate_namelist(
@@ -317,6 +317,8 @@ class ESMValToolProcess(WPSProcess):
         # run esmvaltool
         self.show_status("esmvaltool started", 20)
         esmvaltool(f_namelist)
+        #import time
+        #time.sleep(60)
         self.show_status("esmvaltool done", 100)
 
         # output: postscript
@@ -324,7 +326,7 @@ class ESMValToolProcess(WPSProcess):
         import shutil
         out = 'output.ps'
         from os.path import join
-        shutil.copyfile(join(data_dir, 'plots', 'MyDiag', 'MyDiag_MyVar.ps'), out)
+        shutil.copyfile(join(workspace_dir, 'plots', 'MyDiag', 'MyDiag_MyVar.ps'), out)
         self.output.setValue(out)
         
         # output: summary
