@@ -32,20 +32,22 @@ class CFCheckerProcess(WPSProcess):
             type=type(''),
             minOccurs=1,
             maxOccurs=1,
-            allowedValues=["auto", "1.6", "1.4"]
+            allowedValues=["auto", "1.6", "1.5", "1.4", "1.3", "1.2", "1.1"]
             )
 
         self.output = self.addComplexOutput(
             identifier="output",
             title="CF Checker Report",
             abstract="",
-            formats=[{"mimeType":"application/json"}],
+            formats=[{"mimeType":"text/plain"}],
             asReference=True,
             )
 
     def execute(self):
         self.show_status("starting cfchecker ...", 0)
 
+        # TODO: iterate input files ... run parallel 
+        # TODO: generate html report with links to cfchecker output ...
         nc_file = self.getInputValues(identifier='resource')[0]
         # TODO: maybe use local file path
         from os import rename
