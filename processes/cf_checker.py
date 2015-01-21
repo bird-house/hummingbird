@@ -50,9 +50,11 @@ class CFCheckerProcess(WPSProcess):
         # TODO: generate html report with links to cfchecker output ...
         nc_file = self.getInputValues(identifier='resource')[0]
         # TODO: maybe use local file path
-        from os import rename
-        rename(nc_file, "input.nc")
-        nc_file = "input.nc"
+        if not nc_file.endswith(".nc"):
+            new_name = nc_file + ".nc"
+            from os import rename
+            rename(nc_file, new_name)
+            nc_file = new_name
         from subprocess import check_output, CalledProcessError
         cmd = ["cfchecks"]
         cmd.extend( ["--cf_standard_names", "http://cfconventions.org/Data/cf-standard-names/28/src/cf-standard-name-table.xml"] )
