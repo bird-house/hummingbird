@@ -2,6 +2,6 @@
 __all__ = [
            "cdo_worker",
            "ncmeta",
-           "esmvaltool",
+#           "esmvaltool",
            "cf_checker",
            ]
