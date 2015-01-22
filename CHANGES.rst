@@ -1,6 +1,12 @@
 Changes
 *******
 
+0.1.3 (2015-xx-xx)
+==================
+
+* cfchecker added
+* using anaconda environment
+
 0.1.2 (2014-11-24)
 ==================
 
