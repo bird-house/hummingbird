@@ -27,7 +27,7 @@ DOWNLOAD_CACHE := $(APP_ROOT)/downloads
 BUILDOUT_FILES := parts eggs develop-eggs bin .installed.cfg .mr.developer.cfg *.egg-info bootstrap-buildout.py *.bak.* $(DOWNLOAD_CACHE)
 
 # Docker
-DOCKER_IMAGE := $(APP_NAME)
+DOCKER_IMAGE := birdhouse/$(APP_NAME)
 DOCKER_CONTAINER := $(APP_NAME)
 
 # end of configuration
