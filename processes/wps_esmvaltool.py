@@ -161,6 +161,11 @@ class ESMValToolProcess(WPSProcess):
         from os import environ
         if not environ.has_key('ESGF_ARCHIVE_ROOT'):
             environ['ESGF_ARCHIVE_ROOT'] = config.getConfigValue("hummingbird", "archive_root")
+        # get prefix of esmvaltool
+        docker = False
+        prefix = config.getConfigValue("hummingbird", "esmval_root")
+        if prefix is None or len(prefix.strip()) == 0:
+            docker = True
 
         # search
         constraints = []
@@ -193,12 +198,8 @@ class ESMValToolProcess(WPSProcess):
         # prepare workspace dir
         self.show_status("prepare", 10)
         workspace = esmvaltool.prepare(file_urls)
-
-        # use docker?
-        docker = False
         
         # generate namelist
-        prefix = config.getConfigValue("hummingbird", "esmval_root")
         namelist = esmvaltool.generate_namelist(
             name="MyDiag",
             prefix=prefix,
