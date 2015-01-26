@@ -214,8 +214,8 @@ class ESMValToolProcess(WPSProcess):
 
         # run esmvaltool
         self.show_status("esmvaltool started", 20)
-        #log_file = esmvaltool.esmval_docker(f_namelist)
-        log_file = esmvaltool.esmval_console(prefix, f_namelist)
+        #log_file = esmvaltool.run_docker(f_namelist)
+        log_file = esmvaltool.run_console(prefix, f_namelist)
         self.summary.setValue( log_file )
         self.show_status("esmvaltool done", 100)
 

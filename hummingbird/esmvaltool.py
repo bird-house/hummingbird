@@ -86,7 +86,7 @@ def write_namelist(name, namelist):
         fp.write(namelist)
     return abspath(join(curdir, outfile))
 
-def esmval_console(prefix, f_namelist):
+def run_console(prefix, f_namelist):
     logger.debug("prefix=%s, namelist=%s", prefix, f_namelist)
     from os.path import join, curdir, abspath
     script = join(prefix, "esmval.sh")
@@ -102,7 +102,7 @@ def esmval_console(prefix, f_namelist):
         #time.sleep(60)
     return logfile
 
-def esmval_docker(namelist):
+def run_docker(namelist):
     from os.path import abspath, curdir, join, realpath
     mountpoint = "%s:/workspace" % abspath(join(curdir, 'workspace'))
     cmd = ["docker", "run", "--rm", "-t"]
