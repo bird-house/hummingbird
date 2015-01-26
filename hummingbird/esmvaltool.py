@@ -56,8 +56,14 @@ def prepare(file_urls):
             results.append(new_name)
     return workspace
 
-def generate_namelist(name, prefix, workspace, model, experiment, cmor_table, ensemble, start_year, end_year):
+def generate_namelist(name, prefix, workspace,
+                      model, experiment, cmor_table, ensemble, start_year, end_year,
+                      docker=False):
     logger.info("generate namelist %s", name)
+
+    if docker is True:
+        prefix = "/home/esmval/esmvaltool"
+        workspace = "/workspace"
     
     from os.path import join, dirname
     from mako.template import Template
@@ -85,22 +91,31 @@ def write_namelist(namelist, workspace):
         fp.write(namelist)
     return outfile
 
-def run_console(prefix, f_namelist):
-    logger.debug("prefix=%s, namelist=%s", prefix, f_namelist)
+def run(namelist, prefix, workspace, docker=False):
+    logfile = None
+    if docker is True:
+        logfile = run_docker(workspace=workspace)
+    else:
+        logfile = run_console(namelist=namelist, prefix=prefix)
+    return logfile
+
+def run_console(namelist, prefix):
+    logger.info("run esmval on console: prefix=%s", prefix)
+    logger.debug("namelist=%s", namelist)
     from os.path import join, curdir, abspath
     script = join(prefix, "esmval.sh")
     logfile = abspath(join(curdir, 'log.txt'))
-    cmd = [script, f_namelist, logfile]
+    cmd = [script, namelist, logfile]
 
     from subprocess import check_output
     try:
         check_output(cmd)
     except:
         logger.exception('esmvaltool failed!')
-
     return logfile
 
-def run_docker(f_namelist, workspace):
+def run_docker(workspace):
+    logger.info("run esmval with docker")
     from os.path import abspath, curdir, join, realpath
     mountpoint = "%s:/workspace" % realpath(workspace)
     cmd = ["docker", "run", "--rm", "-t"]

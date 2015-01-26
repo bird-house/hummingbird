@@ -194,31 +194,33 @@ class ESMValToolProcess(WPSProcess):
         self.show_status("prepare", 10)
         workspace = esmvaltool.prepare(file_urls)
 
+        # use docker?
+        docker = False
+        
         # generate namelist
         prefix = config.getConfigValue("hummingbird", "esmval_root")
         namelist = esmvaltool.generate_namelist(
             name="MyDiag",
-            #prefix=prefix,
-            prefix="/home/esmval/esmvaltool",
-            workspace="/workspace",
-            #workspace=workspace,
+            prefix=prefix,
+            workspace=workspace,
             model=self.model.getValue(),
             cmor_table=self.cmor_table.getValue(),
             experiment=self.experiment.getValue(),
             ensemble=self.ensemble.getValue(),
             start_year=self.start_year.getValue(),
             end_year=self.end_year.getValue(),
+            docker=docker,
             )
         f_namelist = esmvaltool.write_namelist(namelist=namelist, workspace=workspace)
         self.namelist.setValue(f_namelist)
 
         # run esmvaltool
         self.show_status("esmvaltool started", 20)
-        log_file = esmvaltool.run_docker(f_namelist, workspace)
-        #log_file = esmvaltool.run_console(prefix, f_namelist)
-        self.summary.setValue( log_file )
+        log_file = esmvaltool.run(
+            namelist=f_namelist, prefix=prefix, workspace=workspace, docker=docker)
         self.show_status("esmvaltool done", 100)
-
+        self.summary.setValue( log_file )
+        
         # check outputs
         #import time
         #time.sleep(60)
