@@ -60,7 +60,7 @@ def prepare(file_urls):
             results.append(new_name)
     return workspace_dir
 
-def generate_namelist(name, model, experiment, cmor_table, ensemble, start_year, end_year):
+def generate_namelist(name, workspace, model, experiment, cmor_table, ensemble, start_year, end_year):
     logger.info("generate namelist %s", name)
     
     from os.path import join, dirname
@@ -71,6 +71,7 @@ def generate_namelist(name, model, experiment, cmor_table, ensemble, start_year,
         encoding_errors='replace')
     result = mytemplate.render_unicode(
         model=model,
+        workspace=workspace,
         experiment=experiment,
         cmor_table=cmor_table,
         ensemble=ensemble,
@@ -87,7 +88,20 @@ def generate_namelist(name, model, experiment, cmor_table, ensemble, start_year,
         fp.write(result)
     return outfile
 
-def esmvaltool(namelist):
+def esmvaltool_console(namelist):
+    cmd = ["python", "main.py", "nml/namelist_MyDiag_generated.xml"]
+    cmd.extend( [">", "log.txt"] ) 
+
+    from subprocess import check_call
+    try:
+        check_call(cmd)
+    except:
+        logger.exception('esmvaltool failed')
+        #import time
+        #time.sleep(60)
+    return join(curdir, 'workspace', 'log.txt')
+
+def esmvaltool_docker(namelist):
     from os.path import abspath, curdir, join, realpath
     mountpoint = "%s:/workspace" % abspath(join(curdir, 'workspace'))
     cmd = ["docker", "run", "--rm", "-t"]
@@ -306,6 +320,7 @@ class ESMValToolProcess(WPSProcess):
         # generate namelist
         f_namelist = generate_namelist(
             name="MyDiag",
+            workspace="/workspace",
             model=self.model.getValue(),
             cmor_table=self.cmor_table.getValue(),
             experiment=self.experiment.getValue(),
@@ -317,7 +332,7 @@ class ESMValToolProcess(WPSProcess):
 
         # run esmvaltool
         self.show_status("esmvaltool started", 20)
-        log_file = esmvaltool(f_namelist)
+        log_file = esmvaltool_docker(f_namelist)
         self.summary.setValue( log_file )
         self.show_status("esmvaltool done", 100)
 

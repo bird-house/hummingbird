@@ -19,9 +19,9 @@
     <write_plots type="boolean">           True      </write_plots>
     <write_netcdf type="boolean">          True      </write_netcdf>
     <force_processing type="boolean">     False      </force_processing>
-    <wrk_dir type="path">                 /workspace/work/     </wrk_dir>
-    <plot_dir type="path">                /workspace/plots/     </plot_dir>
-    <climo_dir type="path">               /workspace/climo/     </climo_dir>
+    <wrk_dir type="path">                 ${workspace}/work/     </wrk_dir>
+    <plot_dir type="path">                ${workspace}/plots/     </plot_dir>
+    <climo_dir type="path">               ${workspace}/climo/     </climo_dir>
     <write_plot_vars type="boolean">       True      </write_plot_vars>
     <max_data_filesize type="integer">      100      </max_data_filesize>
     <max_data_blocksize type="integer">     500      </max_data_blocksize>
@@ -31,7 +31,7 @@
 </GLOBAL>
 
 <MODELS>
-    <model>  CMIP5 ${model} ${cmor_table} ${experiment} ${ensemble} ${start_year} ${end_year} /workspace/input-data/  </model>
+    <model>  CMIP5 ${model} ${cmor_table} ${experiment} ${ensemble} ${start_year} ${end_year} ${workspace}/input-data/  </model>
 </MODELS>
 
 <!-- Please do not change anything below this line, 
