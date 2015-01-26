@@ -40,8 +40,8 @@ def prepare(file_urls):
     # symlink files to workspace dir
     from urlparse import urlparse
     from os import mkdir,chmod
-    from os.path import exists, basename, join, realpath
-    workspace_dir = 'workspace'
+    from os.path import exists, basename, join, realpath, curdir, abspath
+    workspace_dir = abspath(join(curdir, 'workspace'))
     mkdir(workspace_dir)
     # TODO: docker needs full access to create new files
     import stat
@@ -89,8 +89,13 @@ def generate_namelist(name, workspace, model, experiment, cmor_table, ensemble, 
     return outfile
 
 def esmvaltool_console(namelist):
+    from os import chdir
+    from os.path import join, curdir, abspath
+    mydir = abspath(join(curdir))
+    logfile = join(mydir, 'log.txt')
+    chdir("/home/pingu/sandbox/esmvaltool-git-svn")
     cmd = ["python", "main.py", "nml/namelist_MyDiag_generated.xml"]
-    cmd.extend( [">", "log.txt"] ) 
+    cmd.extend( [">", logfile] ) 
 
     from subprocess import check_call
     try:
@@ -99,7 +104,9 @@ def esmvaltool_console(namelist):
         logger.exception('esmvaltool failed')
         #import time
         #time.sleep(60)
-    return join(curdir, 'workspace', 'log.txt')
+    finally:
+        chdir(mydir)
+    return logfile
 
 def esmvaltool_docker(namelist):
     from os.path import abspath, curdir, join, realpath
@@ -321,6 +328,7 @@ class ESMValToolProcess(WPSProcess):
         f_namelist = generate_namelist(
             name="MyDiag",
             workspace="/workspace",
+            #workspace=workspace_dir,
             model=self.model.getValue(),
             cmor_table=self.cmor_table.getValue(),
             experiment=self.experiment.getValue(),
@@ -333,6 +341,7 @@ class ESMValToolProcess(WPSProcess):
         # run esmvaltool
         self.show_status("esmvaltool started", 20)
         log_file = esmvaltool_docker(f_namelist)
+        #log_file = esmvaltool_console(f_namelist)
         self.summary.setValue( log_file )
         self.show_status("esmvaltool done", 100)
 
