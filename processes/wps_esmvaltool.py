@@ -197,6 +197,7 @@ class ESMValToolProcess(WPSProcess):
         # generate namelist
         namelist = esmvaltool.generate_namelist(
             name="MyDiag",
+            prefix="/home/esmval/esmvaltool",
             workspace="/workspace",
             #workspace=workspace_dir,
             model=self.model.getValue(),

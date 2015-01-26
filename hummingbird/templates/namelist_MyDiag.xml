@@ -39,10 +39,10 @@
 <DIAGNOSTICS>
     <diag>
         <description> Tutorial diagnostic used in the doc/toy-diagnostic-tutorial.pdf </description>
-        <variable_def_dir>                ./variable_defs/   </variable_def_dir>
+        <variable_def_dir>                ${prefix}/variable_defs/   </variable_def_dir>
         <variable>                          MyVar            </variable>
         <field_type>                        T3M              </field_type>
-        <diag_script_cfg_dir>             ./nml/cfg_MyDiag/  </diag_script_cfg_dir>
+        <diag_script_cfg_dir>             ${prefix}/nml/cfg_MyDiag/  </diag_script_cfg_dir>
 
         <diag_script cfg="cfg_MyDiag.ncl">      MyDiag.ncl       </diag_script>
     </diag>

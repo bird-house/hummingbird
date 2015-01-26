@@ -56,7 +56,7 @@ def prepare(file_urls):
             results.append(new_name)
     return workspace_dir
 
-def generate_namelist(name, workspace, model, experiment, cmor_table, ensemble, start_year, end_year):
+def generate_namelist(name, prefix, workspace, model, experiment, cmor_table, ensemble, start_year, end_year):
     logger.info("generate namelist %s", name)
     
     from os.path import join, dirname
@@ -66,8 +66,9 @@ def generate_namelist(name, workspace, model, experiment, cmor_table, ensemble, 
         output_encoding='utf-8',
         encoding_errors='replace')
     return mytemplate.render_unicode(
-        model=model,
+        prefix=prefix,
         workspace=workspace,
+        model=model,
         experiment=experiment,
         cmor_table=cmor_table,
         ensemble=ensemble,
