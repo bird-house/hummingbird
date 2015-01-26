@@ -65,7 +65,7 @@ def generate_namelist(name, workspace, model, experiment, cmor_table, ensemble, 
         filename=join(dirname(__file__), 'templates', 'namelist_%s.xml' % name),
         output_encoding='utf-8',
         encoding_errors='replace')
-    result = mytemplate.render_unicode(
+    return mytemplate.render_unicode(
         model=model,
         workspace=workspace,
         experiment=experiment,
@@ -75,13 +75,14 @@ def generate_namelist(name, workspace, model, experiment, cmor_table, ensemble, 
         end_year=end_year,
         )
    
+def write_namelist(name, namelist):
     from os import curdir
-    from tempfile import mkstemp
+    #from tempfile import mkstemp
     #_,outfile = mkstemp(prefix='namelist_', suffix='.xml', dir=curdir)
     outfile = 'namelist_%s.xml' % name
     logger.info("namelist=%s", outfile)
     with open(outfile, 'w') as fp:
-        fp.write(result)
+        fp.write(namelist)
     return outfile
 
 def esmvaltool_console(namelist):

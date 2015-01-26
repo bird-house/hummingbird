@@ -195,7 +195,7 @@ class ESMValToolProcess(WPSProcess):
         workspace_dir = esmvaltool.prepare(file_urls)
 
         # generate namelist
-        f_namelist = esmvaltool.generate_namelist(
+        namelist = esmvaltool.generate_namelist(
             name="MyDiag",
             workspace="/workspace",
             #workspace=workspace_dir,
@@ -206,6 +206,7 @@ class ESMValToolProcess(WPSProcess):
             start_year=self.start_year.getValue(),
             end_year=self.end_year.getValue(),
             )
+        f_namelist = esmvaltool.write_namelist(name="MyDiag", namelist=namelist)
         self.namelist.setValue(f_namelist)
 
         # run esmvaltool
