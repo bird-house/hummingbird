@@ -77,33 +77,31 @@ def generate_namelist(name, prefix, workspace, model, experiment, cmor_table, en
         )
    
 def write_namelist(name, namelist):
-    from os import curdir
+    from os.path import curdir, join, abspath
     #from tempfile import mkstemp
     #_,outfile = mkstemp(prefix='namelist_', suffix='.xml', dir=curdir)
     outfile = 'namelist_%s.xml' % name
     logger.info("namelist=%s", outfile)
     with open(outfile, 'w') as fp:
         fp.write(namelist)
-    return outfile
+    return abspath(join(curdir, outfile))
 
-def esmvaltool_console(namelist):
+def esmvaltool_console(prefix, f_namelist):
+    logger.info("prefix=%s", prefix)
+    logger.info("namelist=%s", f_namelist)
     from os import chdir
     from os.path import join, curdir, abspath
-    mydir = abspath(join(curdir))
-    logfile = join(mydir, 'log.txt')
-    chdir("/home/pingu/sandbox/esmvaltool-git-svn")
-    cmd = ["python", "main.py", "nml/namelist_MyDiag_generated.xml"]
-    cmd.extend( [">", logfile] ) 
+    script = join(prefix, "esmval.sh")
+    logfile = abspath(join(curdir, 'log.txt'))
+    cmd = [script, f_namelist, logfile]
 
-    from subprocess import check_call
+    from subprocess import check_output
     try:
-        check_call(cmd)
+        check_output(cmd)
     except:
-        logger.exception('esmvaltool failed')
+        logger.exception('esmvaltool failed!')
         #import time
         #time.sleep(60)
-    finally:
-        chdir(mydir)
     return logfile
 
 def esmvaltool_docker(namelist):

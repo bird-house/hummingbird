@@ -195,11 +195,13 @@ class ESMValToolProcess(WPSProcess):
         workspace_dir = esmvaltool.prepare(file_urls)
 
         # generate namelist
+        #prefix = "/home/esmval/esmvaltool"
+        prefix = "/home/pingu/sandbox/esmvaltool-git-svn"
         namelist = esmvaltool.generate_namelist(
             name="MyDiag",
-            prefix="/home/esmval/esmvaltool",
-            workspace="/workspace",
-            #workspace=workspace_dir,
+            prefix=prefix,
+            #workspace="/workspace",
+            workspace=workspace_dir,
             model=self.model.getValue(),
             cmor_table=self.cmor_table.getValue(),
             experiment=self.experiment.getValue(),
@@ -212,8 +214,8 @@ class ESMValToolProcess(WPSProcess):
 
         # run esmvaltool
         self.show_status("esmvaltool started", 20)
-        log_file = esmvaltool.esmvaltool_docker(f_namelist)
-        #log_file = esmvaltool.esmvaltool_console(f_namelist)
+        #log_file = esmvaltool.esmvaltool_docker(f_namelist)
+        log_file = esmvaltool.esmvaltool_console(prefix, f_namelist)
         self.summary.setValue( log_file )
         self.show_status("esmvaltool done", 100)
 
