@@ -1,7 +1,7 @@
 
 __all__ = [
-           "cdo_worker",
-           "ncmeta",
-           "esmvaltool",
-           "cf_checker",
+           "wps_cdo",
+           "wps_ncmeta",
+           "wps_esmvaltool",
+           "wps_cfchecker",
            ]
