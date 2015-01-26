@@ -37,12 +37,12 @@ def prepare(file_urls):
     from urlparse import urlparse
     from os import mkdir,chmod, symlink
     from os.path import exists, basename, join, realpath, curdir, abspath
-    workspace_dir = abspath(join(curdir, 'workspace'))
-    mkdir(workspace_dir)
+    workspace = abspath(join(curdir, 'workspace'))
+    mkdir(workspace)
     # TODO: docker needs full access to create new files
     import stat
-    chmod(workspace_dir, stat.S_IRWXU|stat.S_IRWXG|stat.S_IRWXO)
-    input_dir = join(workspace_dir, 'input-data')
+    chmod(workspace, stat.S_IRWXU|stat.S_IRWXG|stat.S_IRWXO)
+    input_dir = join(workspace, 'input-data')
     mkdir(input_dir)
     results = []
     for url in file_urls:
@@ -54,7 +54,7 @@ def prepare(file_urls):
             logger.debug("new name: %s", new_name)
             symlink(filename, new_name)
             results.append(new_name)
-    return workspace_dir
+    return workspace
 
 def generate_namelist(name, prefix, workspace, model, experiment, cmor_table, ensemble, start_year, end_year):
     logger.info("generate namelist %s", name)
@@ -76,15 +76,14 @@ def generate_namelist(name, prefix, workspace, model, experiment, cmor_table, en
         end_year=end_year,
         )
    
-def write_namelist(name, namelist):
-    from os.path import curdir, join, abspath
+def write_namelist(namelist, workspace):
+    from os.path import join, abspath
     #from tempfile import mkstemp
     #_,outfile = mkstemp(prefix='namelist_', suffix='.xml', dir=curdir)
-    outfile = 'namelist_%s.xml' % name
-    logger.info("namelist=%s", outfile)
+    outfile = abspath(join(workspace, "namelist.xml"))
     with open(outfile, 'w') as fp:
         fp.write(namelist)
-    return abspath(join(curdir, outfile))
+    return outfile
 
 def run_console(prefix, f_namelist):
     logger.debug("prefix=%s, namelist=%s", prefix, f_namelist)
@@ -98,13 +97,12 @@ def run_console(prefix, f_namelist):
         check_output(cmd)
     except:
         logger.exception('esmvaltool failed!')
-        #import time
-        #time.sleep(60)
+
     return logfile
 
-def run_docker(namelist):
+def run_docker(f_namelist, workspace):
     from os.path import abspath, curdir, join, realpath
-    mountpoint = "%s:/workspace" % abspath(join(curdir, 'workspace'))
+    mountpoint = "%s:/workspace" % realpath(workspace)
     cmd = ["docker", "run", "--rm", "-t"]
     cmd.extend([ "-v", mountpoint])
     # archive path
@@ -117,8 +115,6 @@ def run_docker(namelist):
     # cache path
     cache_path = realpath(config.cache_path())
     cmd.extend(["-v", "%s:%s:ro" % (cache_path, cache_path)])
-    # mount namelist
-    cmd.extend(["-v", "%s:/home/esmval/esmvaltool/nml/namelist_MyDiag_generated.xml" % realpath(namelist)])
     cmd.extend(["birdhouse/esmvaltool"])
 
     from subprocess import check_call
@@ -126,7 +122,6 @@ def run_docker(namelist):
         check_call(cmd)
     except:
         logger.exception('docker failed')
-        #import time
-        #time.sleep(60)
-    return join(curdir, 'workspace', 'log.txt')
+       
+    return join(workspace, 'log.txt')
 

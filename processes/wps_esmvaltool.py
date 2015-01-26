@@ -192,15 +192,16 @@ class ESMValToolProcess(WPSProcess):
 
         # prepare workspace dir
         self.show_status("prepare", 10)
-        workspace_dir = esmvaltool.prepare(file_urls)
+        workspace = esmvaltool.prepare(file_urls)
 
         # generate namelist
         prefix = config.getConfigValue("hummingbird", "esmval_root")
         namelist = esmvaltool.generate_namelist(
             name="MyDiag",
-            prefix=prefix,
-            #workspace="/workspace",
-            workspace=workspace_dir,
+            #prefix=prefix,
+            prefix="/home/esmval/esmvaltool",
+            workspace="/workspace",
+            #workspace=workspace,
             model=self.model.getValue(),
             cmor_table=self.cmor_table.getValue(),
             experiment=self.experiment.getValue(),
@@ -208,22 +209,26 @@ class ESMValToolProcess(WPSProcess):
             start_year=self.start_year.getValue(),
             end_year=self.end_year.getValue(),
             )
-        f_namelist = esmvaltool.write_namelist(name="MyDiag", namelist=namelist)
+        f_namelist = esmvaltool.write_namelist(namelist=namelist, workspace=workspace)
         self.namelist.setValue(f_namelist)
 
         # run esmvaltool
         self.show_status("esmvaltool started", 20)
-        #log_file = esmvaltool.run_docker(f_namelist)
-        log_file = esmvaltool.run_console(prefix, f_namelist)
+        log_file = esmvaltool.run_docker(f_namelist, workspace)
+        #log_file = esmvaltool.run_console(prefix, f_namelist)
         self.summary.setValue( log_file )
         self.show_status("esmvaltool done", 100)
+
+        # check outputs
+        #import time
+        #time.sleep(60)
 
         # output: postscript
         # TODO: permisson problem with generated files within docker container
         import shutil
         out = 'output.ps'
         from os.path import join
-        shutil.copyfile(join(workspace_dir, 'plots', 'MyDiag', 'MyDiag_MyVar.ps'), out)
+        shutil.copyfile(join(workspace, 'plots', 'MyDiag', 'MyDiag_MyVar.ps'), out)
         self.output.setValue(out)
         
 
