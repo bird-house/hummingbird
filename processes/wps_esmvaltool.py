@@ -195,8 +195,7 @@ class ESMValToolProcess(WPSProcess):
         workspace_dir = esmvaltool.prepare(file_urls)
 
         # generate namelist
-        #prefix = "/home/esmval/esmvaltool"
-        prefix = "/home/pingu/sandbox/esmvaltool-git-svn"
+        prefix = config.getConfigValue("hummingbird", "esmval_root")
         namelist = esmvaltool.generate_namelist(
             name="MyDiag",
             prefix=prefix,
