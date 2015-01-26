@@ -17,7 +17,7 @@ class WpsTestCase(TestCase):
         from owslib.wps import WebProcessingService
         cls.wps = WebProcessingService(SERVICE, verbose=False, skip_caps=False)
 
-class EsgValToolTestCase(WpsTestCase):
+class EsmValToolProcessTestCase(WpsTestCase):
 
     @attr('online')
     def test_mydiag(self):
