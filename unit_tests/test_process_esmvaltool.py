@@ -181,11 +181,12 @@ class EsmValToolProcessTestCase(WpsTestCase):
         inputs.append(('end_year', '2005'))
         
         #output=[('output', True), ('namelist', True), ('summary', True)]
-        output=[('namelist', True), ('summary', True)]
+        output=[('summary', True)]
         execution = self.wps.execute(identifier="esmvaltool", inputs=inputs, output=output)
-        monitorExecution(execution, sleepSecs=1)
+        monitorExecution(execution, sleepSecs=1, download=False)
 
         nose.tools.ok_(execution.status == 'ProcessSucceeded', execution.status)
+        #nose.tools.ok_(False, execution.processOutputs[0].reference)
 
     
 

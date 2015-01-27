@@ -198,8 +198,8 @@ def run_on_esgf(
         namelist=namelist_file, prefix=prefix, workspace=workspace, docker=docker)
     logger.info("esmvaltool done")
 
-    import time
-    time.sleep(60)
+    #import time
+    #time.sleep(60)
 
     # output: postscript
     # TODO: permisson problem with generated files within docker container
