@@ -21,7 +21,7 @@ class EsmValToolProcessTestCase(WpsTestCase):
 
     @attr('online')
     def test_mydiag_ta(self):
-        raise SkipTest
+        #raise SkipTest
         inputs = []
         inputs.append(('diag', 'MyDiag'))
         inputs.append(('credentials', CREDENTIALS))
@@ -37,11 +37,12 @@ class EsmValToolProcessTestCase(WpsTestCase):
         inputs.append(('end_year', '2005'))
         
         #output=[('output', True), ('namelist', True), ('summary', True)]
-        output=[('namelist', True), ('summary', True)]
+        output=[('summary', True)]
         execution = self.wps.execute(identifier="esmvaltool", inputs=inputs, output=output)
         monitorExecution(execution, sleepSecs=1)
 
         nose.tools.ok_(execution.status == 'ProcessSucceeded', execution.status)
+        #nose.tools.ok_(False, execution.processOutputs[0].reference)
 
     @attr('online')
     def test_mydiag_with_replica(self):
@@ -69,7 +70,7 @@ class EsmValToolProcessTestCase(WpsTestCase):
 
     @attr('online')
     def test_overview_pr(self):
-        raise SkipTest
+        #raise SkipTest
         inputs = []
         inputs.append(('diag', 'overview'))
         inputs.append(('credentials', CREDENTIALS))
@@ -85,11 +86,12 @@ class EsmValToolProcessTestCase(WpsTestCase):
         inputs.append(('end_year', '2005'))
         
         #output=[('output', True), ('namelist', True), ('summary', True)]
-        output=[('namelist', True), ('summary', True)]
+        output=[('summary', True)]
         execution = self.wps.execute(identifier="esmvaltool", inputs=inputs, output=output)
         monitorExecution(execution, sleepSecs=1)
 
         nose.tools.ok_(execution.status == 'ProcessSucceeded', execution.status)
+        #nose.tools.ok_(False, execution.processOutputs[0].reference)
 
     @attr('online')
     def test_reformat_psl(self):
@@ -138,6 +140,7 @@ class EsmValToolProcessTestCase(WpsTestCase):
         monitorExecution(execution, sleepSecs=1)
 
         nose.tools.ok_(execution.status == 'ProcessSucceeded', execution.status)
+        #nose.tools.ok_(False, execution.processOutputs[0].reference)
 
     @attr('online')
     def test_perfmetrics_ta(self):
@@ -165,7 +168,7 @@ class EsmValToolProcessTestCase(WpsTestCase):
 
     @attr('online')
     def test_plot_perfmetrics_ta(self):
-        #raise SkipTest
+        raise SkipTest
         inputs = []
         inputs.append(('diag', 'plot_perfmetrics'))
         inputs.append(('credentials', CREDENTIALS))
