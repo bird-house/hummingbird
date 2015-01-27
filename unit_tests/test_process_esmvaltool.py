@@ -36,8 +36,8 @@ class EsmValToolProcessTestCase(WpsTestCase):
         inputs.append(('start_year', '2001'))
         inputs.append(('end_year', '2005'))
         
-        #output=[('output', True), ('namelist', True), ('summary', True)]
-        output=[('summary', True)]
+        #output=[('output', True), ('namelist', True), ('log', True)]
+        output=[('log', True)]
         execution = self.wps.execute(identifier="esmvaltool", inputs=inputs, output=output)
         monitorExecution(execution, sleepSecs=1)
 
@@ -62,7 +62,7 @@ class EsmValToolProcessTestCase(WpsTestCase):
         inputs.append(('start_year', '2001'))
         inputs.append(('end_year', '2005'))
         
-        output=[('output', True), ('summary', True)]
+        output=[('output', True), ('log', True)]
         execution = self.wps.execute(identifier="esmvaltool", inputs=inputs, output=output)
         monitorExecution(execution, sleepSecs=1)
 
@@ -85,8 +85,8 @@ class EsmValToolProcessTestCase(WpsTestCase):
         inputs.append(('start_year', '2001'))
         inputs.append(('end_year', '2005'))
         
-        #output=[('output', True), ('namelist', True), ('summary', True)]
-        output=[('summary', True)]
+        #output=[('output', True), ('namelist', True), ('log', True)]
+        output=[('log', True)]
         execution = self.wps.execute(identifier="esmvaltool", inputs=inputs, output=output)
         monitorExecution(execution, sleepSecs=1)
 
@@ -110,8 +110,8 @@ class EsmValToolProcessTestCase(WpsTestCase):
         inputs.append(('start_year', '2001'))
         inputs.append(('end_year', '2005'))
         
-        #output=[('output', True), ('namelist', True), ('summary', True)]
-        output=[('namelist', True), ('summary', True)]
+        #output=[('output', True), ('namelist', True), ('log', True)]
+        output=[('namelist', True), ('log', True)]
         execution = self.wps.execute(identifier="esmvaltool", inputs=inputs, output=output)
         monitorExecution(execution, sleepSecs=1)
 
@@ -134,8 +134,8 @@ class EsmValToolProcessTestCase(WpsTestCase):
         inputs.append(('start_year', '2001'))
         inputs.append(('end_year', '2005'))
         
-        #output=[('output', True), ('namelist', True), ('summary', True)]
-        output=[('namelist', True), ('summary', True)]
+        #output=[('output', True), ('namelist', True), ('log', True)]
+        output=[('namelist', True), ('log', True)]
         execution = self.wps.execute(identifier="esmvaltool", inputs=inputs, output=output)
         monitorExecution(execution, sleepSecs=1)
 
@@ -159,8 +159,8 @@ class EsmValToolProcessTestCase(WpsTestCase):
         inputs.append(('start_year', '2001'))
         inputs.append(('end_year', '2005'))
         
-        #output=[('output', True), ('namelist', True), ('summary', True)]
-        output=[('namelist', True), ('summary', True)]
+        #output=[('output', True), ('namelist', True), ('log', True)]
+        output=[('namelist', True), ('log', True)]
         execution = self.wps.execute(identifier="esmvaltool", inputs=inputs, output=output)
         monitorExecution(execution, sleepSecs=1)
 
@@ -183,8 +183,8 @@ class EsmValToolProcessTestCase(WpsTestCase):
         inputs.append(('start_year', '2001'))
         inputs.append(('end_year', '2005'))
         
-        #output=[('output', True), ('namelist', True), ('summary', True)]
-        output=[('summary', True)]
+        #output=[('output', True), ('namelist', True), ('log', True)]
+        output=[('log', True)]
         execution = self.wps.execute(identifier="esmvaltool", inputs=inputs, output=output)
         monitorExecution(execution, sleepSecs=1, download=False)
 

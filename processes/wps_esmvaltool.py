@@ -157,9 +157,9 @@ class ESMValToolProcess(WPSProcess):
             asReference=True,
             )
 
-        self.summary = self.addComplexOutput(
-            identifier="summary",
-            title="summary",
+        self.log = self.addComplexOutput(
+            identifier="log",
+            title="log",
             abstract="",
             formats=[{"mimeType":"text/plain"}],
             asReference=True,
@@ -187,7 +187,7 @@ class ESMValToolProcess(WPSProcess):
         self.show_status("done", 100)
 
         self.namelist.setValue(namelist_file)
-        self.summary.setValue( log_file )
+        self.log.setValue( log_file )
         self.output.setValue(out)
         
 
