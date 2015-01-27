@@ -1,36 +1,9 @@
 from malleefowl import config
+from malleefowl.esgf.search import ESGSearch
+from malleefowl.download import download_files
+
 from malleefowl import wpslogging as logging
 logger = logging.getLogger(__name__)
-
-def search(url, distrib, replica, limit, constraints, start_year, end_year, monitor):
-    from malleefowl.esgf.search import ESGSearch
-    esgsearch = ESGSearch(
-        url = url,
-        distrib = distrib,
-        replica = replica,
-        latest = True,
-        monitor = monitor,
-    )
-    logger.info("constraints: %s", constraints)
-
-    (result, summary, facet_counts) = esgsearch.search(
-        constraints = constraints,
-        query = "*:*",
-        start = "%d-01-01" % start_year,
-        end = "%d-12-31" % end_year,
-        search_type = "File",
-        limit = limit,
-        offset = 0,
-        temporal = False)
-    return result
-
-def download(urls, credentials, monitor):
-    from malleefowl.download import download_files
-    file_urls = download_files(
-        urls = urls,
-        credentials = credentials,
-        monitor = monitor)
-    return file_urls
 
 def prepare(file_urls):
     # symlink files to workspace dir
@@ -164,32 +137,40 @@ def run_on_esgf(
     constraints.append( ("experiment", experiment ) )
     constraints.append( ("ensemble", ensemble ) )
 
-    logger.info("esgsearch started")
-    urls = search(
-        url = config.getConfigValue("hummingbird", "esgsearch_url"),
-        distrib=distrib,
-        replica=replica,
-        limit=limit,
-        constraints=constraints,
-        start_year=start_year,
-        end_year=end_year,
-        monitor=monitor
-        )
-    logger.info("esgsearch done")
+    logger.debug("constraints: %s", constraints)
 
+    logger.info("esgsearch ...")
+    esgsearch = ESGSearch(
+        url = config.getConfigValue("hummingbird", "esgsearch_url"),
+        distrib = distrib,
+        replica = replica,
+        latest = True,
+        monitor = monitor,
+    )
+
+    (urls, summary, facet_counts) = esgsearch.search(
+        constraints = constraints,
+        query = "*:*",
+        start = "%d-01-01" % start_year,
+        end = "%d-12-31" % end_year,
+        search_type = "File",
+        limit = limit,
+        offset = 0,
+        temporal = False)
+     
     # download
-    logger.info("download started")
-    file_urls = download(
-        urls=urls,
-        credentials=credentials,
-        monitor=monitor)
-    logger.info("donwload done")
+    logger.info("download ...")
+    file_urls = download_files(
+        urls = urls,
+        credentials = credentials,
+        monitor = monitor)
 
     # prepare workspace dir
+    logger.info("prepare ...")
     workspace = prepare(file_urls)
 
     # generate namelist
-    logger.info("generate namelist")
+    logger.info("generate namelist ...")
     namelist = generate_namelist(
         name="MyDiag",
         prefix=prefix,
@@ -205,7 +186,7 @@ def run_on_esgf(
     namelist_file = write_namelist(namelist=namelist, workspace=workspace)
 
     # run esmvaltool
-    logger.info("esmvaltool started")
+    logger.info("esmvaltool ...")
     log_file = run(
         namelist=namelist_file, prefix=prefix, workspace=workspace, docker=docker)
     logger.info("esmvaltool done")
