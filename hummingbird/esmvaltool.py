@@ -164,6 +164,7 @@ def run_on_esgf(
     constraints.append( ("experiment", experiment ) )
     constraints.append( ("ensemble", ensemble ) )
 
+    logger.info("esgsearch started")
     urls = search(
         url = config.getConfigValue("hummingbird", "esgsearch_url"),
         distrib=distrib,
@@ -174,17 +175,21 @@ def run_on_esgf(
         end_year=end_year,
         monitor=monitor
         )
+    logger.info("esgsearch done")
 
     # download
+    logger.info("download started")
     file_urls = download(
         urls=urls,
         credentials=credentials,
         monitor=monitor)
+    logger.info("donwload done")
 
     # prepare workspace dir
     workspace = prepare(file_urls)
 
     # generate namelist
+    logger.info("generate namelist")
     namelist = generate_namelist(
         name="MyDiag",
         prefix=prefix,
@@ -197,13 +202,13 @@ def run_on_esgf(
         end_year=end_year,
         docker=docker,
         )
-    f_namelist = write_namelist(namelist=namelist, workspace=workspace)
+    namelist_file = write_namelist(namelist=namelist, workspace=workspace)
 
     # run esmvaltool
-    monitor("esmvaltool started", 20)
+    logger.info("esmvaltool started")
     log_file = run(
-        namelist=f_namelist, prefix=prefix, workspace=workspace, docker=docker)
-    monitor("esmvaltool done", 100)
+        namelist=namelist_file, prefix=prefix, workspace=workspace, docker=docker)
+    logger.info("esmvaltool done")
 
     # output: postscript
     # TODO: permisson problem with generated files within docker container
@@ -212,4 +217,4 @@ def run_on_esgf(
     from os.path import join
     shutil.copyfile(join(workspace, 'plots', 'MyDiag', 'MyDiag_MyVar.ps'), out)
 
-    return out, f_namelist, log_file
+    return out, namelist_file, log_file
