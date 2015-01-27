@@ -24,6 +24,7 @@ class EsmValToolProcessTestCase(WpsTestCase):
         #raise SkipTest
         inputs = []
         inputs.append(('diag', 'MyDiag'))
+        inputs.append(('output_format', 'ps'))
         inputs.append(('credentials', CREDENTIALS))
         inputs.append(('distrib', 'False'))
         inputs.append(('replica', 'False'))

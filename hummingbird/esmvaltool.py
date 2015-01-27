@@ -125,6 +125,7 @@ def run_on_esgf(
         start_year, end_year,
         distrib=False, replica=False, limit=10,
         credentials=None,
+        output_format='ps',
         monitor=None):
     # TODO: configure archive_root only in malleefowl
     from os import environ
@@ -178,7 +179,6 @@ def run_on_esgf(
     workspace = prepare(file_urls)
 
     # generate namelist
-    output_format='ps'
     logger.info("generate namelist ...")
     namelist = generate_namelist(
         diag=diag,

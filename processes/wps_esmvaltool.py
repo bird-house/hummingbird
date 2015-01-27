@@ -141,11 +141,30 @@ class ESMValToolProcess(WPSProcess):
             maxOccurs=1
             )
 
+        self.output_format = self.addLiteralInput(
+            identifier="output_format",
+            title="Output Format",
+            abstract="",
+            default="ps",
+            type=type(''),
+            minOccurs=1,
+            maxOccurs=1,
+            allowedValues=['ps', 'eps', 'pdf', 'png']
+            )
+
+        # outputs
+        # -------
+
         self.output = self.addComplexOutput(
             identifier="output",
             title="output",
             abstract="",
-            formats=[{"mimeType":"application/postscript"}],
+            formats=[
+                {"mimeType":"application/postscript"},
+                {"mimeType":"application/pdf"},
+                {"mimeType":"image/png"},
+                {"mimeType":"application/eps"}
+                ],
             asReference=True,
             )
 
@@ -182,6 +201,7 @@ class ESMValToolProcess(WPSProcess):
             limit=self.limit.getValue(),
             start_year=self.start_year.getValue(),
             end_year=self.end_year.getValue(),
+            output_format=self.output_format.getValue(),
             monitor=self.show_status  )
         
         self.show_status("done", 100)
