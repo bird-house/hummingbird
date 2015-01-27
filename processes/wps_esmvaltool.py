@@ -22,7 +22,7 @@ class ESMValToolProcess(WPSProcess):
             type=type(''),
             minOccurs=1,
             maxOccurs=1,
-            allowedValues=['MyDiag', 'overview', 'reformat']
+            allowedValues=['MyDiag', 'overview', 'reformat', 'anncycplot', 'perfmetrics']
             )
 
         self.credentials = self.addComplexInput(

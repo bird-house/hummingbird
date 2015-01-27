@@ -26,7 +26,7 @@ NOTES: The namelist is part of the ESMValTool
 </GLOBAL>
 
 <MODELS>
-  <model>  CMIP5 ${model} ${cmor_table} ${experiment} ${ensemble} ${start_year} ${end_year} ${workspace}/input-data/  </model>
+  <model>CMIP5 ${model} ${cmor_table} ${experiment} ${ensemble} ${start_year} ${end_year} ${workspace}/input-data/</model>
 </MODELS>
 
 <!-- Please do not change anything below this line, 
@@ -58,6 +58,41 @@ NOTES: The namelist is part of the ESMValTool
       <field_type>T2Ms</field_type>
       <diag_script_cfg_dir>${prefix}/nml/cfg_generic/</diag_script_cfg_dir>
       <diag_script cfg="cfg_generic_tsline.ncl">tsline.ncl</diag_script>
+    </diag>
+    % elif diag == 'anncycplot':
+    <diag>
+      <description>Annual cycle contour plot</description>
+      <variable_def_dir>${prefix}/variable_defs/</variable_def_dir>
+      <variable>pr</variable>
+      <field_type>T2Ms</field_type>
+      <diag_script_cfg_dir>${prefix}/nml/cfg_generic/</diag_script_cfg_dir>
+      <diag_script cfg="cfg_generic_anncycplot.ncl">anncycplot.ncl</diag_script>
+    </diag>
+    % elif diag == 'perfmetrics':
+    <diag>
+      <description>Temperature</description>
+      <variable_def_dir>${prefix}/variable_defs/</variable_def_dir>
+      <variable>ta</variable>
+      <field_type>T3M</field_type>
+      <diag_script_cfg_dir>${prefix}/nml/cfg_perfmetrics/CMIP5/</diag_script_cfg_dir>
+
+      <model>OBS   NCEP        reanaly     1           2000  2001  /home/pingu/Public/data/esmvaltool/ESMValTool_OBS/NCEP</model>
+      <model>OBS   ERA-Interim reanaly     1           2000  2001  /home/pingu/Public/data/esmvaltool/ESMValTool_OBS/ERA-Interim</model>
+
+      <!--
+      <model>  CMIP5  EC-EARTH       Amon  historical   r2i1p1  2000 2005  /home/pingu/anaconda/var/cache/pywps/ </model>
+      <model>  CMIP5  CanCM4         Amon  historical   r1i1p1  2000 2005  /home/pingu/anaconda/var/cache/pywps/ </model>
+      <model>  CMIP5  CMCC-CMS       Amon  historical   r1i1p1  2000 2005  /home/pingu/anaconda/var/cache/pywps/ </model>
+      <model>  CMIP5  GFDL-CM2p1     Amon  historical   r1i1p1  2000 2005  /home/pingu/anaconda/var/cache/pywps/ </model>
+      <model>  CMIP5  IPSL-CM5A-MR   Amon  historical   r1i1p1  2000 2005  /home/pingu/anaconda/var/cache/pywps/ </model>
+      <model>  CMIP5  IPSL-CM5B-LR   Amon  historical   r1i1p1  2000 2005  /home/pingu/anaconda/var/cache/pywps/ </model>
+      -->
+
+      <diag_script cfg="cfg_perfmetrics_grading_RMSD_850_glob.ncl">perfmetrics_main.ncl</diag_script>
+      <diag_script cfg="cfg_perfmetrics_grading_RMSD_200_glob.ncl">perfmetrics_main.ncl</diag_script>
+
+      <diag_script cfg="cfg_perfmetrics_grading_RMSD_850_glob.ncl">perfmetrics_grading.ncl</diag_script>
+      <diag_script cfg="cfg_perfmetrics_grading_RMSD_200_glob.ncl">perfmetrics_grading.ncl</diag_script>
     </diag>
     % endif
 </DIAGNOSTICS>
