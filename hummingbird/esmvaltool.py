@@ -140,3 +140,76 @@ def run_docker(workspace):
        
     return join(workspace, 'log.txt')
 
+def run_on_esgf(
+        project, model, variable, cmor_table, experiment, ensemble, start_year, end_year,
+        distrib=False, replica=False, limit=10,
+        credentials=None,
+        monitor=None):
+    # TODO: configure archive_root only in malleefowl
+    from os import environ
+    if not environ.has_key('ESGF_ARCHIVE_ROOT'):
+        environ['ESGF_ARCHIVE_ROOT'] = config.getConfigValue("hummingbird", "archive_root")
+    # get prefix of esmvaltool
+    docker = False
+    prefix = config.getConfigValue("hummingbird", "esmval_root")
+    if prefix is None or len(prefix.strip()) == 0:
+        docker = True
+
+    # search
+    constraints = []
+    constraints.append( ("project", project ) )
+    constraints.append( ("model", model ) )
+    constraints.append( ("variable", variable ) )
+    constraints.append( ("cmor_table", cmor_table ) )
+    constraints.append( ("experiment", experiment ) )
+    constraints.append( ("ensemble", ensemble ) )
+
+    urls = search(
+        url = config.getConfigValue("hummingbird", "esgsearch_url"),
+        distrib=distrib,
+        replica=replica,
+        limit=limit,
+        constraints=constraints,
+        start_year=start_year,
+        end_year=end_year,
+        monitor=monitor
+        )
+
+    # download
+    file_urls = download(
+        urls=urls,
+        credentials=credentials,
+        monitor=monitor)
+
+    # prepare workspace dir
+    workspace = prepare(file_urls)
+
+    # generate namelist
+    namelist = generate_namelist(
+        name="MyDiag",
+        prefix=prefix,
+        workspace=workspace,
+        model=model,
+        cmor_table=cmor_table,
+        experiment=experiment,
+        ensemble=ensemble,
+        start_year=start_year,
+        end_year=end_year,
+        docker=docker,
+        )
+    f_namelist = write_namelist(namelist=namelist, workspace=workspace)
+
+    # run esmvaltool
+    monitor("esmvaltool started", 20)
+    log_file = run(
+        namelist=f_namelist, prefix=prefix, workspace=workspace, docker=docker)
+    monitor("esmvaltool done", 100)
+
+    # output: postscript
+    # TODO: permisson problem with generated files within docker container
+    import shutil
+    out = 'output.ps'
+    from os.path import join
+    shutil.copyfile(join(workspace, 'plots', 'MyDiag', 'MyDiag_MyVar.ps'), out)
+
+    return out, f_namelist, log_file

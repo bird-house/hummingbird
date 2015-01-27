@@ -156,82 +156,26 @@ class ESMValToolProcess(WPSProcess):
 
     def execute(self):
         self.show_status("starting", 0)
-
-        # TODO: configure archive_root only in malleefowl
-        from os import environ
-        if not environ.has_key('ESGF_ARCHIVE_ROOT'):
-            environ['ESGF_ARCHIVE_ROOT'] = config.getConfigValue("hummingbird", "archive_root")
-        # get prefix of esmvaltool
-        docker = False
-        prefix = config.getConfigValue("hummingbird", "esmval_root")
-        if prefix is None or len(prefix.strip()) == 0:
-            docker = True
-
-        # search
-        constraints = []
-        constraints.append( ("project", "CMIP5" ) )
-        constraints.append( ("model", self.model.getValue() ) )
-        constraints.append( ("variable", self.variable.getValue() ) )
-        constraints.append( ("cmor_table", self.cmor_table.getValue() ) )
-        constraints.append( ("experiment", self.experiment.getValue() ) )
-        constraints.append( ("ensemble", self.ensemble.getValue() ) )
-
-        self.show_status("search", 5)
-        urls = esmvaltool.search(
-            url = config.getConfigValue("hummingbird", "esgsearch_url"),
-            distrib=self.distrib.getValue(),
-            replica=self.replica.getValue(),
-            limit=self.limit.getValue(),
-            constraints=constraints,
-            start_year=self.start_year.getValue(),
-            end_year=self.end_year.getValue(),
-            monitor=self.show_status
-            )
         
-        # download
-        self.show_status("download", 10)
-        file_urls = esmvaltool.download(
-            urls = urls,
-            credentials = self.credentials.getValue(),
-            monitor=self.show_status)
-
-        # prepare workspace dir
-        self.show_status("prepare", 10)
-        workspace = esmvaltool.prepare(file_urls)
-        
-        # generate namelist
-        namelist = esmvaltool.generate_namelist(
-            name="MyDiag",
-            prefix=prefix,
-            workspace=workspace,
+        out, namelist_file, log_file = esmvaltool.run_on_esgf(
+            credentials=self.credentials.getValue(),
+            project="CMIP5",
             model=self.model.getValue(),
+            variable=self.variable.getValue(),
             cmor_table=self.cmor_table.getValue(),
             experiment=self.experiment.getValue(),
             ensemble=self.ensemble.getValue(),
+            distrib=self.distrib.getValue(),
+            replica=self.replica.getValue(),
+            limit=self.limit.getValue(),
             start_year=self.start_year.getValue(),
             end_year=self.end_year.getValue(),
-            docker=docker,
-            )
-        f_namelist = esmvaltool.write_namelist(namelist=namelist, workspace=workspace)
-        self.namelist.setValue(f_namelist)
-
-        # run esmvaltool
-        self.show_status("esmvaltool started", 20)
-        log_file = esmvaltool.run(
-            namelist=f_namelist, prefix=prefix, workspace=workspace, docker=docker)
-        self.show_status("esmvaltool done", 100)
-        self.summary.setValue( log_file )
+            monitor=self.show_status  )
         
-        # check outputs
-        #import time
-        #time.sleep(60)
+        self.show_status("done", 100)
 
-        # output: postscript
-        # TODO: permisson problem with generated files within docker container
-        import shutil
-        out = 'output.ps'
-        from os.path import join
-        shutil.copyfile(join(workspace, 'plots', 'MyDiag', 'MyDiag_MyVar.ps'), out)
+        self.namelist.setValue(namelist_file)
+        self.summary.setValue( log_file )
         self.output.setValue(out)
         
 
