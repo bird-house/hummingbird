@@ -73,7 +73,7 @@ class ESMValToolProcess(WPSProcess):
             default="MPI-ESM-LR",
             type=type(''),
             minOccurs=1,
-            maxOccurs=1,
+            maxOccurs=10,
             allowedValues=["ACCESS1-0", "ACCESS1-3", "CMCC-CMS", "CanCM4", "EC-EARTH", "GFDL-CM2.1", "IPSL-CM5A-LR", "IPSL-CM5A-MR", "IPSL-CM5B-LR", "MPI-ESM-LR", "MPI-ESM-MR", "MPI-ESM-P"]
             )
 
@@ -191,7 +191,7 @@ class ESMValToolProcess(WPSProcess):
             diag=self.diag.getValue(),
             credentials=self.credentials.getValue(),
             project="CMIP5",
-            model=self.model.getValue(),
+            models=self.getInputValues(identifier='model'),
             variable=self.variable.getValue(),
             cmor_table=self.cmor_table.getValue(),
             experiment=self.experiment.getValue(),

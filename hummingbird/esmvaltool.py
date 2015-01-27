@@ -121,7 +121,7 @@ def run_docker(workspace):
 
 def run_on_esgf(
         diag,
-        project, model, variable, cmor_table, experiment, ensemble,
+        project, models, variable, cmor_table, experiment, ensemble,
         start_year, end_year,
         distrib=False, replica=False, limit=10,
         credentials=None,
@@ -140,7 +140,8 @@ def run_on_esgf(
     # search
     constraints = []
     constraints.append( ("project", project ) )
-    constraints.append( ("model", model ) )
+    for model in models:
+        constraints.append( ("model", model ) )
     constraints.append( ("variable", variable ) )
     constraints.append( ("cmor_table", cmor_table ) )
     constraints.append( ("experiment", experiment ) )
@@ -184,7 +185,7 @@ def run_on_esgf(
         diag=diag,
         prefix=prefix,
         workspace=workspace,
-        model=model,
+        model=models[0],
         cmor_table=cmor_table,
         experiment=experiment,
         ensemble=ensemble,
@@ -202,8 +203,8 @@ def run_on_esgf(
         namelist=namelist_file, prefix=prefix, workspace=workspace, docker=docker)
     logger.info("esmvaltool done")
 
-    import time
-    time.sleep(60)
+    #import time
+    #time.sleep(60)
 
     # output: postscript
     # TODO: permisson problem with generated files within docker container
