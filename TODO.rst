@@ -1,4 +1,6 @@
 Todo list
 *********
 
-* cfchecker qc process (package from anaconda)
+* R packages via anaconda for esmvaltool:
+ncdf4, fields, maps, MASS, chron
+
