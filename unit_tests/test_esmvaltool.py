@@ -16,7 +16,7 @@ class EsmValToolTestCase(TestCase):
             diag="MyDiag",
             prefix="/opt/esmvaltool",
             workspace="/tmp",
-            model="MPI-ESM-LR",
+            models=["MPI-ESM-LR", "MPI-ESM-MR"],
             experiment="historical",
             cmor_table="Amon",
             ensemble="r1i1p1",
@@ -25,4 +25,5 @@ class EsmValToolTestCase(TestCase):
             end_year=2005,
             output_format='ps')
         nose.tools.ok_("CMIP5 MPI-ESM-LR Amon historical r1i1p1 2001 2005 /tmp/input-data/" in result, result)
+        nose.tools.ok_("CMIP5 MPI-ESM-MR Amon historical r1i1p1 2001 2005 /tmp/input-data/" in result, result)
 

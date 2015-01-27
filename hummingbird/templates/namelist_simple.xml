@@ -26,7 +26,9 @@ NOTES: The namelist is part of the ESMValTool
 </GLOBAL>
 
 <MODELS>
+  % for model in models:
   <model>CMIP5 ${model} ${cmor_table} ${experiment} ${ensemble} ${start_year} ${end_year} ${workspace}/input-data/</model>
+  % endfor
 </MODELS>
 
 <!-- Please do not change anything below this line, 
