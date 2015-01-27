@@ -52,7 +52,7 @@ NOTES: The namelist is part of the ESMValTool
     </diag>
     % elif diag == 'reformat':
     <diag>
-      <description> Tutorial diagnostic used in the doc/toy-diagnostic-tutorial.pdf </description>
+      <description>Tutorial diagnostic used in the doc/toy-diagnostic-tutorial.pdf</description>
       <variable_def_dir>${prefix}/variable_defs/</variable_def_dir>
       <variable>psl</variable>
       <field_type>T2Ms</field_type>
@@ -93,6 +93,15 @@ NOTES: The namelist is part of the ESMValTool
 
       <diag_script cfg="cfg_perfmetrics_grading_RMSD_850_glob.ncl">perfmetrics_grading.ncl</diag_script>
       <diag_script cfg="cfg_perfmetrics_grading_RMSD_200_glob.ncl">perfmetrics_grading.ncl</diag_script>
+    </diag>
+    % elif diag == 'plot_perfmetrics':
+    <diag>
+      <description>Portrait diagram</description>
+      <variable_def_dir>${prefix}/variable_defs/</variable_def_dir>
+      <variable>ta</variable>
+      <field_type>T3M</field_type>
+      <diag_script_cfg_dir>${prefix}/nml/cfg_perfmetrics/CMIP5/</diag_script_cfg_dir>
+      <diag_script cfg="cfg_perfmetrics_grading_collect.ncl">perfmetrics_grading_collect.ncl</diag_script>
     </diag>
     % endif
 </DIAGNOSTICS>
