@@ -14,6 +14,17 @@ class ESMValToolProcess(WPSProcess):
             version = "0.1",
             abstract="Test Process for ESMValTool")
 
+        self.diag = self.addLiteralInput(
+            identifier="diag",
+            title="Diagnostic",
+            abstract="",
+            default="MyDiag",
+            type=type(''),
+            minOccurs=1,
+            maxOccurs=1,
+            allowedValues=['MyDiag', 'overview']
+            )
+
         self.credentials = self.addComplexInput(
             identifier = "credentials",
             title = "X509 Certificate",
@@ -158,6 +169,7 @@ class ESMValToolProcess(WPSProcess):
         self.show_status("starting", 0)
         
         out, namelist_file, log_file = esmvaltool.run_on_esgf(
+            diag=self.diag.getValue(),
             credentials=self.credentials.getValue(),
             project="CMIP5",
             model=self.model.getValue(),

@@ -116,6 +116,7 @@ def run_docker(workspace):
     return join(workspace, 'log.txt')
 
 def run_on_esgf(
+        diag,
         project, model, variable, cmor_table, experiment, ensemble, start_year, end_year,
         distrib=False, replica=False, limit=10,
         credentials=None,
@@ -174,7 +175,7 @@ def run_on_esgf(
     # generate namelist
     logger.info("generate namelist ...")
     namelist = generate_namelist(
-        diag='MyDiag',
+        diag=diag,
         prefix=prefix,
         workspace=workspace,
         model=model,

@@ -22,6 +22,7 @@ class EsmValToolProcessTestCase(WpsTestCase):
     @attr('online')
     def test_mydiag(self):
         inputs = []
+        inputs.append(('diag', 'MyDiag'))
         inputs.append(('credentials', CREDENTIALS))
         inputs.append(('distrib', 'False'))
         inputs.append(('replica', 'False'))
@@ -46,6 +47,7 @@ class EsmValToolProcessTestCase(WpsTestCase):
         # TODO: fix replica search ... did not return results
         raise SkipTest
         inputs = []
+        inputs.append(('diag', 'MyDiag'))
         inputs.append(('credentials', CREDENTIALS))
         inputs.append(('distrib', 'False'))
         inputs.append(('replica', 'True'))
