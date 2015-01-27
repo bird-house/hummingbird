@@ -45,7 +45,7 @@ NOTES: The namelist is part of the ESMValTool
     <diag>
       <description>Tutorial contour plot used in the doc/overview.pdf</description>
       <variable_def_dir>${prefix}/variable_defs/</variable_def_dir>
-      <variable>pr</variable>
+      <variable>${variable}</variable>
       <field_type>T2Ms</field_type>
       <diag_script_cfg_dir>${prefix}/nml/cfg_overview</diag_script_cfg_dir>
       <diag_script cfg="cfg_precip.ncl">surfconplot_simple.ncl</diag_script>

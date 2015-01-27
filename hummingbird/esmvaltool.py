@@ -30,7 +30,8 @@ def prepare(file_urls):
     return workspace
 
 def generate_namelist(prefix, workspace,
-                      model, experiment, cmor_table, ensemble, start_year, end_year,
+                      model, experiment, cmor_table, ensemble, variable,
+                      start_year, end_year,
                       diag='MyDiag',
                       docker=False):
     logger.info("generate namelist: diag=%s", diag)
@@ -53,6 +54,7 @@ def generate_namelist(prefix, workspace,
         experiment=experiment,
         cmor_table=cmor_table,
         ensemble=ensemble,
+        variable=variable,
         start_year=start_year,
         end_year=end_year,
         )
@@ -117,7 +119,8 @@ def run_docker(workspace):
 
 def run_on_esgf(
         diag,
-        project, model, variable, cmor_table, experiment, ensemble, start_year, end_year,
+        project, model, variable, cmor_table, experiment, ensemble,
+        start_year, end_year,
         distrib=False, replica=False, limit=10,
         credentials=None,
         monitor=None):
@@ -182,6 +185,7 @@ def run_on_esgf(
         cmor_table=cmor_table,
         experiment=experiment,
         ensemble=ensemble,
+        variable=variable,
         start_year=start_year,
         end_year=end_year,
         docker=docker,
@@ -206,6 +210,7 @@ def run_on_esgf(
     if diag == 'MyDiag':
         shutil.copyfile(join(workspace, 'plots', 'MyDiag', 'MyDiag_MyVar.ps'), out)
     elif diag == 'overview':
-        shutil.copyfile(join(workspace, 'plots', 'surfconplot_simple', 'surfconplot_simple_pr_T2Ms_ANN.ps'), out)
+        filename = 'surfconplot_simple_%s_T2Ms_ANN.ps' % variable
+        shutil.copyfile(join(workspace, 'plots', 'surfconplot_simple', filename), out)
 
     return out, namelist_file, log_file
