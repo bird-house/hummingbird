@@ -20,8 +20,8 @@ NOTES: The namelist is part of the ESMValTool
   <write_plot_vars type="boolean">      True      </write_plot_vars>
   <max_data_filesize type="integer">    100      </max_data_filesize>
   <max_data_blocksize type="integer">   500      </max_data_blocksize>
-  <verbosity  type="integer">           2                 </verbosity>
-  <exit_on_warning  type="boolean">     True              </exit_on_warning>
+  <verbosity  type="integer">           1                 </verbosity>
+  <exit_on_warning  type="boolean">     False              </exit_on_warning>
   <output_file_type>                    ${output_format}  </output_file_type>
 </GLOBAL>
 
@@ -64,6 +64,7 @@ NOTES: The namelist is part of the ESMValTool
       <description>Annual cycle contour plot</description>
       <variable_def_dir>${prefix}/variable_defs/</variable_def_dir>
       <variable>pr</variable>
+      <!-- T2Ms: time series (T), 2-dim (2), monthly means (M), at the surface (s) -->
       <field_type>T2Ms</field_type>
       <diag_script_cfg_dir>${prefix}/nml/cfg_generic/</diag_script_cfg_dir>
       <diag_script cfg="cfg_generic_anncycplot.ncl">anncycplot.ncl</diag_script>
@@ -76,6 +77,8 @@ NOTES: The namelist is part of the ESMValTool
       <field_type>T3M</field_type>
       <diag_script_cfg_dir>${prefix}/nml/cfg_perfmetrics/CMIP5/</diag_script_cfg_dir>
 
+      <!-- Additional data sets specific for this section. 
+           Data sets defined here will be applied together with the models from the global section -->
       <model>OBS   NCEP        reanaly     1           2000  2001  /home/pingu/Public/data/esmvaltool/ESMValTool_OBS/NCEP</model>
       <model>OBS   ERA-Interim reanaly     1           2000  2001  /home/pingu/Public/data/esmvaltool/ESMValTool_OBS/ERA-Interim</model>
 
