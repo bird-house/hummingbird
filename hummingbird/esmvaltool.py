@@ -194,11 +194,18 @@ def run_on_esgf(
         namelist=namelist_file, prefix=prefix, workspace=workspace, docker=docker)
     logger.info("esmvaltool done")
 
+    #import time
+    #time.sleep(60)
+
     # output: postscript
     # TODO: permisson problem with generated files within docker container
     import shutil
     out = 'output.ps'
     from os.path import join
-    shutil.copyfile(join(workspace, 'plots', 'MyDiag', 'MyDiag_MyVar.ps'), out)
+    # TODO: fix output generation of esmvaltool
+    if diag == 'MyDiag':
+        shutil.copyfile(join(workspace, 'plots', 'MyDiag', 'MyDiag_MyVar.ps'), out)
+    elif diag == 'overview':
+        shutil.copyfile(join(workspace, 'plots', 'surfconplot_simple', 'surfconplot_simple_pr_T2Ms_ANN.ps'), out)
 
     return out, namelist_file, log_file
