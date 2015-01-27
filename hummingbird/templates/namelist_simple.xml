@@ -50,6 +50,15 @@ NOTES: The namelist is part of the ESMValTool
       <diag_script_cfg_dir>${prefix}/nml/cfg_overview</diag_script_cfg_dir>
       <diag_script cfg="cfg_precip.ncl">surfconplot_simple.ncl</diag_script>
     </diag>
+    % elif diag == 'reformat':
+    <diag>
+      <description> Tutorial diagnostic used in the doc/toy-diagnostic-tutorial.pdf </description>
+      <variable_def_dir>${prefix}/variable_defs/</variable_def_dir>
+      <variable>psl</variable>
+      <field_type>T2Ms</field_type>
+      <diag_script_cfg_dir>${prefix}/nml/cfg_generic/</diag_script_cfg_dir>
+      <diag_script cfg="cfg_generic_tsline.ncl">tsline.ncl</diag_script>
+    </diag>
     % endif
 </DIAGNOSTICS>
 

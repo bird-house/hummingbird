@@ -20,7 +20,7 @@ class WpsTestCase(TestCase):
 class EsmValToolProcessTestCase(WpsTestCase):
 
     @attr('online')
-    def test_mydiag(self):
+    def test_mydiag_ta(self):
         #raise SkipTest
         inputs = []
         inputs.append(('diag', 'MyDiag'))
@@ -92,16 +92,16 @@ class EsmValToolProcessTestCase(WpsTestCase):
         nose.tools.ok_(execution.status == 'ProcessSucceeded', execution.status)
 
     @attr('online')
-    def test_overview_ta(self):
+    def test_reformat_psl(self):
         raise SkipTest
         inputs = []
-        inputs.append(('diag', 'overview'))
+        inputs.append(('diag', 'reformat'))
         inputs.append(('credentials', CREDENTIALS))
         inputs.append(('distrib', 'False'))
         inputs.append(('replica', 'False'))
         inputs.append(('limit', '10'))
         inputs.append(('model', 'MPI-ESM-LR'))
-        inputs.append(('variable', 'ta'))
+        inputs.append(('variable', 'psl'))
         inputs.append(('cmor_table', 'Amon'))
         inputs.append(('experiment', 'historical'))
         inputs.append(('ensemble', 'r1i1p1'))

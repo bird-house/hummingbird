@@ -22,7 +22,7 @@ class ESMValToolProcess(WPSProcess):
             type=type(''),
             minOccurs=1,
             maxOccurs=1,
-            allowedValues=['MyDiag', 'overview']
+            allowedValues=['MyDiag', 'overview', 'reformat']
             )
 
         self.credentials = self.addComplexInput(
@@ -85,7 +85,7 @@ class ESMValToolProcess(WPSProcess):
             type=type(''),
             minOccurs=1,
             maxOccurs=1,
-            allowedValues=['ta', 'tas', 'ua', 'va', 'zg', 'pr', 'rlut', 'rsut']
+            allowedValues=['ta', 'tas', 'ua', 'va', 'zg', 'psl', 'pr', 'rlut', 'rsut']
             )
 
         self.cmor_table = self.addLiteralInput(
