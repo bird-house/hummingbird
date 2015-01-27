@@ -1,0 +1,56 @@
+<namelist>
+<namelist_summary>
+========================================================================
+DESCRIPTION: A namelist used for the tutorial in the doc-folder
+AUTHORS: This file is generated
+
+NOTES: The namelist is part of the ESMValTool 
+       ESMValTool PIs EMBRACE:                
+       Veronika Eyring (DLR, Germany) and Klaus Wyser (SMHI, Sweden)
+========================================================================
+</namelist_summary>
+
+<GLOBAL>
+  <write_plots type="boolean">           True      </write_plots>
+  <write_netcdf type="boolean">          True      </write_netcdf>
+  <force_processing type="boolean">     False      </force_processing>
+  <wrk_dir type="path">                 ${workspace}/work/     </wrk_dir>
+  <plot_dir type="path">                ${workspace}/plots/     </plot_dir>
+  <climo_dir type="path">               ${workspace}/climo/     </climo_dir>
+  <write_plot_vars type="boolean">       True      </write_plot_vars>
+  <max_data_filesize type="integer">      100      </max_data_filesize>
+  <max_data_blocksize type="integer">     500      </max_data_blocksize>
+  <verbosity  type="integer">               1      </verbosity>
+  <exit_on_warning  type="boolean">      True      </exit_on_warning>
+  <output_file_type>                       ps      </output_file_type>
+</GLOBAL>
+
+<MODELS>
+  <model>  CMIP5 ${model} ${cmor_table} ${experiment} ${ensemble} ${start_year} ${end_year} ${workspace}/input-data/  </model>
+</MODELS>
+
+<!-- Please do not change anything below this line, 
+     unless you want to modify the standard diagnostic settings. -->
+<DIAGNOSTICS>
+    % if diag == 'MyDiag':
+    <diag>
+      <description>Tutorial diagnostic used in the doc/toy-diagnostic-tutorial.pdf</description>
+      <variable_def_dir>${prefix}/variable_defs/</variable_def_dir>
+      <variable>MyVar</variable>
+      <field_type>T3M</field_type>
+      <diag_script_cfg_dir>${prefix}/nml/cfg_MyDiag/</diag_script_cfg_dir>
+      <diag_script cfg="cfg_MyDiag.ncl">MyDiag.ncl</diag_script>
+    </diag>
+    % elif diag == 'overview':
+    <diag>
+      <description>Tutorial contour plot used in the doc/overview.pdf</description>
+      <variable_def_dir>${prefix}/variable_defs/</variable_def_dir>
+      <variable>pr</variable>
+      <field_type>T2Ms</field_type>
+      <diag_script_cfg_dir>${prefix}/nml/cfg_overview</diag_script_cfg_dir>
+      <diag_script cfg="cfg_precip.ncl">surfconplot_simple.ncl</diag_script>
+    </diag>
+    % endif
+</DIAGNOSTICS>
+
+</namelist>

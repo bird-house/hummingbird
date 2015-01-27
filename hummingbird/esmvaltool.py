@@ -29,10 +29,11 @@ def prepare(file_urls):
             results.append(new_name)
     return workspace
 
-def generate_namelist(name, prefix, workspace,
+def generate_namelist(prefix, workspace,
                       model, experiment, cmor_table, ensemble, start_year, end_year,
+                      diag='MyDiag',
                       docker=False):
-    logger.info("generate namelist %s", name)
+    logger.info("generate namelist: diag=%s", diag)
 
     if docker is True:
         prefix = "/home/esmval/esmvaltool"
@@ -41,10 +42,11 @@ def generate_namelist(name, prefix, workspace,
     from os.path import join, dirname
     from mako.template import Template
     mytemplate = Template(
-        filename=join(dirname(__file__), 'templates', 'namelist_%s.xml' % name),
+        filename=join(dirname(__file__), 'templates', 'namelist_simple.xml'),
         output_encoding='utf-8',
         encoding_errors='replace')
     return mytemplate.render_unicode(
+        diag=diag,
         prefix=prefix,
         workspace=workspace,
         model=model,
@@ -172,7 +174,7 @@ def run_on_esgf(
     # generate namelist
     logger.info("generate namelist ...")
     namelist = generate_namelist(
-        name="MyDiag",
+        diag='MyDiag',
         prefix=prefix,
         workspace=workspace,
         model=model,

@@ -13,7 +13,7 @@ class EsmValToolTestCase(TestCase):
 
     def test_generate_namelist(self):
         result = esmvaltool.generate_namelist(
-            name="MyDiag",
+            diag="MyDiag",
             prefix="/opt/esmvaltool",
             workspace="/tmp",
             model="MPI-ESM-LR",
