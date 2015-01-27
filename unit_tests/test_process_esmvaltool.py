@@ -21,7 +21,7 @@ class EsmValToolProcessTestCase(WpsTestCase):
 
     @attr('online')
     def test_mydiag_ta(self):
-        #raise SkipTest
+        raise SkipTest
         inputs = []
         inputs.append(('diag', 'MyDiag'))
         inputs.append(('output_format', 'ps'))
@@ -71,7 +71,7 @@ class EsmValToolProcessTestCase(WpsTestCase):
 
     @attr('online')
     def test_overview_pr(self):
-        #raise SkipTest
+        raise SkipTest
         inputs = []
         inputs.append(('diag', 'overview'))
         inputs.append(('credentials', CREDENTIALS))
@@ -123,6 +123,7 @@ class EsmValToolProcessTestCase(WpsTestCase):
         raise SkipTest
         inputs = []
         inputs.append(('diag', 'anncycplot'))
+        inputs.append(('output_format', 'png'))
         inputs.append(('credentials', CREDENTIALS))
         inputs.append(('distrib', 'False'))
         inputs.append(('replica', 'False'))
@@ -141,11 +142,11 @@ class EsmValToolProcessTestCase(WpsTestCase):
         monitorExecution(execution, sleepSecs=1)
 
         nose.tools.ok_(execution.status == 'ProcessSucceeded', execution.status)
-        #nose.tools.ok_(False, execution.processOutputs[0].reference)
+        nose.tools.ok_(False, execution.processOutputs[0].reference)
 
     @attr('online')
     def test_perfmetrics_ta(self):
-        raise SkipTest
+        #raise SkipTest
         inputs = []
         inputs.append(('diag', 'perfmetrics'))
         inputs.append(('credentials', CREDENTIALS))
@@ -157,8 +158,8 @@ class EsmValToolProcessTestCase(WpsTestCase):
         inputs.append(('cmor_table', 'Amon'))
         inputs.append(('experiment', 'historical'))
         inputs.append(('ensemble', 'r1i1p1'))
-        inputs.append(('start_year', '2001'))
-        inputs.append(('end_year', '2005'))
+        inputs.append(('start_year', '2000'))
+        inputs.append(('end_year', '2001'))
         
         #output=[('output', True), ('namelist', True), ('log', True)]
         output=[('namelist', True), ('log', True)]

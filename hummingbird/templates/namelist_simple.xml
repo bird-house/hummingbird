@@ -20,8 +20,8 @@ NOTES: The namelist is part of the ESMValTool
   <write_plot_vars type="boolean">      True      </write_plot_vars>
   <max_data_filesize type="integer">    100      </max_data_filesize>
   <max_data_blocksize type="integer">   500      </max_data_blocksize>
-  <verbosity  type="integer">           1                 </verbosity>
-  <exit_on_warning  type="boolean">     False              </exit_on_warning>
+  <verbosity  type="integer">           2                 </verbosity>
+  <exit_on_warning  type="boolean">     True              </exit_on_warning>
   <output_file_type>                    ${output_format}  </output_file_type>
 </GLOBAL>
 
@@ -61,9 +61,19 @@ NOTES: The namelist is part of the ESMValTool
     </diag>
     % elif diag == 'anncycplot':
     <diag>
+      <description>Time series and monthly mean</description>
+      <variable_def_dir>${prefix}/variable_defs/</variable_def_dir>
+      <variable>pr_mmday</variable>
+      <field_type>T2Ms</field_type>
+      <diag_script_cfg_dir>${prefix}/nml/cfg_generic/</diag_script_cfg_dir>
+
+      <diag_script cfg="cfg_generic_tsline.ncl">tsline.ncl</diag_script>
+      <diag_script cfg="cfg_generic_monline.ncl">monline.ncl</diag_script>
+    </diag>
+    <diag>
       <description>Annual cycle contour plot</description>
       <variable_def_dir>${prefix}/variable_defs/</variable_def_dir>
-      <variable>pr</variable>
+      <variable>pr_mmday</variable>
       <!-- T2Ms: time series (T), 2-dim (2), monthly means (M), at the surface (s) -->
       <field_type>T2Ms</field_type>
       <diag_script_cfg_dir>${prefix}/nml/cfg_generic/</diag_script_cfg_dir>
