@@ -71,7 +71,7 @@ class EsmValToolProcessTestCase(WpsTestCase):
 
     @attr('online')
     def test_overview_pr(self):
-        raise SkipTest
+        #raise SkipTest
         inputs = []
         inputs.append(('diag', 'overview'))
         inputs.append(('credentials', CREDENTIALS))
