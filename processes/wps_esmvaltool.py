@@ -35,37 +35,6 @@ class ESMValToolProcess(WPSProcess):
             formats=[{"mimeType":"application/x-pkcs7-mime"}],
             )
 
-        self.distrib = self.addLiteralInput(
-            identifier = "distrib",
-            title = "Distributed",
-            abstract = "If flag is set then a distributed search will be run.",
-            default = False,
-            minOccurs=1,
-            maxOccurs=1,
-            type=type(True)
-            )
-
-        self.replica = self.addLiteralInput(
-            identifier = "replica",
-            title = "Replica",
-            abstract = "If flag is set then search will include replicated datasets.",
-            default = False,
-            minOccurs=1,
-            maxOccurs=1,
-            type=type(True)
-            )
-
-        self.limit = self.addLiteralInput(
-            identifier = "limit",
-            title = "Limit",
-            abstract = "Maximum number of datasets in search result",
-            default = 20,
-            minOccurs=1,
-            maxOccurs=1,
-            type=type(1),
-            allowedValues=[0,1,2,5,10,20,50,100,200]
-            )
-
         self.model = self.addLiteralInput(
             identifier="model",
             title="Model",
@@ -186,6 +155,8 @@ class ESMValToolProcess(WPSProcess):
 
     def execute(self):
         self.show_status("starting", 0)
+
+        # TODO: configure distrib, replica, limit
         
         out, namelist_file, log_file = esmvaltool.run_on_esgf(
             diag=self.diag.getValue(),
@@ -196,9 +167,9 @@ class ESMValToolProcess(WPSProcess):
             cmor_table=self.cmor_table.getValue(),
             experiment=self.experiment.getValue(),
             ensemble=self.ensemble.getValue(),
-            distrib=self.distrib.getValue(),
-            replica=self.replica.getValue(),
-            limit=self.limit.getValue(),
+            distrib=True,
+            replica=False,
+            limit=100,
             start_year=self.start_year.getValue(),
             end_year=self.end_year.getValue(),
             output_format=self.output_format.getValue(),
