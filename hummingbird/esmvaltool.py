@@ -198,10 +198,10 @@ def run_on_esgf(
     namelist_file = write_namelist(namelist=namelist, workspace=workspace)
 
     # run esmvaltool
-    logger.info("esmvaltool ...")
+    monitor("esmvaltool ...", 10)
     log_file = run(
         namelist=namelist_file, prefix=prefix, workspace=workspace, docker=docker)
-    logger.info("esmvaltool done")
+    monitor("esmvaltool done", 90)
 
     #import time
     #time.sleep(60)
