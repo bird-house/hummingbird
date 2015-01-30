@@ -134,13 +134,13 @@ class ESMValToolOverviewProcess(WPSProcess):
             asReference=True,
             )
 
-        self.log = self.addComplexOutput(
-            identifier="log",
-            title="log",
-            abstract="",
-            formats=[{"mimeType":"text/plain"}],
-            asReference=True,
-            )
+        ## self.log = self.addComplexOutput(
+        ##     identifier="log",
+        ##     title="log",
+        ##     abstract="",
+        ##     formats=[{"mimeType":"text/plain"}],
+        ##     asReference=True,
+        ##     )
 
     def execute(self):
         self.show_status("starting", 0)
@@ -167,7 +167,7 @@ class ESMValToolOverviewProcess(WPSProcess):
         self.show_status("done", 100)
 
         self.namelist.setValue(namelist_file)
-        self.log.setValue( log_file )
+        #self.log.setValue( log_file )
         self.output.setValue(out)
         
 
