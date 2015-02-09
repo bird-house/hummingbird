@@ -39,7 +39,7 @@ class ESMValToolOverviewProcess(WPSProcess):
             identifier="variable",
             title="Variable",
             abstract="",
-            default="ta",
+            default="pr",
             type=type(''),
             minOccurs=1,
             maxOccurs=1,
