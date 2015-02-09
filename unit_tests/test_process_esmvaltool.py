@@ -21,7 +21,7 @@ class EsmValToolProcessTestCase(WpsTestCase):
 
     @attr('online')
     def test_mydiag_ta(self):
-        #raise SkipTest
+        raise SkipTest
         inputs = []
         inputs.append(('diag', 'MyDiag'))
         inputs.append(('output_format', 'ps'))
