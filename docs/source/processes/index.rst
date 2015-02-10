@@ -22,6 +22,7 @@ The XML response of the WPS service is the following document:
 
 .. literalinclude:: wps_cfchecker.xml
     :language: xml
+    :emphasize-lines: 9,26,46
     :linenos:
 
 The WPS Parameters are:
