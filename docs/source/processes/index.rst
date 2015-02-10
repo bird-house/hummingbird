@@ -37,6 +37,25 @@ The WPS Parameters are:
      Is the output parameter to provide the report of the CF check as text document. 
      It is a WPS ComplexData type with MIME-type ``text/plain``.
 
+WPS process execution
+---------------------
+
+An example execution of the cfchecker process with public available data:
+
+http://localhost:8092/wps?service=WPS&version=1.0.0&request=Execute&identifier=cfchecker&DataInputs=resource=http://www.esrl.noaa.gov/psd/thredds/fileServer/Datasets/ncep/vwnd.sfc.2015.nc&RawDataOutput=output
+
+The process is called with key/value parameters, synchronously and with direct output (``RawDataOutput``).
+
+The resulting text document of the cfchecker report looks like the following:
+
+.. literalinclude:: cf_output.txt
+    :linenos:
+
+CDO
+===
+
+to be continued ...
+
 
 
 

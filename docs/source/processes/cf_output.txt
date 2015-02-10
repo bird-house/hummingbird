@@ -1,0 +1,35 @@
+CHECKING NetCDF FILE: vwnd.sfc.2015.nc
+=====================
+WARNING: The conventions attribute specifies COARDS, assuming CF-1.0
+Using CF Checker Version 2.0.6
+Checking against CF Version CF-1.0
+Using Standard Name Table Version 28 (2015-01-07T10:24:11Z)
+
+ERROR (2.6.1): This netCDF file does not appear to contain CF Convention data.
+
+------------------
+Checking variable: lat
+------------------
+
+------------------
+Checking variable: head
+------------------
+INFO (3.1): No units attribute set.  Please consider adding a units attribute for completeness.
+
+------------------
+Checking variable: vwnd
+------------------
+WARNING (2.5.1): missing_value and _FillValue set to differing values
+
+------------------
+Checking variable: lon
+------------------
+
+------------------
+Checking variable: time
+------------------
+WARNING (4.4.1): Use of the calendar and/or month_lengths attributes is recommended for time coordinate variables
+
+ERRORS detected: 1
+WARNINGS given: 2
+INFORMATION messages: 1
