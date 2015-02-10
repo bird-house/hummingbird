@@ -20,6 +20,7 @@ Contents:
    installation/index
    configuration/index
    testing/index
+   processes/index
 
 
 
