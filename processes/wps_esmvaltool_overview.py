@@ -12,7 +12,7 @@ class ESMValToolOverviewProcess(ESMValToolProcess):
             identifier = "overview",
             title = "ESMValTool Overview",
             version = "0.1",
-            abstract="Overview Diag of ESMValTool")
+            abstract="Tutorial contour plot used in the doc/overview.pdf")
 
         self.variable = self.addLiteralInput(
             identifier="variable",

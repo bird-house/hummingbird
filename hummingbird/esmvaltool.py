@@ -40,11 +40,15 @@ def generate_namelist(prefix, workspace,
     if docker is True:
         prefix = "/home/esmval/esmvaltool"
         workspace = "/workspace"
-    
+
+    namelist = 'namelist_simple.xml'
+    if diag == 'perfmetrics':
+        namelist = 'namelist_perfmetrics.xml'
+        
     from os.path import join, dirname
     from mako.template import Template
     mytemplate = Template(
-        filename=join(dirname(__file__), 'templates', 'namelist_simple.xml'),
+        filename=join(dirname(__file__), 'templates', namelist),
         output_encoding='utf-8',
         encoding_errors='replace')
     return mytemplate.render_unicode(

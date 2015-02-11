@@ -12,7 +12,7 @@ class ESMValToolMyDiagProcess(ESMValToolProcess):
             identifier = "mydiag",
             title = "ESMValTool MyDiag",
             version = "0.1",
-            abstract="Tutorial Diag of ESMValTool")
+            abstract="Tutorial diagnostic used in the doc/toy-diagnostic-tutorial.pdf")
 
         self.variable = self.addLiteralInput(
             identifier="variable",
