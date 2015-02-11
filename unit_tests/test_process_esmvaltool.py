@@ -21,7 +21,7 @@ class EsmValToolProcessTestCase(WpsTestCase):
 
     @attr('online')
     def test_mydiag_ta(self):
-        raise SkipTest
+        #raise SkipTest
         inputs = []
         inputs.append(('output_format', 'ps'))
         inputs.append(('credentials', CREDENTIALS))
@@ -33,8 +33,7 @@ class EsmValToolProcessTestCase(WpsTestCase):
         inputs.append(('start_year', '2000'))
         inputs.append(('end_year', '2004'))
         
-        #output=[('output', True), ('namelist', True), ('log', True)]
-        output=[('log', True)]
+        output=[('output', True), ('namelist', True), ('log', True)]
         execution = self.wps.execute(identifier="mydiag", inputs=inputs, output=output)
         monitorExecution(execution, sleepSecs=1)
 
@@ -61,6 +60,7 @@ class EsmValToolProcessTestCase(WpsTestCase):
         #nose.tools.ok_(False, execution.processOutputs[0].reference)
 
     @attr('online')
+    @attr('slow')
     def test_perfmetrics_ta(self):
         raise SkipTest
         inputs = []

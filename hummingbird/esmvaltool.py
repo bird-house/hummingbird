@@ -32,7 +32,7 @@ def prepare(file_urls):
 def generate_namelist(prefix, workspace,
                       models, experiment, cmor_table, ensemble, variable,
                       start_year, end_year,
-                      diag='MyDiag',
+                      diag='mydiag',
                       output_format='ps'):
     logger.info("generate namelist: diag=%s", diag)
 
@@ -184,7 +184,7 @@ def run_on_esgf(
     out = 'output.ps'
     from os.path import join
     # TODO: fix output generation of esmvaltool
-    if diag == 'MyDiag':
+    if diag == 'mydiag':
         filename = 'MyDiag_MyVar.%s' % output_format
         shutil.copyfile(join(workspace, 'plots', 'MyDiag', filename), out)
     elif diag == 'surfconplot':
