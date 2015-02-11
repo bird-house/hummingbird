@@ -1,30 +1,34 @@
 <namelist>
-<namelist_summary>Diag: Perfmetrics. This file is generated!</namelist_summary>
+  <namelist_summary>Diag: Perfmetrics. This file is generated!</namelist_summary>
 
-<GLOBAL>
-  <write_plots type="boolean">          True      </write_plots>
-  <write_netcdf type="boolean">         True      </write_netcdf>
-  <force_processing type="boolean">     False      </force_processing>
-  <wrk_dir type="path">                 ${workspace}/work/     </wrk_dir>
-  <plot_dir type="path">                ${workspace}/plots/     </plot_dir>
-  <climo_dir type="path">               ${workspace}/climo/     </climo_dir>
-  <write_plot_vars type="boolean">      True      </write_plot_vars>
-  <max_data_filesize type="integer">    100      </max_data_filesize>
-  <max_data_blocksize type="integer">   500      </max_data_blocksize>
-  <verbosity  type="integer">           1                 </verbosity>
-  <exit_on_warning  type="boolean">     True              </exit_on_warning>
-  <output_file_type>                    ${output_format}  </output_file_type>
-</GLOBAL>
+  <GLOBAL>
+    <write_plots type="boolean">          True      </write_plots>
+    <write_netcdf type="boolean">         True      </write_netcdf>
+    <force_processing type="boolean">     True      </force_processing>
+    <wrk_dir type="path">                 ${workspace}/work/     </wrk_dir>
+    <plot_dir type="path">                ${workspace}/plots/     </plot_dir>
+    <climo_dir type="path">               ${workspace}/climo/     </climo_dir>
+    <write_plot_vars type="boolean">      True      </write_plot_vars>
+    <max_data_filesize type="integer">    100      </max_data_filesize>
+    <max_data_blocksize type="integer">   500      </max_data_blocksize>
+    <verbosity  type="integer">           1                 </verbosity>
+    <exit_on_warning  type="boolean">     False              </exit_on_warning>
+    <output_file_type>                    ${output_format}  </output_file_type>
+    <force_calc type="boolean">              True         </force_calc>
+    <force_gradecalc type="boolean">         True         </force_gradecalc>
+    <force_taylorcalc type="boolean">        True         </force_taylorcalc>
+  </GLOBAL>
 
-<MODELS>
-  % for model in models:
-  <model>CMIP5 ${model} ${cmor_table} ${experiment} ${ensemble} ${start_year} ${end_year} ${workspace}/input-data/</model>
-  % endfor
-</MODELS>
+  <MODELS>
+    % for model in models:
+    <model>CMIP5 ${model} ${cmor_table} ${experiment} ${ensemble} ${start_year} ${end_year} ${workspace}/input-data/</model>
+    % endfor
+  </MODELS>
 
-<!-- Please do not change anything below this line, 
-     unless you want to modify the standard diagnostic settings. -->
-<DIAGNOSTICS>
+  <!-- Please do not change anything below this line, 
+       unless you want to modify the standard diagnostic settings. -->
+  <DIAGNOSTICS>
+  
     <diag>
       <description>Temperature</description>
       <variable_def_dir>${prefix}/variable_defs/</variable_def_dir>
@@ -39,11 +43,11 @@
 
       <diag_script cfg="cfg_perfmetrics_grading_RMSD_850_glob.ncl">perfmetrics_main.ncl</diag_script>
       <diag_script cfg="cfg_perfmetrics_grading_RMSD_200_glob.ncl">perfmetrics_main.ncl</diag_script>
-
+      
       <diag_script cfg="cfg_perfmetrics_grading_RMSD_850_glob.ncl">perfmetrics_grading.ncl</diag_script>
       <diag_script cfg="cfg_perfmetrics_grading_RMSD_200_glob.ncl">perfmetrics_grading.ncl</diag_script>
     </diag>
-
+  
     <diag>
       <description>Portrait diagram</description>
       <variable_def_dir>${prefix}/variable_defs/</variable_def_dir>
@@ -53,6 +57,6 @@
       <diag_script cfg="cfg_perfmetrics_grading_collect.ncl">perfmetrics_grading_collect.ncl</diag_script>
     </diag>
 
-</DIAGNOSTICS>
+  </DIAGNOSTICS>
 
 </namelist>

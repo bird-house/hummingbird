@@ -12,17 +12,16 @@ class ESMValToolPerfmetricsProcess(ESMValToolProcess):
             identifier = "perfmetrics",
             title = "ESMValTool Perfmetrics",
             version = "0.1",
-            abstract="Perfmetrics Diag of ESMValTool")
+            abstract="Plotting the performance metrics for the CMIP5 models")
 
         self.variable = self.addLiteralInput(
             identifier="variable",
             title="Variable",
             abstract="",
-            default="ta",
             type=type(''),
             minOccurs=1,
             maxOccurs=1,
-            allowedValues=['ta']
+            allowedValues=['ta', 'ua', 'va']
             )
 
     def execute(self):

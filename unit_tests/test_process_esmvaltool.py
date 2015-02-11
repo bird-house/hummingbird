@@ -68,6 +68,7 @@ class EsmValToolProcessTestCase(WpsTestCase):
         inputs = []
         inputs.append(('credentials', CREDENTIALS))
         inputs.append(('model', 'MPI-ESM-LR'))
+        inputs.append(('model', 'MPI-ESM-MR'))
         inputs.append(('variable', 'ta'))
         inputs.append(('cmor_table', 'Amon'))
         inputs.append(('experiment', 'historical'))

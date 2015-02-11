@@ -177,7 +177,7 @@ def run_on_esgf(
     monitor("esmvaltool done", 90)
 
     #import time
-    #time.sleep(60)
+    #time.sleep(120)
 
     # output: postscript
     import shutil
@@ -190,5 +190,8 @@ def run_on_esgf(
     elif diag == 'overview':
         filename = 'surfconplot_simple_%s_T2Ms_ANN.%s' % (variable, output_format)
         shutil.copyfile(join(workspace, 'plots', 'surfconplot_simple', filename), out)
+    elif diag == 'perfmetrics':
+        filename = 'namelist_%s-850_Globta-200_Glob_RMSD_grading.%s' % (variable, output_format)
+        shutil.copyfile(join(workspace, 'plots', 'perfmetrics_grading', filename), out)
 
     return out, namelist_file, log_file
