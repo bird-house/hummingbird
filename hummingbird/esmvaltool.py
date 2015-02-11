@@ -81,6 +81,14 @@ def run(namelist, prefix, workspace, docker=False):
 def run_console(namelist, prefix):
     logger.info("run esmval on console: prefix=%s", prefix)
     logger.debug("namelist=%s", namelist)
+
+    # set ncl path
+    ncarg_root = config.getConfigValue("hummingbird", "ncarg_root")
+    from os import environ
+    environ['NCARG_ROOT'] = ncarg_root.strip()
+    environ['PATH'] = environ['NCARG_ROOT'] + ':' + environ['PATH']
+    logger.debug('path with ncarg_root: %s', environ['PATH'])
+    
     from os.path import join, curdir, abspath
     script = join(prefix, "esmval.sh")
     logfile = abspath(join(curdir, 'log.txt'))
@@ -201,9 +209,9 @@ def run_on_esgf(
     monitor("esmvaltool ...", 10)
     log_file = run(
         namelist=namelist_file, prefix=prefix, workspace=workspace, docker=docker)
-    #if logger.isEnabledFor(logging.DEBUG):
-    with open(log_file, 'r') as f:
-        logger.info(f.read())
+    if logger.isEnabledFor(logging.DEBUG):
+        with open(log_file, 'r') as f:
+            logger.debug(f.read())
     monitor("esmvaltool done", 90)
 
     #import time
