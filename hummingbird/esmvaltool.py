@@ -187,7 +187,7 @@ def run_on_esgf(
     if diag == 'MyDiag':
         filename = 'MyDiag_MyVar.%s' % output_format
         shutil.copyfile(join(workspace, 'plots', 'MyDiag', filename), out)
-    elif diag == 'overview':
+    elif diag == 'surfconplot':
         filename = 'surfconplot_simple_%s_T2Ms_ANN.%s' % (variable, output_format)
         shutil.copyfile(join(workspace, 'plots', 'surfconplot_simple', filename), out)
     elif diag == 'perfmetrics':

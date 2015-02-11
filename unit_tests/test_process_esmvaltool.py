@@ -42,21 +42,19 @@ class EsmValToolProcessTestCase(WpsTestCase):
         #nose.tools.ok_(False, execution.processOutputs[0].reference)
 
     @attr('online')
-    def test_overview_pr(self):
-        raise SkipTest
+    def test_surfconplot_pr(self):
+        #raise SkipTest
         inputs = []
         inputs.append(('credentials', CREDENTIALS))
         inputs.append(('model', 'MPI-ESM-LR'))
-        inputs.append(('variable', 'pr'))
         inputs.append(('cmor_table', 'Amon'))
         inputs.append(('experiment', 'historical'))
         inputs.append(('ensemble', 'r1i1p1'))
         inputs.append(('start_year', '2001'))
         inputs.append(('end_year', '2005'))
         
-        #output=[('output', True), ('namelist', True), ('log', True)]
-        output=[('log', True)]
-        execution = self.wps.execute(identifier="overview", inputs=inputs, output=output)
+        output=[('output', True), ('namelist', True), ('log', True)]
+        execution = self.wps.execute(identifier="surfconplot", inputs=inputs, output=output)
         monitorExecution(execution, sleepSecs=1)
 
         nose.tools.ok_(execution.status == 'ProcessSucceeded', execution.status)
@@ -64,7 +62,7 @@ class EsmValToolProcessTestCase(WpsTestCase):
 
     @attr('online')
     def test_perfmetrics_ta(self):
-        #raise SkipTest
+        raise SkipTest
         inputs = []
         inputs.append(('credentials', CREDENTIALS))
         inputs.append(('model', 'MPI-ESM-LR'))
@@ -76,8 +74,7 @@ class EsmValToolProcessTestCase(WpsTestCase):
         inputs.append(('start_year', '2000'))
         inputs.append(('end_year', '2001'))
         
-        #output=[('output', True), ('namelist', True), ('log', True)]
-        output=[('namelist', True), ('log', True)]
+        output=[('output', True), ('namelist', True), ('log', True)]
         execution = self.wps.execute(identifier="perfmetrics", inputs=inputs, output=output)
         monitorExecution(execution, sleepSecs=1)
 

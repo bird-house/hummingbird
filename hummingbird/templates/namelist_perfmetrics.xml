@@ -30,9 +30,9 @@
   <DIAGNOSTICS>
   
     <diag>
-      <description>Temperature</description>
+      <description>${variable}</description>
       <variable_def_dir>${prefix}/variable_defs/</variable_def_dir>
-      <variable>ta</variable>
+      <variable>${variable}</variable>
       <field_type>T3M</field_type>
       <diag_script_cfg_dir>${prefix}/nml/cfg_perfmetrics/CMIP5/</diag_script_cfg_dir>
 
@@ -51,7 +51,7 @@
     <diag>
       <description>Portrait diagram</description>
       <variable_def_dir>${prefix}/variable_defs/</variable_def_dir>
-      <variable>ta</variable>
+      <variable>${variable}</variable>
       <field_type>T3M</field_type>
       <diag_script_cfg_dir>${prefix}/nml/cfg_perfmetrics/CMIP5/</diag_script_cfg_dir>
       <diag_script cfg="cfg_perfmetrics_grading_collect.ncl">perfmetrics_grading_collect.ncl</diag_script>

@@ -9,21 +9,21 @@ logger = logging.getLogger(__name__)
 class ESMValToolOverviewProcess(ESMValToolProcess):
     def __init__(self):
         ESMValToolProcess.__init__(self,
-            identifier = "overview",
-            title = "ESMValTool Overview",
+            identifier = "surfconplot",
+            title = "ESMValTool: surface contour plot for precipitation",
             version = "0.1",
             abstract="Tutorial contour plot used in the doc/overview.pdf")
 
-        self.variable = self.addLiteralInput(
-            identifier="variable",
-            title="Variable",
-            abstract="",
-            default="pr",
-            type=type(''),
-            minOccurs=1,
-            maxOccurs=1,
-            allowedValues=['pr']
-            )
+        ## self.variable = self.addLiteralInput(
+        ##     identifier="variable",
+        ##     title="Variable",
+        ##     abstract="",
+        ##     default="pr",
+        ##     type=type(''),
+        ##     minOccurs=1,
+        ##     maxOccurs=1,
+        ##     allowedValues=['pr']
+        ##     )
 
     def execute(self):
         self.show_status("starting", 0)
@@ -31,11 +31,11 @@ class ESMValToolOverviewProcess(ESMValToolProcess):
         # TODO: configure distrib, replica, limit
         
         out, namelist_file, log_file = esmvaltool.run_on_esgf(
-            diag='overview',
+            diag='surfconplot',
             credentials=self.credentials.getValue(),
             project="CMIP5",
             models=self.getInputValues(identifier='model'),
-            variable=self.variable.getValue(),
+            variable='pr',
             cmor_table=self.cmor_table.getValue(),
             experiment=self.experiment.getValue(),
             ensemble=self.ensemble.getValue(),
