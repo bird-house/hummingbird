@@ -21,7 +21,7 @@ class EsmValToolProcessTestCase(WpsTestCase):
 
     @attr('online')
     def test_mydiag_ta(self):
-        raise SkipTest
+        #raise SkipTest
         inputs = []
         inputs.append(('diag', 'MyDiag'))
         inputs.append(('output_format', 'ps'))
@@ -31,8 +31,8 @@ class EsmValToolProcessTestCase(WpsTestCase):
         inputs.append(('cmor_table', 'Amon'))
         inputs.append(('experiment', 'historical'))
         inputs.append(('ensemble', 'r1i1p1'))
-        inputs.append(('start_year', '2001'))
-        inputs.append(('end_year', '2005'))
+        inputs.append(('start_year', '2000'))
+        inputs.append(('end_year', '2004'))
         
         #output=[('output', True), ('namelist', True), ('log', True)]
         output=[('log', True)]

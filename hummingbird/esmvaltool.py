@@ -201,6 +201,9 @@ def run_on_esgf(
     monitor("esmvaltool ...", 10)
     log_file = run(
         namelist=namelist_file, prefix=prefix, workspace=workspace, docker=docker)
+    #if logger.isEnabledFor(logging.DEBUG):
+    with open(log_file, 'r') as f:
+        logger.info(f.read())
     monitor("esmvaltool done", 90)
 
     #import time
