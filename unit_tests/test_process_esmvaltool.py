@@ -64,9 +64,8 @@ class EsmValToolProcessTestCase(WpsTestCase):
 
     @attr('online')
     def test_perfmetrics_ta(self):
-        raise SkipTest
+        #raise SkipTest
         inputs = []
-        inputs.append(('diag', 'perfmetrics'))
         inputs.append(('credentials', CREDENTIALS))
         inputs.append(('model', 'MPI-ESM-LR'))
         inputs.append(('variable', 'ta'))
@@ -78,7 +77,7 @@ class EsmValToolProcessTestCase(WpsTestCase):
         
         #output=[('output', True), ('namelist', True), ('log', True)]
         output=[('namelist', True), ('log', True)]
-        execution = self.wps.execute(identifier="esmvaltool", inputs=inputs, output=output)
+        execution = self.wps.execute(identifier="perfmetrics", inputs=inputs, output=output)
         monitorExecution(execution, sleepSecs=1)
 
         nose.tools.ok_(execution.status == 'ProcessSucceeded', execution.status)
