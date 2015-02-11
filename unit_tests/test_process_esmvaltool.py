@@ -21,9 +21,8 @@ class EsmValToolProcessTestCase(WpsTestCase):
 
     @attr('online')
     def test_mydiag_ta(self):
-        raise SkipTest
+        #raise SkipTest
         inputs = []
-        inputs.append(('diag', 'MyDiag'))
         inputs.append(('output_format', 'ps'))
         inputs.append(('credentials', CREDENTIALS))
         inputs.append(('model', 'MPI-ESM-LR'))
@@ -36,32 +35,11 @@ class EsmValToolProcessTestCase(WpsTestCase):
         
         #output=[('output', True), ('namelist', True), ('log', True)]
         output=[('log', True)]
-        execution = self.wps.execute(identifier="esmvaltool", inputs=inputs, output=output)
+        execution = self.wps.execute(identifier="mydiag", inputs=inputs, output=output)
         monitorExecution(execution, sleepSecs=1)
 
         nose.tools.ok_(execution.status == 'ProcessSucceeded', execution.status)
         #nose.tools.ok_(False, execution.processOutputs[0].reference)
-
-    @attr('online')
-    def test_mydiag_with_replica(self):
-        # TODO: fix replica search ... did not return results
-        raise SkipTest
-        inputs = []
-        inputs.append(('diag', 'MyDiag'))
-        inputs.append(('credentials', CREDENTIALS))
-        inputs.append(('model', 'MPI-ESM-LR'))
-        inputs.append(('variable', 'ta'))
-        inputs.append(('cmor_table', 'Amon'))
-        inputs.append(('experiment', 'historical'))
-        inputs.append(('ensemble', 'r1i1p1'))
-        inputs.append(('start_year', '2001'))
-        inputs.append(('end_year', '2005'))
-        
-        output=[('output', True), ('log', True)]
-        execution = self.wps.execute(identifier="esmvaltool", inputs=inputs, output=output)
-        monitorExecution(execution, sleepSecs=1)
-
-        nose.tools.ok_(execution.status == 'ProcessSucceeded', execution.status)
 
     @attr('online')
     def test_overview_pr(self):
@@ -85,53 +63,6 @@ class EsmValToolProcessTestCase(WpsTestCase):
         #nose.tools.ok_(False, execution.processOutputs[0].reference)
 
     @attr('online')
-    def test_reformat_psl(self):
-        raise SkipTest
-        inputs = []
-        inputs.append(('diag', 'reformat'))
-        inputs.append(('credentials', CREDENTIALS))
-        inputs.append(('distrib', 'False'))
-        inputs.append(('replica', 'False'))
-        inputs.append(('limit', '10'))
-        inputs.append(('model', 'MPI-ESM-LR'))
-        inputs.append(('variable', 'psl'))
-        inputs.append(('cmor_table', 'Amon'))
-        inputs.append(('experiment', 'historical'))
-        inputs.append(('ensemble', 'r1i1p1'))
-        inputs.append(('start_year', '2001'))
-        inputs.append(('end_year', '2005'))
-        
-        #output=[('output', True), ('namelist', True), ('log', True)]
-        output=[('namelist', True), ('log', True)]
-        execution = self.wps.execute(identifier="esmvaltool", inputs=inputs, output=output)
-        monitorExecution(execution, sleepSecs=1)
-
-        nose.tools.ok_(execution.status == 'ProcessSucceeded', execution.status)
-
-    @attr('online')
-    def test_anncycplot_pr(self):
-        raise SkipTest
-        inputs = []
-        inputs.append(('diag', 'anncycplot'))
-        inputs.append(('output_format', 'png'))
-        inputs.append(('credentials', CREDENTIALS))
-        inputs.append(('model', 'MPI-ESM-LR'))
-        inputs.append(('variable', 'pr'))
-        inputs.append(('cmor_table', 'Amon'))
-        inputs.append(('experiment', 'historical'))
-        inputs.append(('ensemble', 'r1i1p1'))
-        inputs.append(('start_year', '2001'))
-        inputs.append(('end_year', '2005'))
-        
-        #output=[('output', True), ('namelist', True), ('log', True)]
-        output=[('namelist', True), ('log', True)]
-        execution = self.wps.execute(identifier="esmvaltool", inputs=inputs, output=output)
-        monitorExecution(execution, sleepSecs=1)
-
-        nose.tools.ok_(execution.status == 'ProcessSucceeded', execution.status)
-        nose.tools.ok_(False, execution.processOutputs[0].reference)
-
-    @attr('online')
     def test_perfmetrics_ta(self):
         raise SkipTest
         inputs = []
@@ -152,27 +83,6 @@ class EsmValToolProcessTestCase(WpsTestCase):
 
         nose.tools.ok_(execution.status == 'ProcessSucceeded', execution.status)
 
-    @attr('online')
-    def test_plot_perfmetrics_ta(self):
-        raise SkipTest
-        inputs = []
-        inputs.append(('diag', 'plot_perfmetrics'))
-        inputs.append(('credentials', CREDENTIALS))
-        inputs.append(('model', 'MPI-ESM-LR'))
-        inputs.append(('variable', 'ta'))
-        inputs.append(('cmor_table', 'Amon'))
-        inputs.append(('experiment', 'historical'))
-        inputs.append(('ensemble', 'r1i1p1'))
-        inputs.append(('start_year', '2001'))
-        inputs.append(('end_year', '2005'))
-        
-        #output=[('output', True), ('namelist', True), ('log', True)]
-        output=[('log', True)]
-        execution = self.wps.execute(identifier="esmvaltool", inputs=inputs, output=output)
-        monitorExecution(execution, sleepSecs=1, download=False)
-
-        nose.tools.ok_(execution.status == 'ProcessSucceeded', execution.status)
-        #nose.tools.ok_(False, execution.processOutputs[0].reference)
 
     
 

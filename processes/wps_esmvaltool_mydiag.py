@@ -6,23 +6,23 @@ from hummingbird import esmvaltool
 from malleefowl import wpslogging as logging
 logger = logging.getLogger(__name__)
 
-class ESMValToolOverviewProcess(ESMValToolProcess):
+class ESMValToolMyDiagProcess(ESMValToolProcess):
     def __init__(self):
         ESMValToolProcess.__init__(self,
-            identifier = "overview",
-            title = "ESMValTool Overview",
+            identifier = "mydiag",
+            title = "ESMValTool MyDiag",
             version = "0.1",
-            abstract="Overview Diag of ESMValTool")
+            abstract="Tutorial Diag of ESMValTool")
 
         self.variable = self.addLiteralInput(
             identifier="variable",
             title="Variable",
             abstract="",
-            default="pr",
+            default="ta",
             type=type(''),
             minOccurs=1,
             maxOccurs=1,
-            allowedValues=['pr']
+            allowedValues=['ta']
             )
 
     def execute(self):
@@ -31,7 +31,7 @@ class ESMValToolOverviewProcess(ESMValToolProcess):
         # TODO: configure distrib, replica, limit
         
         out, namelist_file, log_file = esmvaltool.run_on_esgf(
-            diag='overview',
+            diag='mydiag',
             credentials=self.credentials.getValue(),
             project="CMIP5",
             models=self.getInputValues(identifier='model'),

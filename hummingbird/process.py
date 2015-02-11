@@ -35,17 +35,6 @@ class ESMValToolProcess(WPSProcess):
             allowedValues=["IPSL-CM5A-LR", "MPI-ESM-LR", "MPI-ESM-MR", "MPI-ESM-P"]
             )
 
-        self.variable = self.addLiteralInput(
-            identifier="variable",
-            title="Variable",
-            abstract="",
-            default="pr",
-            type=type(''),
-            minOccurs=1,
-            maxOccurs=1,
-            allowedValues=['pr']
-            )
-
         self.cmor_table = self.addLiteralInput(
             identifier="cmor_table",
             title="CMOR Table",
