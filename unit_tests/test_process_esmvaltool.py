@@ -21,7 +21,7 @@ class EsmValToolProcessTestCase(WpsTestCase):
 
     @attr('online')
     def test_mydiag_ta(self):
-        #raise SkipTest
+        raise SkipTest
         inputs = []
         inputs.append(('diag', 'MyDiag'))
         inputs.append(('output_format', 'ps'))
@@ -67,7 +67,6 @@ class EsmValToolProcessTestCase(WpsTestCase):
     def test_overview_pr(self):
         #raise SkipTest
         inputs = []
-        inputs.append(('diag', 'overview'))
         inputs.append(('credentials', CREDENTIALS))
         inputs.append(('model', 'MPI-ESM-LR'))
         inputs.append(('variable', 'pr'))
@@ -79,7 +78,7 @@ class EsmValToolProcessTestCase(WpsTestCase):
         
         #output=[('output', True), ('namelist', True), ('log', True)]
         output=[('log', True)]
-        execution = self.wps.execute(identifier="esmvaltool", inputs=inputs, output=output)
+        execution = self.wps.execute(identifier="overview", inputs=inputs, output=output)
         monitorExecution(execution, sleepSecs=1)
 
         nose.tools.ok_(execution.status == 'ProcessSucceeded', execution.status)
