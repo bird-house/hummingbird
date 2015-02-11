@@ -34,8 +34,8 @@
 
       <!-- Additional data sets specific for this section. 
            Data sets defined here will be applied together with the models from the global section -->
-      <model>OBS   NCEP        reanaly     1           2000  2001  /home/pingu/Public/data/esmvaltool/ESMValTool_OBS/NCEP</model>
-      <model>OBS   ERA-Interim reanaly     1           2000  2001  /home/pingu/Public/data/esmvaltool/ESMValTool_OBS/ERA-Interim</model>
+      <model>OBS   NCEP        reanaly     1           2000  2001  ${obs_root}/NCEP</model>
+      <model>OBS   ERA-Interim reanaly     1           2000  2001  ${obs_root}/ERA-Interim</model>
 
       <diag_script cfg="cfg_perfmetrics_grading_RMSD_850_glob.ncl">perfmetrics_main.ncl</diag_script>
       <diag_script cfg="cfg_perfmetrics_grading_RMSD_200_glob.ncl">perfmetrics_main.ncl</diag_script>

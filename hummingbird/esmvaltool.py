@@ -55,6 +55,7 @@ def generate_namelist(prefix, workspace,
         diag=diag,
         prefix=prefix,
         workspace=workspace,
+        obs_root=config.getConfigValue("hummingbird", "obs_root"),
         models=models,
         experiment=experiment,
         cmor_table=cmor_table,
@@ -66,6 +67,7 @@ def generate_namelist(prefix, workspace,
         )
    
 def write_namelist(namelist, workspace):
+    logger.debug(namelist)
     from os.path import join, abspath
     #from tempfile import mkstemp
     #_,outfile = mkstemp(prefix='namelist_', suffix='.xml', dir=curdir)
