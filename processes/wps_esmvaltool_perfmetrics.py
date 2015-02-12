@@ -10,9 +10,16 @@ class ESMValToolPerfmetricsProcess(ESMValToolProcess):
     def __init__(self):
         ESMValToolProcess.__init__(self,
             identifier = "perfmetrics",
-            title = "ESMValTool Perfmetrics",
+            title = "ESMValTool: Perfmetrics",
             version = "0.1",
-            abstract="Plotting the performance metrics for the CMIP5 models")
+            abstract="""Plotting the performance metrics for the CMIP5 models.
+
+            Calculation of performance metrics to quantify the ability of the models to reproduce the
+            climatological mean annual cycle for some selected EVCs  plus some additional
+            corresponding diagnostics and plots to better understand and interpret the results. 
+            
+            https://teamsites-extranet.dlr.de/pa/ESMValTool/Wiki/Performance%20Metrics%20for%20Essential%20Climate%20Parameters.aspx
+            """)
 
         self.variable = self.addLiteralInput(
             identifier="variable",
@@ -21,7 +28,7 @@ class ESMValToolPerfmetricsProcess(ESMValToolProcess):
             type=type(''),
             minOccurs=1,
             maxOccurs=1,
-            allowedValues=['ta', 'ua', 'va']
+            allowedValues=['ta', 'ua', 'va', 'zg', 'tas', 'rsut', 'rlut']
             )
 
     def execute(self):
