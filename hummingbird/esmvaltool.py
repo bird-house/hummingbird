@@ -94,6 +94,14 @@ def run_console(namelist, prefix):
         logger.exception('esmvaltool failed!')
     return logfile
 
+def perfmetrics(
+        project, models, variable, cmor_table, experiment, ensemble,
+        start_year, end_year,
+        output_format='ps'):
+    field_type = 'T3M'
+    if variable in ['tas', 'rsut', 'rlut']:
+        field_type = 'T2Ms'
+
 def run_on_esgf(
         diag,
         project, models, variable, cmor_table, experiment, ensemble,
