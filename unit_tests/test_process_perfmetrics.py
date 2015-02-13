@@ -22,7 +22,7 @@ class PerfmetricsProcessTestCase(WpsTestCase):
     @attr('online')
     @attr('slow')
     def test_perfmetrics_ta(self):
-        raise SkipTest
+        #raise SkipTest
         inputs = []
         inputs.append(('credentials', CREDENTIALS))
         inputs.append(('model', 'MPI-ESM-LR'))

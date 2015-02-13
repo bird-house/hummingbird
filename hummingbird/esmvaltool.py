@@ -185,7 +185,7 @@ def run_on_esgf(
     monitor("esmvaltool done", 90)
 
     #import time
-    #time.sleep(120)
+    #time.sleep(300)
 
     # output: postscript
     import shutil
