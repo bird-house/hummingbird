@@ -59,26 +59,6 @@ class EsmValToolProcessTestCase(WpsTestCase):
         nose.tools.ok_(execution.status == 'ProcessSucceeded', execution.status)
         #nose.tools.ok_(False, execution.processOutputs[0].reference)
 
-    @attr('online')
-    @attr('slow')
-    def test_perfmetrics_ta(self):
-        #raise SkipTest
-        inputs = []
-        inputs.append(('credentials', CREDENTIALS))
-        inputs.append(('model', 'MPI-ESM-LR'))
-        inputs.append(('model', 'MPI-ESM-MR'))
-        inputs.append(('variable', 'ta'))
-        inputs.append(('cmor_table', 'Amon'))
-        inputs.append(('experiment', 'historical'))
-        inputs.append(('ensemble', 'r1i1p1'))
-        inputs.append(('start_year', '2000'))
-        inputs.append(('end_year', '2001'))
-        
-        output=[('output', True), ('namelist', True), ('log', True)]
-        execution = self.wps.execute(identifier="perfmetrics", inputs=inputs, output=output)
-        monitorExecution(execution, sleepSecs=1)
-
-        nose.tools.ok_(execution.status == 'ProcessSucceeded', execution.status)
 
 
     
