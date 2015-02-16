@@ -87,9 +87,9 @@ def run_console(namelist, prefix):
     logfile = abspath(join(curdir, 'log.txt'))
     cmd = [script, namelist, logfile]
 
-    from subprocess import check_output
+    from subprocess import check_output, STDOUT
     try:
-        check_output(cmd)
+        check_output(cmd, stderr=STDOUT)
     except:
         logger.exception('esmvaltool failed!')
     return logfile
