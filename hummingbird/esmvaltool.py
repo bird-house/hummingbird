@@ -79,7 +79,7 @@ def run_console(namelist, prefix):
     ncarg_root = config.getConfigValue("hummingbird", "ncarg_root")
     from os import environ
     environ['NCARG_ROOT'] = ncarg_root.strip()
-    environ['PATH'] = environ['NCARG_ROOT'] + ':' + environ['PATH']
+    environ['PATH'] = environ['NCARG_ROOT'] + '/bin' + ':' + environ['PATH']
     logger.debug('path with ncarg_root: %s', environ['PATH'])
     
     from os.path import join, curdir, abspath
