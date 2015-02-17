@@ -33,12 +33,9 @@ def diag_mydiag(
     log_file = esmvaltool(namelist=namelist_file)
     monitor("MyDiag done", 90)
 
-    # output: postscript
-    import shutil
-    out = 'output.ps'
+    # plot output
     from os.path import join
-    filename = 'MyDiag_MyVar.%s' % output_format
-    shutil.copyfile(join(workspace, 'plots', 'MyDiag', filename), out)
+    out = join(workspace, 'plots', 'MyDiag', 'MyDiag_MyVar.%s' % output_format)
 
     # references/acknowledgements document
     ack_file = join(workspace, 'work', 'namelist.txt')
@@ -74,13 +71,10 @@ def diag_surfconplot(
     log_file = esmvaltool(namelist=namelist_file)
     monitor("surfconplot done", 90)
 
-    # output: postscript
-    import shutil
-    out = 'output.ps'
+    # plot output
     from os.path import join
-    # TODO: fix output generation of esmvaltool
     filename = 'surfconplot_simple_%s_T2Ms_ANN.%s' % (constraints.get('variable'), output_format)
-    shutil.copyfile(join(workspace, 'plots', 'surfconplot_simple', filename), out)
+    out = join(workspace, 'plots', 'surfconplot_simple', filename)
     
     # references/acknowledgements document
     ack_file = join(workspace, 'work', 'namelist.txt')
@@ -120,12 +114,10 @@ def diag_perfmetrics(
     log_file = esmvaltool(namelist=namelist_file)
     monitor("perfmetrics done", 90)
 
-    # output: postscript
-    import shutil
-    out = 'output.ps'
+    # plot output
     from os.path import join
     filename = 'namelist_%s-850_Globta-200_Glob_RMSD_grading.%s' % (constraints.get('variable'), output_format)
-    shutil.copyfile(join(workspace, 'plots', 'perfmetrics_grading', filename), out)
+    out = join(workspace, 'plots', 'perfmetrics_grading', filename)
 
     # references/acknowledgements document
     ack_file = join(workspace, 'work', 'namelist.txt')
@@ -274,11 +266,10 @@ def generate_namelist(diag, workspace,
 def write_namelist(namelist, workspace):
     logger.debug(namelist)
     from os.path import join, abspath
-    #from tempfile import mkstemp
-    #_,outfile = mkstemp(prefix='namelist_', suffix='.xml', dir=curdir)
     outfile = abspath(join(workspace, "namelist.xml"))
     with open(outfile, 'w') as fp:
         fp.write(namelist)
     return outfile
+
 
 
