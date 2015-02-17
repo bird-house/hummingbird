@@ -70,7 +70,57 @@ def perfmetrics(
             end_year=end_year,
             output_format=output_format,
             monitor=monitor )
-    return out, namelist_file, log_file, ack_file 
+    return out, namelist_file, log_file, ack_file
+
+def retrieve_esgf_files(
+        project, models, variable, cmor_table, experiment, ensemble,
+        start_year, end_year,
+        distrib=True, replica=False, limit=100,
+        credentials=None,
+        monitor=None):
+    # TODO: configure archive_root only in malleefowl
+    from os import environ
+    if not environ.has_key('ESGF_ARCHIVE_ROOT'):
+        environ['ESGF_ARCHIVE_ROOT'] = config.getConfigValue("hummingbird", "archive_root")
+
+    # search
+    constraints = []
+    constraints.append( ("project", project ) )
+    for model in models:
+        constraints.append( ("model", model ) )
+    constraints.append( ("variable", variable ) )
+    constraints.append( ("cmor_table", cmor_table ) )
+    constraints.append( ("experiment", experiment ) )
+    constraints.append( ("ensemble", ensemble ) )
+
+    logger.debug("constraints: %s", constraints)
+
+    logger.info("esgsearch ...")
+    esgsearch = ESGSearch(
+        url = config.getConfigValue("hummingbird", "esgsearch_url"),
+        distrib = distrib,
+        replica = replica,
+        latest = True,
+        monitor = monitor,
+    )
+
+    (urls, summary, facet_counts) = esgsearch.search(
+        constraints = constraints,
+        query = "*:*",
+        start = "%d-01-01" % start_year,
+        end = "%d-12-31" % end_year,
+        search_type = "File",
+        limit = limit,
+        offset = 0,
+        temporal = False)
+     
+    # download
+    logger.info("download ...")
+    file_urls = download_files(
+        urls = urls,
+        credentials = credentials,
+        monitor = monitor)
+    return file_urls
 
 def prepare_workspace(file_urls):
     # symlink files to workspace dir
@@ -169,50 +219,12 @@ def run_on_esgf(
         credentials=None,
         output_format='ps',
         monitor=None):
-    # TODO: configure archive_root only in malleefowl
-    from os import environ
-    if not environ.has_key('ESGF_ARCHIVE_ROOT'):
-        environ['ESGF_ARCHIVE_ROOT'] = config.getConfigValue("hummingbird", "archive_root")
-    # get prefix of esmvaltool
-    prefix = config.getConfigValue("hummingbird", "esmval_root")
 
-    # search
-    constraints = []
-    constraints.append( ("project", project ) )
-    for model in models:
-        constraints.append( ("model", model ) )
-    constraints.append( ("variable", variable ) )
-    constraints.append( ("cmor_table", cmor_table ) )
-    constraints.append( ("experiment", experiment ) )
-    constraints.append( ("ensemble", ensemble ) )
-
-    logger.debug("constraints: %s", constraints)
-
-    logger.info("esgsearch ...")
-    esgsearch = ESGSearch(
-        url = config.getConfigValue("hummingbird", "esgsearch_url"),
-        distrib = distrib,
-        replica = replica,
-        latest = True,
-        monitor = monitor,
-    )
-
-    (urls, summary, facet_counts) = esgsearch.search(
-        constraints = constraints,
-        query = "*:*",
-        start = "%d-01-01" % start_year,
-        end = "%d-12-31" % end_year,
-        search_type = "File",
-        limit = limit,
-        offset = 0,
-        temporal = False)
-     
-    # download
-    logger.info("download ...")
-    file_urls = download_files(
-        urls = urls,
-        credentials = credentials,
-        monitor = monitor)
+    file_urls = retrieve_esgf_files(
+        project=project, models=models, variable=variable, cmor_table=cmor_table, experiment=experiment, ensemble=ensemble,
+        start_year=start_year, end_year=end_year,
+        credentials=credentials,
+        monitor=monitor)
 
     # prepare workspace dir
     logger.info("prepare ...")
@@ -220,6 +232,8 @@ def run_on_esgf(
 
     # generate namelist
     logger.info("generate namelist ...")
+    # get prefix of esmvaltool
+    prefix = config.getConfigValue("hummingbird", "esmval_root")
     namelist = generate_namelist(
         diag=diag,
         prefix=prefix,
@@ -243,9 +257,6 @@ def run_on_esgf(
             logger.debug(f.read())
     monitor("esmvaltool done", 90)
 
-    #import time
-    #time.sleep(300)
-
     # output: postscript
     import shutil
     out = 'output.ps'
@@ -261,9 +272,7 @@ def run_on_esgf(
         filename = 'namelist_%s-850_Globta-200_Glob_RMSD_grading.%s' % (variable, output_format)
         shutil.copyfile(join(workspace, 'plots', 'perfmetrics_grading', filename), out)
 
-    # TODO: reference document:
-    # PY  info: For the required references/acknowledgements of these diagnostics see: 
-    # PY  info: /gpfs_750/projects/BirdHouse/bovec.dkrz.de/var/tmp/pywps-instanceb1cGgj/workspace/work/namelist.txt
+    # references/acknowledgements document
     ack_file = join(workspace, 'work', 'namelist.txt')
 
     return out, namelist_file, log_file, ack_file
