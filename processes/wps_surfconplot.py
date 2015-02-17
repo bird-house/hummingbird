@@ -19,7 +19,7 @@ class ESMValToolOverviewProcess(ESMValToolProcess):
 
         # TODO: configure distrib, replica, limit
         
-        out, namelist_file, log_file, ack_file = esmvaltool.surfconplot(
+        out, namelist_file, log_file, ack_file = esmvaltool.diag_surfconplot(
             credentials=self.credentials.getValue(),
             project="CMIP5",
             models=self.getInputValues(identifier='model'),

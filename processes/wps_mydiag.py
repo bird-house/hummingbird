@@ -30,7 +30,7 @@ class ESMValToolMyDiagProcess(ESMValToolProcess):
 
         # TODO: configure distrib, replica, limit
         
-        out, namelist_file, log_file, ack_file = esmvaltool.mydiag(
+        out, namelist_file, log_file, ack_file = esmvaltool.diag_mydiag(
             credentials=self.credentials.getValue(),
             project="CMIP5",
             models=self.getInputValues(identifier='model'),

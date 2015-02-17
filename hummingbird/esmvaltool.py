@@ -1,11 +1,33 @@
 from malleefowl import config
-from malleefowl.esgf.search import ESGSearch
-from malleefowl.download import download_files
 
 from malleefowl import wpslogging as logging
 logger = logging.getLogger(__name__)
 
-def mydiag(
+def esmvaltool(namelist):
+    prefix = config.getConfigValue("hummingbird", "esmval_root")
+    logger.info("run esmvaltool: prefix=%s", prefix)
+    logger.debug("namelist=%s", namelist)
+
+    # set ncl path
+    ncarg_root = config.getConfigValue("hummingbird", "ncarg_root")
+    from os import environ
+    environ['NCARG_ROOT'] = ncarg_root.strip()
+    environ['PATH'] = environ['NCARG_ROOT'] + '/bin' + ':' + environ['PATH']
+    logger.debug('path with ncarg_root: %s', environ['PATH'])
+    
+    from os.path import join, curdir, abspath
+    script = join(prefix, "esmval.sh")
+    logfile = abspath(join(curdir, 'log.txt'))
+    cmd = [script, namelist, logfile]
+
+    from subprocess import check_output, STDOUT
+    try:
+        check_output(cmd, stderr=STDOUT)
+    except:
+        logger.exception('esmvaltool failed!')
+    return logfile
+
+def diag_mydiag(
         credentials,
         project, models, variable, cmor_table, experiment, ensemble,
         start_year, end_year,
@@ -18,17 +40,11 @@ def mydiag(
         credentials=credentials,
         monitor=monitor)
 
-    # prepare workspace dir
-    logger.info("prepare ...")
     workspace = prepare_workspace(file_urls)
 
-    # generate namelist
-    logger.info("generate namelist ...")
-    # get prefix of esmvaltool
-    prefix = config.getConfigValue("hummingbird", "esmval_root")
     namelist = generate_namelist(
         diag='mydiag',
-        prefix=prefix,
+        prefix=config.getConfigValue("hummingbird", "esmval_root"),
         workspace=workspace,
         models=models,
         cmor_table=cmor_table,
@@ -43,7 +59,7 @@ def mydiag(
 
     # run mydiag
     monitor("MyDiag ...", 10)
-    log_file = esmvaltool(namelist=namelist_file, prefix=prefix)
+    log_file = esmvaltool(namelist=namelist_file)
     if logger.isEnabledFor(logging.DEBUG):
         with open(log_file, 'r') as f:
             logger.debug(f.read())
@@ -53,7 +69,6 @@ def mydiag(
     import shutil
     out = 'output.ps'
     from os.path import join
-    # TODO: fix output generation of esmvaltool
     filename = 'MyDiag_MyVar.%s' % output_format
     shutil.copyfile(join(workspace, 'plots', 'MyDiag', filename), out)
 
@@ -62,7 +77,7 @@ def mydiag(
 
     return out, namelist_file, log_file, ack_file
     
-def surfconplot(
+def diag_surfconplot(
         credentials,
         project, models, variable, cmor_table, experiment, ensemble,
         start_year, end_year,
@@ -74,17 +89,11 @@ def surfconplot(
         credentials=credentials,
         monitor=monitor)
 
-    # prepare workspace dir
-    logger.info("prepare ...")
     workspace = prepare_workspace(file_urls)
 
-    # generate namelist
-    logger.info("generate namelist ...")
-    # get prefix of esmvaltool
-    prefix = config.getConfigValue("hummingbird", "esmval_root")
     namelist = generate_namelist(
         diag='surfconplot',
-        prefix=prefix,
+        prefix=config.getConfigValue("hummingbird", "esmval_root"),
         workspace=workspace,
         models=models,
         cmor_table=cmor_table,
@@ -99,7 +108,7 @@ def surfconplot(
 
     # run esmvaltool
     monitor("surfconplot ...", 10)
-    log_file = esmvaltool(namelist=namelist_file, prefix=prefix)
+    log_file = esmvaltool(namelist=namelist_file)
     if logger.isEnabledFor(logging.DEBUG):
         with open(log_file, 'r') as f:
             logger.debug(f.read())
@@ -118,7 +127,7 @@ def surfconplot(
 
     return out, namelist_file, log_file, ack_file
 
-def perfmetrics(
+def diag_perfmetrics(
         credentials,
         project, models, variable, cmor_table, experiment, ensemble,
         start_year, end_year,
@@ -134,16 +143,11 @@ def perfmetrics(
         credentials=credentials,
         monitor=monitor)
 
-    # prepare workspace dir
-    logger.info("prepare ...")
     workspace = prepare_workspace(file_urls)
 
-    # generate namelist
-    logger.info("generate namelist ...")
-    prefix = config.getConfigValue("hummingbird", "esmval_root")
     namelist = generate_namelist(
         diag='perfmetrics',
-        prefix=prefix,
+        prefix=config.getConfigValue("hummingbird", "esmval_root"),
         workspace=workspace,
         models=models,
         cmor_table=cmor_table,
@@ -182,6 +186,8 @@ def retrieve_esgf_files(
         distrib=True, replica=False, limit=100,
         credentials=None,
         monitor=None):
+    from malleefowl.esgf.search import ESGSearch
+    from malleefowl.download import download_files
     # TODO: configure archive_root only in malleefowl
     from os import environ
     if not environ.has_key('ESGF_ARCHIVE_ROOT'):
@@ -227,6 +233,7 @@ def retrieve_esgf_files(
     return file_urls
 
 def prepare_workspace(file_urls):
+    logger.info("prepare workspace ...")
     # symlink files to workspace dir
     from urlparse import urlparse
     from os import mkdir,chmod, symlink
@@ -292,26 +299,4 @@ def write_namelist(namelist, workspace):
         fp.write(namelist)
     return outfile
 
-def esmvaltool(namelist, prefix):
-    logger.info("run esmvaltool: prefix=%s", prefix)
-    logger.debug("namelist=%s", namelist)
-
-    # set ncl path
-    ncarg_root = config.getConfigValue("hummingbird", "ncarg_root")
-    from os import environ
-    environ['NCARG_ROOT'] = ncarg_root.strip()
-    environ['PATH'] = environ['NCARG_ROOT'] + '/bin' + ':' + environ['PATH']
-    logger.debug('path with ncarg_root: %s', environ['PATH'])
-    
-    from os.path import join, curdir, abspath
-    script = join(prefix, "esmval.sh")
-    logfile = abspath(join(curdir, 'log.txt'))
-    cmd = [script, namelist, logfile]
-
-    from subprocess import check_output, STDOUT
-    try:
-        check_output(cmd, stderr=STDOUT)
-    except:
-        logger.exception('esmvaltool failed!')
-    return logfile
 
