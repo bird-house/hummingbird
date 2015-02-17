@@ -187,7 +187,7 @@ test:
 
 .PHONY: testall
 testall:
-	@echo "Running all tests (also slow tests) ..."
+	@echo "Running all tests (including slow tests) ..."
 	bin/nosetests unit_tests
 
 .PHONY: docs
