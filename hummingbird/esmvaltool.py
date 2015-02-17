@@ -43,7 +43,7 @@ def mydiag(
 
     # run mydiag
     monitor("MyDiag ...", 10)
-    log_file = run_console(namelist=namelist_file, prefix=prefix)
+    log_file = esmvaltool(namelist=namelist_file, prefix=prefix)
     if logger.isEnabledFor(logging.DEBUG):
         with open(log_file, 'r') as f:
             logger.debug(f.read())
@@ -99,7 +99,7 @@ def surfconplot(
 
     # run esmvaltool
     monitor("surfconplot ...", 10)
-    log_file = run_console(namelist=namelist_file, prefix=prefix)
+    log_file = esmvaltool(namelist=namelist_file, prefix=prefix)
     if logger.isEnabledFor(logging.DEBUG):
         with open(log_file, 'r') as f:
             logger.debug(f.read())
@@ -128,19 +128,52 @@ def perfmetrics(
     if variable in ['tas', 'rsut', 'rlut']:
         field_type = 'T2Ms'
 
-    out, namelist_file, log_file, ack_file = run_on_esgf(
-            diag='perfmetrics',
-            credentials=credentials,
-            project=project,
-            models=models,
-            variable=variable,
-            cmor_table=cmor_table,
-            experiment=experiment,
-            ensemble=ensemble,
-            start_year=start_year,
-            end_year=end_year,
-            output_format=output_format,
-            monitor=monitor )
+    file_urls = retrieve_esgf_files(
+        project=project, models=models, variable=variable, cmor_table=cmor_table, experiment=experiment, ensemble=ensemble,
+        start_year=start_year, end_year=end_year,
+        credentials=credentials,
+        monitor=monitor)
+
+    # prepare workspace dir
+    logger.info("prepare ...")
+    workspace = prepare_workspace(file_urls)
+
+    # generate namelist
+    logger.info("generate namelist ...")
+    prefix = config.getConfigValue("hummingbird", "esmval_root")
+    namelist = generate_namelist(
+        diag='perfmetrics',
+        prefix=prefix,
+        workspace=workspace,
+        models=models,
+        cmor_table=cmor_table,
+        experiment=experiment,
+        ensemble=ensemble,
+        variable=variable,
+        start_year=start_year,
+        end_year=end_year,
+        output_format=output_format,
+        )
+    namelist_file = write_namelist(namelist=namelist, workspace=workspace)
+
+    # run esmvaltool
+    monitor("perfmetrics ...", 10)
+    log_file = esmvaltool(namelist=namelist_file, prefix=prefix)
+    if logger.isEnabledFor(logging.DEBUG):
+        with open(log_file, 'r') as f:
+            logger.debug(f.read())
+    monitor("perfmetrics done", 90)
+
+    # output: postscript
+    import shutil
+    out = 'output.ps'
+    from os.path import join
+    filename = 'namelist_%s-850_Globta-200_Glob_RMSD_grading.%s' % (variable, output_format)
+    shutil.copyfile(join(workspace, 'plots', 'perfmetrics_grading', filename), out)
+
+    # references/acknowledgements document
+    ack_file = join(workspace, 'work', 'namelist.txt')
+
     return out, namelist_file, log_file, ack_file
 
 def retrieve_esgf_files(
@@ -259,8 +292,8 @@ def write_namelist(namelist, workspace):
         fp.write(namelist)
     return outfile
 
-def run_console(namelist, prefix):
-    logger.info("run esmval on console: prefix=%s", prefix)
+def esmvaltool(namelist, prefix):
+    logger.info("run esmvaltool: prefix=%s", prefix)
     logger.debug("namelist=%s", namelist)
 
     # set ncl path
@@ -282,68 +315,3 @@ def run_console(namelist, prefix):
         logger.exception('esmvaltool failed!')
     return logfile
 
-def run_on_esgf(
-        diag,
-        project, models, variable, cmor_table, experiment, ensemble,
-        start_year, end_year,
-        distrib=True, replica=False, limit=100,
-        credentials=None,
-        output_format='ps',
-        monitor=None):
-
-    file_urls = retrieve_esgf_files(
-        project=project, models=models, variable=variable, cmor_table=cmor_table, experiment=experiment, ensemble=ensemble,
-        start_year=start_year, end_year=end_year,
-        credentials=credentials,
-        monitor=monitor)
-
-    # prepare workspace dir
-    logger.info("prepare ...")
-    workspace = prepare_workspace(file_urls)
-
-    # generate namelist
-    logger.info("generate namelist ...")
-    # get prefix of esmvaltool
-    prefix = config.getConfigValue("hummingbird", "esmval_root")
-    namelist = generate_namelist(
-        diag=diag,
-        prefix=prefix,
-        workspace=workspace,
-        models=models,
-        cmor_table=cmor_table,
-        experiment=experiment,
-        ensemble=ensemble,
-        variable=variable,
-        start_year=start_year,
-        end_year=end_year,
-        output_format=output_format,
-        )
-    namelist_file = write_namelist(namelist=namelist, workspace=workspace)
-
-    # run esmvaltool
-    monitor("esmvaltool ...", 10)
-    log_file = run_console(namelist=namelist_file, prefix=prefix)
-    if logger.isEnabledFor(logging.DEBUG):
-        with open(log_file, 'r') as f:
-            logger.debug(f.read())
-    monitor("esmvaltool done", 90)
-
-    # output: postscript
-    import shutil
-    out = 'output.ps'
-    from os.path import join
-    # TODO: fix output generation of esmvaltool
-    if diag == 'mydiag':
-        filename = 'MyDiag_MyVar.%s' % output_format
-        shutil.copyfile(join(workspace, 'plots', 'MyDiag', filename), out)
-    elif diag == 'surfconplot':
-        filename = 'surfconplot_simple_%s_T2Ms_ANN.%s' % (variable, output_format)
-        shutil.copyfile(join(workspace, 'plots', 'surfconplot_simple', filename), out)
-    elif diag == 'perfmetrics':
-        filename = 'namelist_%s-850_Globta-200_Glob_RMSD_grading.%s' % (variable, output_format)
-        shutil.copyfile(join(workspace, 'plots', 'perfmetrics_grading', filename), out)
-
-    # references/acknowledgements document
-    ack_file = join(workspace, 'work', 'namelist.txt')
-
-    return out, namelist_file, log_file, ack_file
