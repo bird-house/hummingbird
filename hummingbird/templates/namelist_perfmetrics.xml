@@ -20,8 +20,8 @@
   </GLOBAL>
 
   <MODELS>
-    % for model in models:
-    <model>CMIP5 ${model} ${cmor_table} ${experiment} ${ensemble} ${start_year} ${end_year} ${workspace}/input-data/</model>
+    % for model in constraints.getlist('model'):
+    <model>CMIP5 ${model} ${constraints.get('cmor_table')} ${constraints.get('experiment')} ${constraints.get('ensemble')} ${start_year} ${end_year} ${workspace}/input-data/</model>
     % endfor
   </MODELS>
 
@@ -30,10 +30,14 @@
   <DIAGNOSTICS>
   
     <diag>
-      <description>${variable}</description>
+      <description>${constraints.get('variable')}</description>
       <variable_def_dir>${prefix}/variable_defs/</variable_def_dir>
-      <variable>${variable}</variable>
+      <variable>${constraints.get('variable')}</variable>
+      % if constraints.get('variable') in ['tas', 'rsut', 'rlut']:
+      <field_type>T2Ms</field_type>
+      % else:
       <field_type>T3M</field_type>
+      % endif
       <diag_script_cfg_dir>${prefix}/nml/cfg_perfmetrics/CMIP5/</diag_script_cfg_dir>
 
       <!-- Additional data sets specific for this section. 
@@ -51,8 +55,12 @@
     <diag>
       <description>Portrait diagram</description>
       <variable_def_dir>${prefix}/variable_defs/</variable_def_dir>
-      <variable>${variable}</variable>
+      <variable>${constraints.get('variable')}</variable>
+      % if constraints.get('variable') in ['tas', 'rsut', 'rlut']:
+      <field_type>T2Ms</field_type>
+      % else:
       <field_type>T3M</field_type>
+      % endif
       <diag_script_cfg_dir>${prefix}/nml/cfg_perfmetrics/CMIP5/</diag_script_cfg_dir>
       <diag_script cfg="cfg_perfmetrics_grading_collect.ncl">perfmetrics_grading_collect.ncl</diag_script>
     </diag>

@@ -4,11 +4,11 @@ from malleefowl import wpslogging as logging
 logger = logging.getLogger(__name__)
 
 def diag_mydiag(
-        credentials,
-        constraints,
-        start_year, end_year,
-        output_format='ps',
-        monitor=None):
+    credentials,
+    constraints,
+    start_year, end_year,
+    output_format='ps',
+    monitor=None):
 
     file_urls = retrieve_esgf_files(
         constraints=constraints,
@@ -39,11 +39,12 @@ def diag_mydiag(
     return out, namelist, log_file, ack_file
     
 def diag_surfconplot(
-        credentials,
-        constraints,
-        start_year, end_year,
-        output_format='ps',
-        monitor=None):
+    credentials,
+    constraints,
+    start_year, end_year,
+    output_format='ps',
+    monitor=None):
+
     file_urls = retrieve_esgf_files(
         constraints=constraints,
         start_year=start_year, end_year=end_year,
@@ -74,14 +75,11 @@ def diag_surfconplot(
     return out, namelist, log_file, ack_file
 
 def diag_perfmetrics(
-        credentials,
-        constraints,
-        start_year, end_year,
-        output_format='ps',
-        monitor=None):
-    field_type = 'T3M'
-    if variable in ['tas', 'rsut', 'rlut']:
-        field_type = 'T2Ms'
+    credentials,
+    constraints,
+    start_year, end_year,
+    output_format='ps',
+    monitor=None):
 
     file_urls = retrieve_esgf_files(
         constraints=constraints,
