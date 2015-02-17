@@ -1,3 +1,10 @@
+<%def name="field_type()">
+  % if constraints.get('variable') in ['tas', 'rsut', 'rlut']:
+  <field_type>T2Ms</field_type>
+  % else:
+  <field_type>T3M</field_type>
+  % endif
+</%def>
 <namelist>
   <namelist_summary>Diag: Perfmetrics. This file is generated!</namelist_summary>
 
@@ -13,11 +20,7 @@
       <description>${constraints.get('variable')}</description>
       <variable_def_dir>${prefix}/variable_defs/</variable_def_dir>
       <variable>${constraints.get('variable')}</variable>
-      % if constraints.get('variable') in ['tas', 'rsut', 'rlut']:
-      <field_type>T2Ms</field_type>
-      % else:
-      <field_type>T3M</field_type>
-      % endif
+      ${field_type()}
       <diag_script_cfg_dir>${prefix}/nml/cfg_perfmetrics/CMIP5/</diag_script_cfg_dir>
 
       <!-- Additional data sets specific for this section. 
@@ -36,11 +39,7 @@
       <description>Portrait diagram</description>
       <variable_def_dir>${prefix}/variable_defs/</variable_def_dir>
       <variable>${constraints.get('variable')}</variable>
-      % if constraints.get('variable') in ['tas', 'rsut', 'rlut']:
-      <field_type>T2Ms</field_type>
-      % else:
-      <field_type>T3M</field_type>
-      % endif
+      ${field_type()}
       <diag_script_cfg_dir>${prefix}/nml/cfg_perfmetrics/CMIP5/</diag_script_cfg_dir>
       <diag_script cfg="cfg_perfmetrics_grading_collect.ncl">perfmetrics_grading_collect.ncl</diag_script>
     </diag>
