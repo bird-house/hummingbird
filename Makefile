@@ -182,8 +182,8 @@ buildclean:
 
 .PHONY: test
 test:
-	@echo "Running tests ..."
-	bin/nosetests unit_tests
+	@echo "Running tests (skip slow tests) ..."
+	bin/nosetests -a '!slow' unit_tests
 
 .PHONY: docs
 docs:
