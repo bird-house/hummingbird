@@ -5,6 +5,73 @@ from malleefowl.download import download_files
 from malleefowl import wpslogging as logging
 logger = logging.getLogger(__name__)
 
+def mydiag(
+        credentials,
+        project, models, variable, cmor_table, experiment, ensemble,
+        start_year, end_year,
+        output_format='ps',
+        monitor=None):
+    out, namelist_file, log_file, ack_file = run_on_esgf(
+        diag='mydiag',
+        credentials=credentials,
+        project=project,
+        models=models,
+        variable=variable,
+        cmor_table=cmor_table,
+        experiment=experiment,
+        ensemble=ensemble,
+        start_year=start_year,
+        end_year=end_year,
+        output_format=output_format,
+        monitor=monitor )
+    return out, namelist_file, log_file, ack_file
+
+def surfconplot(
+        credentials,
+        project, models, variable, cmor_table, experiment, ensemble,
+        start_year, end_year,
+        output_format='ps',
+        monitor=None):
+    out, namelist_file, log_file, ack_file = run_on_esgf(
+            diag='surfconplot',
+            credentials=credentials,
+            project=project,
+            models=models,
+            variable=variable,
+            cmor_table=cmor_table,
+            experiment=experiment,
+            ensemble=ensemble,
+            start_year=start_year,
+            end_year=end_year,
+            output_format=output_format,
+            monitor=monitor )
+    return out, namelist_file, log_file, ack_file
+
+def perfmetrics(
+        credentials,
+        project, models, variable, cmor_table, experiment, ensemble,
+        start_year, end_year,
+        output_format='ps',
+        monitor=None):
+    field_type = 'T3M'
+    if variable in ['tas', 'rsut', 'rlut']:
+        field_type = 'T2Ms'
+
+    out, namelist_file, log_file, ack_file = run_on_esgf(
+            diag='perfmetrics',
+            credentials=credentials,
+            project=project,
+            models=models,
+            variable=variable,
+            cmor_table=cmor_table,
+            experiment=experiment,
+            ensemble=ensemble,
+            start_year=start_year,
+            end_year=end_year,
+            output_format=output_format,
+            monitor=monitor )
+    return out, namelist_file, log_file, ack_file 
+
 def prepare_workspace(file_urls):
     # symlink files to workspace dir
     from urlparse import urlparse
@@ -94,19 +161,11 @@ def run_console(namelist, prefix):
         logger.exception('esmvaltool failed!')
     return logfile
 
-def perfmetrics(
-        project, models, variable, cmor_table, experiment, ensemble,
-        start_year, end_year,
-        output_format='ps'):
-    field_type = 'T3M'
-    if variable in ['tas', 'rsut', 'rlut']:
-        field_type = 'T2Ms'
-
 def run_on_esgf(
         diag,
         project, models, variable, cmor_table, experiment, ensemble,
         start_year, end_year,
-        distrib=False, replica=False, limit=10,
+        distrib=True, replica=False, limit=100,
         credentials=None,
         output_format='ps',
         monitor=None):

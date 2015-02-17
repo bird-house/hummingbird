@@ -14,24 +14,12 @@ class ESMValToolOverviewProcess(ESMValToolProcess):
             version = "0.1",
             abstract="Tutorial contour plot used in the doc/overview.pdf")
 
-        ## self.variable = self.addLiteralInput(
-        ##     identifier="variable",
-        ##     title="Variable",
-        ##     abstract="",
-        ##     default="pr",
-        ##     type=type(''),
-        ##     minOccurs=1,
-        ##     maxOccurs=1,
-        ##     allowedValues=['pr']
-        ##     )
-
     def execute(self):
         self.show_status("starting", 0)
 
         # TODO: configure distrib, replica, limit
         
-        out, namelist_file, log_file, ack_file = esmvaltool.run_on_esgf(
-            diag='surfconplot',
+        out, namelist_file, log_file, ack_file = esmvaltool.surfconplot(
             credentials=self.credentials.getValue(),
             project="CMIP5",
             models=self.getInputValues(identifier='model'),
@@ -39,9 +27,6 @@ class ESMValToolOverviewProcess(ESMValToolProcess):
             cmor_table=self.cmor_table.getValue(),
             experiment=self.experiment.getValue(),
             ensemble=self.ensemble.getValue(),
-            distrib=True,
-            replica=False,
-            limit=100,
             start_year=self.start_year.getValue(),
             end_year=self.end_year.getValue(),
             output_format=self.output_format.getValue(),

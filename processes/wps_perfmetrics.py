@@ -36,8 +36,7 @@ class ESMValToolPerfmetricsProcess(ESMValToolProcess):
 
         # TODO: configure distrib, replica, limit
         
-        out, namelist_file, log_file, ack_file = esmvaltool.run_on_esgf(
-            diag='perfmetrics',
+        out, namelist_file, log_file, ack_file = esmvaltool.perfmetrics(
             credentials=self.credentials.getValue(),
             project="CMIP5",
             models=self.getInputValues(identifier='model'),
@@ -45,13 +44,10 @@ class ESMValToolPerfmetricsProcess(ESMValToolProcess):
             cmor_table=self.cmor_table.getValue(),
             experiment=self.experiment.getValue(),
             ensemble=self.ensemble.getValue(),
-            distrib=True,
-            replica=False,
-            limit=100,
             start_year=self.start_year.getValue(),
             end_year=self.end_year.getValue(),
             output_format=self.output_format.getValue(),
-            monitor=self.show_status  )
+            monitor=self.show_status )
         
         self.show_status("done", 100)
 
