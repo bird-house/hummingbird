@@ -15,25 +15,15 @@ def diag_mydiag(
     output_format='ps',
     monitor=None):
 
-    workspace = esgf_workspace(
+    # run diag
+    workspace, namelist, log_file, ack_file = diag(
+        name='mydiag',
+        credentials=credentials,
         constraints=constraints,
         start_year=start_year, end_year=end_year,
-        credentials=credentials,
-        monitor=monitor)
-    namelist = generate_namelist(
-        diag='mydiag',
-        workspace=workspace,
-        constraints=constraints,
-        start_year=start_year,
-        end_year=end_year,
         output_format=output_format,
-        )
-
-    # run mydiag
-    monitor("MyDiag ...", 10)
-    log_file, ack_file = esmvaltool(namelist, workspace)
-    monitor("MyDiag done", 90)
-
+        monitor=monitor)
+   
     # plot output
     from os.path import join
     out = join(workspace, 'plots', 'MyDiag', 'MyDiag_MyVar.%s' % output_format)
@@ -47,25 +37,14 @@ def diag_surfconplot(
     output_format='ps',
     monitor=None):
 
-    workspace = esgf_workspace(
+    # run diag
+    workspace, namelist, log_file, ack_file = diag(
+        name='surfconplot',
+        credentials=credentials,
         constraints=constraints,
         start_year=start_year, end_year=end_year,
-        credentials=credentials,
-        monitor=monitor)
-
-    namelist = generate_namelist(
-        diag='surfconplot',
-        workspace=workspace,
-        constraints=constraints,
-        start_year=start_year,
-        end_year=end_year,
         output_format=output_format,
-        )
-
-    # run esmvaltool
-    monitor("surfconplot ...", 10)
-    log_file, ack_file = esmvaltool(namelist, workspace)
-    monitor("surfconplot done", 90)
+        monitor=monitor)
 
     # plot output
     from os.path import join
@@ -81,23 +60,14 @@ def diag_perfmetrics(
     output_format='ps',
     monitor=None):
 
-    workspace = esgf_workspace(
+    # run diag
+    workspace, namelist, log_file, ack_file = diag(
+        name='perfmetrics',
+        credentials=credentials,
         constraints=constraints,
         start_year=start_year, end_year=end_year,
-        credentials=credentials,
-        monitor=monitor)
-    namelist = generate_namelist(
-        diag='perfmetrics',
-        workspace=workspace,
-        constraints=constraints,
-        start_year=start_year,
-        end_year=end_year,
         output_format=output_format,
-        )
-   
-    monitor("perfmetrics ...", 10)
-    log_file, ack_file = esmvaltool(namelist, workspace)
-    monitor("perfmetrics done", 90)
+        monitor=monitor)
 
     # plot output
     from os.path import join
@@ -105,6 +75,35 @@ def diag_perfmetrics(
     out = join(workspace, 'plots', 'perfmetrics_grading', filename)
 
     return out, namelist, log_file, ack_file
+
+def diag(
+    name,
+    credentials,
+    constraints,
+    start_year, end_year,
+    output_format='ps',
+    monitor=None):
+
+    workspace = esgf_workspace(
+        constraints=constraints,
+        start_year=start_year, end_year=end_year,
+        credentials=credentials,
+        monitor=monitor)
+    namelist = generate_namelist(
+        diag=name,
+        workspace=workspace,
+        constraints=constraints,
+        start_year=start_year,
+        end_year=end_year,
+        output_format=output_format,
+        )
+
+    # run mydiag
+    monitor("%s ..." % name, 10)
+    log_file, ack_file = esmvaltool(namelist, workspace)
+    monitor("%s done" % name, 90)
+
+    return workspace, namelist, log_file, ack_file
 
 def esmvaltool(namelist, workspace):
     prefix = config.getConfigValue("hummingbird", "esmval_root")
