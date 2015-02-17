@@ -26,21 +26,17 @@ def diag_mydiag(
         end_year=end_year,
         output_format=output_format,
         )
-    namelist_file = write_namelist(namelist=namelist, workspace=workspace)
 
     # run mydiag
     monitor("MyDiag ...", 10)
-    log_file = esmvaltool(namelist=namelist_file)
+    log_file, ack_file = esmvaltool(namelist, workspace)
     monitor("MyDiag done", 90)
 
     # plot output
     from os.path import join
     out = join(workspace, 'plots', 'MyDiag', 'MyDiag_MyVar.%s' % output_format)
 
-    # references/acknowledgements document
-    ack_file = join(workspace, 'work', 'namelist.txt')
-
-    return out, namelist_file, log_file, ack_file
+    return out, namelist, log_file, ack_file
     
 def diag_surfconplot(
         credentials,
@@ -64,22 +60,18 @@ def diag_surfconplot(
         end_year=end_year,
         output_format=output_format,
         )
-    namelist_file = write_namelist(namelist=namelist, workspace=workspace)
 
     # run esmvaltool
     monitor("surfconplot ...", 10)
-    log_file = esmvaltool(namelist=namelist_file)
+    log_file, ack_file = esmvaltool(namelist, workspace)
     monitor("surfconplot done", 90)
 
     # plot output
     from os.path import join
     filename = 'surfconplot_simple_%s_T2Ms_ANN.%s' % (constraints.get('variable'), output_format)
     out = join(workspace, 'plots', 'surfconplot_simple', filename)
-    
-    # references/acknowledgements document
-    ack_file = join(workspace, 'work', 'namelist.txt')
 
-    return out, namelist_file, log_file, ack_file
+    return out, namelist, log_file, ack_file
 
 def diag_perfmetrics(
         credentials,
@@ -107,11 +99,9 @@ def diag_perfmetrics(
         end_year=end_year,
         output_format=output_format,
         )
-    namelist_file = write_namelist(namelist=namelist, workspace=workspace)
-
-    # run esmvaltool
+   
     monitor("perfmetrics ...", 10)
-    log_file = esmvaltool(namelist=namelist_file)
+    log_file, ack_file = esmvaltool(namelist, workspace)
     monitor("perfmetrics done", 90)
 
     # plot output
@@ -119,12 +109,9 @@ def diag_perfmetrics(
     filename = 'namelist_%s-850_Globta-200_Glob_RMSD_grading.%s' % (constraints.get('variable'), output_format)
     out = join(workspace, 'plots', 'perfmetrics_grading', filename)
 
-    # references/acknowledgements document
-    ack_file = join(workspace, 'work', 'namelist.txt')
+    return out, namelist, log_file, ack_file
 
-    return out, namelist_file, log_file, ack_file
-
-def esmvaltool(namelist):
+def esmvaltool(namelist, workspace):
     prefix = config.getConfigValue("hummingbird", "esmval_root")
     logger.info("run esmvaltool: prefix=%s", prefix)
     logger.debug("namelist=%s", namelist)
@@ -135,22 +122,28 @@ def esmvaltool(namelist):
     environ['NCARG_ROOT'] = ncarg_root.strip()
     environ['PATH'] = environ['NCARG_ROOT'] + '/bin' + ':' + environ['PATH']
     logger.debug('path with ncarg_root: %s', environ['PATH'])
-    
-    from os.path import join, curdir, abspath
-    script = join(prefix, "esmval.sh")
-    logfile = abspath(join(curdir, 'log.txt'))
-    cmd = [script, namelist, logfile]
 
+    # build cmd
+    from os.path import join, abspath
+    script = join(prefix, "esmval.sh")
+    log_file = abspath(join(workspace, 'log.txt'))
+    cmd = [script, namelist, log_file]
+
+    # run cmd
     from subprocess import check_output, STDOUT
     try:
         check_output(cmd, stderr=STDOUT)
     except:
         logger.exception('esmvaltool failed!')
 
+    # debug: show logfile
     if logger.isEnabledFor(logging.DEBUG):
-        with open(logfile, 'r') as f:
+        with open(log_file, 'r') as f:
             logger.debug(f.read())
-    return logfile
+    # references/acknowledgements document
+    ack_file = join(workspace, 'work', 'namelist.txt')
+
+    return log_file, ack_file
 
 def build_constraints(project=None, models=[], variable=None, cmor_table=None, experiment=None, ensemble=None):
     from werkzeug.datastructures import MultiDict
@@ -252,7 +245,7 @@ def generate_namelist(diag, workspace,
         filename=join(dirname(__file__), 'templates', namelist),
         output_encoding='utf-8',
         encoding_errors='replace')
-    return mytemplate.render_unicode(
+    namelist = mytemplate.render_unicode(
         diag=diag,
         prefix=config.getConfigValue("hummingbird", "esmval_root"),
         workspace=workspace,
@@ -262,6 +255,7 @@ def generate_namelist(diag, workspace,
         end_year=end_year,
         output_format=output_format
         )
+    return write_namelist(namelist=namelist, workspace=workspace)
    
 def write_namelist(namelist, workspace):
     logger.debug(namelist)

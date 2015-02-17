@@ -28,13 +28,15 @@ class EsmValToolTestCase(TestCase):
             variable="ta",
             models=["MPI-ESM-LR", "MPI-ESM-MR"])
 
-        result = esmvaltool.generate_namelist(
+        namelist = esmvaltool.generate_namelist(
             diag="mydiag",
             workspace="/tmp",
             constraints=constraints,
             start_year=2001,
             end_year=2005,
             output_format='ps')
-        nose.tools.ok_("CMIP5 MPI-ESM-LR Amon historical r1i1p1 2001 2005 /tmp/input-data/" in result, result)
-        nose.tools.ok_("CMIP5 MPI-ESM-MR Amon historical r1i1p1 2001 2005 /tmp/input-data/" in result, result)
+        fp = open(namelist, 'r')
+        content = fp.read()
+        nose.tools.ok_("CMIP5 MPI-ESM-LR Amon historical r1i1p1 2001 2005 /tmp/input-data/" in content, content)
+        nose.tools.ok_("CMIP5 MPI-ESM-MR Amon historical r1i1p1 2001 2005 /tmp/input-data/" in content, content)
 
