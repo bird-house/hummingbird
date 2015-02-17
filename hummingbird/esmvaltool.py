@@ -25,7 +25,6 @@ def diag_mydiag(
         monitor=monitor)
    
     # plot output
-    from os.path import join
     out = join(workspace, 'plots', 'MyDiag', 'MyDiag_MyVar.%s' % output_format)
 
     return out, namelist, log_file, ack_file
@@ -47,7 +46,6 @@ def diag_surfconplot(
         monitor=monitor)
 
     # plot output
-    from os.path import join
     filename = 'surfconplot_simple_%s_T2Ms_ANN.%s' % (constraints.get('variable'), output_format)
     out = join(workspace, 'plots', 'surfconplot_simple', filename)
 
@@ -70,7 +68,6 @@ def diag_perfmetrics(
         monitor=monitor)
 
     # plot output
-    from os.path import join
     filename = 'namelist_%s-850_Globta-200_Glob_RMSD_grading.%s' % (constraints.get('variable'), output_format)
     out = join(workspace, 'plots', 'perfmetrics_grading', filename)
 
@@ -118,7 +115,7 @@ def esmvaltool(namelist, workspace):
     logger.debug('path with ncarg_root: %s', environ['PATH'])
 
     # build cmd
-    from os.path import join, abspath
+    from os.path import abspath
     script = join(prefix, "esmval.sh")
     log_file = abspath(join(workspace, 'log.txt'))
     cmd = [script, namelist, log_file]
@@ -204,7 +201,7 @@ def prepare_workspace(file_urls):
     # symlink files to workspace dir
     from urlparse import urlparse
     from os import mkdir,chmod, symlink
-    from os.path import exists, basename, join, realpath, curdir, abspath
+    from os.path import exists, basename, realpath, curdir, abspath
     workspace = abspath(join(curdir, 'workspace'))
     mkdir(workspace)
     # TODO: docker needs full access to create new files
@@ -247,7 +244,7 @@ def generate_namelist(diag, workspace,
     logger.debug("using namelist %s", namelist)
         
     mytemplate = mylookup.get_template(namelist)
-    namelist = mytemplate.render_unicode(
+    rendered_namelist = mytemplate.render_unicode(
         diag=diag,
         prefix=config.getConfigValue("hummingbird", "esmval_root"),
         workspace=workspace,
@@ -257,11 +254,11 @@ def generate_namelist(diag, workspace,
         end_year=end_year,
         output_format=output_format
         )
-    return write_namelist(namelist=namelist, workspace=workspace)
+    return write_namelist(namelist=rendered_namelist, workspace=workspace)
    
 def write_namelist(namelist, workspace):
     logger.debug(namelist)
-    from os.path import join, abspath
+    from os.path import abspath
     outfile = abspath(join(workspace, "namelist.xml"))
     with open(outfile, 'w') as fp:
         fp.write(namelist)
