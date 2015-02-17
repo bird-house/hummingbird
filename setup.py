@@ -10,6 +10,7 @@ requires = [
     'malleefowl',
     'cdo',
     'netcdf4',
+    'werkzeug',
     'nose',
     ]
 
