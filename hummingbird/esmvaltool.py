@@ -5,7 +5,7 @@ from malleefowl.download import download_files
 from malleefowl import wpslogging as logging
 logger = logging.getLogger(__name__)
 
-def prepare(file_urls):
+def prepare_workspace(file_urls):
     # symlink files to workspace dir
     from urlparse import urlparse
     from os import mkdir,chmod, symlink
@@ -157,7 +157,7 @@ def run_on_esgf(
 
     # prepare workspace dir
     logger.info("prepare ...")
-    workspace = prepare(file_urls)
+    workspace = prepare_workspace(file_urls)
 
     # generate namelist
     logger.info("generate namelist ...")
@@ -205,5 +205,6 @@ def run_on_esgf(
     # TODO: reference document:
     # PY  info: For the required references/acknowledgements of these diagnostics see: 
     # PY  info: /gpfs_750/projects/BirdHouse/bovec.dkrz.de/var/tmp/pywps-instanceb1cGgj/workspace/work/namelist.txt
+    ack_file = join(workspace, 'work', 'namelist.txt')
 
-    return out, namelist_file, log_file
+    return out, namelist_file, log_file, ack_file

@@ -33,7 +33,7 @@ class EsmValToolProcessTestCase(WpsTestCase):
         inputs.append(('start_year', '2000'))
         inputs.append(('end_year', '2004'))
         
-        output=[('output', True), ('namelist', True), ('log', True)]
+        output=[('output', True), ('namelist', True), ('log', True), ('ack', True)]
         execution = self.wps.execute(identifier="mydiag", inputs=inputs, output=output)
         monitorExecution(execution, sleepSecs=1)
 
@@ -52,7 +52,7 @@ class EsmValToolProcessTestCase(WpsTestCase):
         inputs.append(('start_year', '2001'))
         inputs.append(('end_year', '2005'))
         
-        output=[('output', True), ('namelist', True), ('log', True)]
+        output=[('output', True), ('namelist', True), ('log', True), ('ack', True)]
         execution = self.wps.execute(identifier="surfconplot", inputs=inputs, output=output)
         monitorExecution(execution, sleepSecs=1)
 

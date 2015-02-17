@@ -131,4 +131,14 @@ class ESMValToolProcess(WPSProcess):
             asReference=True,
             )
 
+        self.ack = self.addComplexOutput(
+            identifier="ack",
+            title="Acknowledgement",
+            abstract="references/acknowledgements of these diagnostics",
+            formats=[{"mimeType":"text/plain"}],
+            asReference=True,
+            )
+
+
+
         
