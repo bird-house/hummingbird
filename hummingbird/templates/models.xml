@@ -1,0 +1,5 @@
+<MODELS>
+  % for model in constraints.getlist('model'):
+  <model>CMIP5 ${model} ${constraints.get('cmor_table')} ${constraints.get('experiment')} ${constraints.get('ensemble')} ${start_year} ${end_year} ${workspace}/input-data/</model>
+  % endfor
+</MODELS>

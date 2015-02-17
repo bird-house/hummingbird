@@ -1,7 +1,12 @@
-from malleefowl import config
+from os.path import join, dirname
 
+from malleefowl import config
 from malleefowl import wpslogging as logging
 logger = logging.getLogger(__name__)
+
+from mako.lookup import TemplateLookup
+mylookup = TemplateLookup(directories=[join(dirname(__file__), 'templates')],
+                          output_encoding='utf-8', encoding_errors='replace')
 
 def diag_mydiag(
     credentials,
@@ -237,12 +242,7 @@ def generate_namelist(diag, workspace,
     namelist = 'namelist_%s.xml' % diag
     logger.debug("using namelist %s", namelist)
         
-    from os.path import join, dirname
-    from mako.template import Template
-    mytemplate = Template(
-        filename=join(dirname(__file__), 'templates', namelist),
-        output_encoding='utf-8',
-        encoding_errors='replace')
+    mytemplate = mylookup.get_template(namelist)
     namelist = mytemplate.render_unicode(
         diag=diag,
         prefix=config.getConfigValue("hummingbird", "esmval_root"),
