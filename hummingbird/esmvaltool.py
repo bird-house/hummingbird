@@ -11,21 +11,57 @@ def mydiag(
         start_year, end_year,
         output_format='ps',
         monitor=None):
-    out, namelist_file, log_file, ack_file = run_on_esgf(
-        diag='mydiag',
+
+    file_urls = retrieve_esgf_files(
+        project=project, models=models, variable=variable, cmor_table=cmor_table, experiment=experiment, ensemble=ensemble,
+        start_year=start_year, end_year=end_year,
         credentials=credentials,
-        project=project,
+        monitor=monitor)
+
+    # prepare workspace dir
+    logger.info("prepare ...")
+    workspace = prepare_workspace(file_urls)
+
+    # generate namelist
+    logger.info("generate namelist ...")
+    # get prefix of esmvaltool
+    prefix = config.getConfigValue("hummingbird", "esmval_root")
+    namelist = generate_namelist(
+        diag='mydiag',
+        prefix=prefix,
+        workspace=workspace,
         models=models,
-        variable=variable,
         cmor_table=cmor_table,
         experiment=experiment,
         ensemble=ensemble,
+        variable=variable,
         start_year=start_year,
         end_year=end_year,
         output_format=output_format,
-        monitor=monitor )
-    return out, namelist_file, log_file, ack_file
+        )
+    namelist_file = write_namelist(namelist=namelist, workspace=workspace)
 
+    # run mydiag
+    monitor("MyDiag ...", 10)
+    log_file = run_console(namelist=namelist_file, prefix=prefix)
+    if logger.isEnabledFor(logging.DEBUG):
+        with open(log_file, 'r') as f:
+            logger.debug(f.read())
+    monitor("MyDiag done", 90)
+
+    # output: postscript
+    import shutil
+    out = 'output.ps'
+    from os.path import join
+    # TODO: fix output generation of esmvaltool
+    filename = 'MyDiag_MyVar.%s' % output_format
+    shutil.copyfile(join(workspace, 'plots', 'MyDiag', filename), out)
+
+    # references/acknowledgements document
+    ack_file = join(workspace, 'work', 'namelist.txt')
+
+    return out, namelist_file, log_file, ack_file
+    
 def surfconplot(
         credentials,
         project, models, variable, cmor_table, experiment, ensemble,
