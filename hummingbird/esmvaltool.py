@@ -31,9 +31,6 @@ def diag_mydiag(
     # run mydiag
     monitor("MyDiag ...", 10)
     log_file = esmvaltool(namelist=namelist_file)
-    if logger.isEnabledFor(logging.DEBUG):
-        with open(log_file, 'r') as f:
-            logger.debug(f.read())
     monitor("MyDiag done", 90)
 
     # output: postscript
@@ -75,9 +72,6 @@ def diag_surfconplot(
     # run esmvaltool
     monitor("surfconplot ...", 10)
     log_file = esmvaltool(namelist=namelist_file)
-    if logger.isEnabledFor(logging.DEBUG):
-        with open(log_file, 'r') as f:
-            logger.debug(f.read())
     monitor("surfconplot done", 90)
 
     # output: postscript
@@ -124,9 +118,6 @@ def diag_perfmetrics(
     # run esmvaltool
     monitor("perfmetrics ...", 10)
     log_file = esmvaltool(namelist=namelist_file)
-    if logger.isEnabledFor(logging.DEBUG):
-        with open(log_file, 'r') as f:
-            logger.debug(f.read())
     monitor("perfmetrics done", 90)
 
     # output: postscript
@@ -163,6 +154,10 @@ def esmvaltool(namelist):
         check_output(cmd, stderr=STDOUT)
     except:
         logger.exception('esmvaltool failed!')
+
+    if logger.isEnabledFor(logging.DEBUG):
+        with open(logfile, 'r') as f:
+            logger.debug(f.read())
     return logfile
 
 def build_constraints(project=None, models=[], variable=None, cmor_table=None, experiment=None, ensemble=None):
