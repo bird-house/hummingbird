@@ -6,6 +6,8 @@ Changes
 
 * cfchecker added
 * using anaconda environment
+* esmvaltools processes added
+* added werkzeug python dependency
 
 0.1.2 (2014-11-24)
 ==================
