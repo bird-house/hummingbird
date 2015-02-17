@@ -186,7 +186,7 @@ test:
 	bin/nosetests -a '!slow' unit_tests
 
 .PHONY: testall
-test:
+testall:
 	@echo "Running all tests (also slow tests) ..."
 	bin/nosetests unit_tests
 
