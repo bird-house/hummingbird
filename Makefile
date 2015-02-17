@@ -185,6 +185,11 @@ test:
 	@echo "Running tests (skip slow tests) ..."
 	bin/nosetests -a '!slow' unit_tests
 
+.PHONY: testall
+test:
+	@echo "Running all tests (also slow tests) ..."
+	bin/nosetests unit_tests
+
 .PHONY: docs
 docs:
 	@echo "Generating docs with Sphinx ..."
