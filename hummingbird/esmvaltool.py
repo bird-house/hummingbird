@@ -202,4 +202,8 @@ def run_on_esgf(
         filename = 'namelist_%s-850_Globta-200_Glob_RMSD_grading.%s' % (variable, output_format)
         shutil.copyfile(join(workspace, 'plots', 'perfmetrics_grading', filename), out)
 
+    # TODO: reference document:
+    # PY  info: For the required references/acknowledgements of these diagnostics see: 
+    # PY  info: /gpfs_750/projects/BirdHouse/bovec.dkrz.de/var/tmp/pywps-instanceb1cGgj/workspace/work/namelist.txt
+
     return out, namelist_file, log_file
