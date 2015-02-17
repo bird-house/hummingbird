@@ -29,13 +29,13 @@ def esmvaltool(namelist):
 
 def diag_mydiag(
         credentials,
-        project, models, variable, cmor_table, experiment, ensemble,
+        constraints,
         start_year, end_year,
         output_format='ps',
         monitor=None):
 
     file_urls = retrieve_esgf_files(
-        project=project, models=models, variable=variable, cmor_table=cmor_table, experiment=experiment, ensemble=ensemble,
+        constraints=constraints,
         start_year=start_year, end_year=end_year,
         credentials=credentials,
         monitor=monitor)
@@ -46,11 +46,7 @@ def diag_mydiag(
         diag='mydiag',
         prefix=config.getConfigValue("hummingbird", "esmval_root"),
         workspace=workspace,
-        models=models,
-        cmor_table=cmor_table,
-        experiment=experiment,
-        ensemble=ensemble,
-        variable=variable,
+        constraints=constraints,
         start_year=start_year,
         end_year=end_year,
         output_format=output_format,
@@ -79,12 +75,12 @@ def diag_mydiag(
     
 def diag_surfconplot(
         credentials,
-        project, models, variable, cmor_table, experiment, ensemble,
+        constraints,
         start_year, end_year,
         output_format='ps',
         monitor=None):
     file_urls = retrieve_esgf_files(
-        project=project, models=models, variable=variable, cmor_table=cmor_table, experiment=experiment, ensemble=ensemble,
+        constraints=constraints,
         start_year=start_year, end_year=end_year,
         credentials=credentials,
         monitor=monitor)
@@ -95,11 +91,7 @@ def diag_surfconplot(
         diag='surfconplot',
         prefix=config.getConfigValue("hummingbird", "esmval_root"),
         workspace=workspace,
-        models=models,
-        cmor_table=cmor_table,
-        experiment=experiment,
-        ensemble=ensemble,
-        variable=variable,
+        constraints=constraints,
         start_year=start_year,
         end_year=end_year,
         output_format=output_format,
@@ -119,7 +111,7 @@ def diag_surfconplot(
     out = 'output.ps'
     from os.path import join
     # TODO: fix output generation of esmvaltool
-    filename = 'surfconplot_simple_%s_T2Ms_ANN.%s' % (variable, output_format)
+    filename = 'surfconplot_simple_%s_T2Ms_ANN.%s' % (constraints.get('variable'), output_format)
     shutil.copyfile(join(workspace, 'plots', 'surfconplot_simple', filename), out)
     
     # references/acknowledgements document
@@ -129,7 +121,7 @@ def diag_surfconplot(
 
 def diag_perfmetrics(
         credentials,
-        project, models, variable, cmor_table, experiment, ensemble,
+        constraints,
         start_year, end_year,
         output_format='ps',
         monitor=None):
@@ -138,7 +130,7 @@ def diag_perfmetrics(
         field_type = 'T2Ms'
 
     file_urls = retrieve_esgf_files(
-        project=project, models=models, variable=variable, cmor_table=cmor_table, experiment=experiment, ensemble=ensemble,
+        constraints=constraints,
         start_year=start_year, end_year=end_year,
         credentials=credentials,
         monitor=monitor)
@@ -149,11 +141,7 @@ def diag_perfmetrics(
         diag='perfmetrics',
         prefix=config.getConfigValue("hummingbird", "esmval_root"),
         workspace=workspace,
-        models=models,
-        cmor_table=cmor_table,
-        experiment=experiment,
-        ensemble=ensemble,
-        variable=variable,
+        constraints=constraints,
         start_year=start_year,
         end_year=end_year,
         output_format=output_format,
@@ -162,7 +150,7 @@ def diag_perfmetrics(
 
     # run esmvaltool
     monitor("perfmetrics ...", 10)
-    log_file = esmvaltool(namelist=namelist_file, prefix=prefix)
+    log_file = esmvaltool(namelist=namelist_file)
     if logger.isEnabledFor(logging.DEBUG):
         with open(log_file, 'r') as f:
             logger.debug(f.read())
@@ -172,7 +160,7 @@ def diag_perfmetrics(
     import shutil
     out = 'output.ps'
     from os.path import join
-    filename = 'namelist_%s-850_Globta-200_Glob_RMSD_grading.%s' % (variable, output_format)
+    filename = 'namelist_%s-850_Globta-200_Glob_RMSD_grading.%s' % (constraints.get('variable'), output_format)
     shutil.copyfile(join(workspace, 'plots', 'perfmetrics_grading', filename), out)
 
     # references/acknowledgements document
@@ -180,9 +168,29 @@ def diag_perfmetrics(
 
     return out, namelist_file, log_file, ack_file
 
+def build_constraints(project=None, models=[], variable=None, cmor_table=None, experiment=None, ensemble=None):
+    from werkzeug.datastructures import MultiDict
+
+    # search
+    constraints = MultiDict()
+    if project is not None:
+        constraints.add("project", project)
+    for model in models:
+        constraints.add("model", model)
+    if variable is not None:
+        constraints.add("variable", variable)
+    if cmor_table is not None:
+        constraints.add("cmor_table", cmor_table)
+    if experiment is not None:
+        constraints.add("experiment", experiment)
+    if ensemble is not None:
+        constraints.add("ensemble", ensemble)
+
+    logger.debug("constraints: %s", constraints)
+    return constraints
+
 def retrieve_esgf_files(
-        project, models, variable, cmor_table, experiment, ensemble,
-        start_year, end_year,
+        constraints, start_year, end_year,
         distrib=True, replica=False, limit=100,
         credentials=None,
         monitor=None):
@@ -192,18 +200,6 @@ def retrieve_esgf_files(
     from os import environ
     if not environ.has_key('ESGF_ARCHIVE_ROOT'):
         environ['ESGF_ARCHIVE_ROOT'] = config.getConfigValue("hummingbird", "archive_root")
-
-    # search
-    constraints = []
-    constraints.append( ("project", project ) )
-    for model in models:
-        constraints.append( ("model", model ) )
-    constraints.append( ("variable", variable ) )
-    constraints.append( ("cmor_table", cmor_table ) )
-    constraints.append( ("experiment", experiment ) )
-    constraints.append( ("ensemble", ensemble ) )
-
-    logger.debug("constraints: %s", constraints)
 
     logger.info("esgsearch ...")
     esgsearch = ESGSearch(
@@ -215,7 +211,7 @@ def retrieve_esgf_files(
     )
 
     (urls, summary, facet_counts) = esgsearch.search(
-        constraints = constraints,
+        constraints = [kv for kv in constraints.iteritems(multi=True)],
         query = "*:*",
         start = "%d-01-01" % start_year,
         end = "%d-12-31" % end_year,
@@ -258,7 +254,7 @@ def prepare_workspace(file_urls):
     return workspace
 
 def generate_namelist(prefix, workspace,
-                      models, experiment, cmor_table, ensemble, variable,
+                      constraints,
                       start_year, end_year,
                       diag='mydiag',
                       output_format='ps'):
@@ -279,11 +275,7 @@ def generate_namelist(prefix, workspace,
         prefix=prefix,
         workspace=workspace,
         obs_root=config.getConfigValue("hummingbird", "obs_root"),
-        models=models,
-        experiment=experiment,
-        cmor_table=cmor_table,
-        ensemble=ensemble,
-        variable=variable,
+        constraints=constraints,
         start_year=start_year,
         end_year=end_year,
         output_format=output_format

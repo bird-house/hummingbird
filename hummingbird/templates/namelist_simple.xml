@@ -17,8 +17,8 @@
 </GLOBAL>
 
 <MODELS>
-  % for model in models:
-  <model>CMIP5 ${model} ${cmor_table} ${experiment} ${ensemble} ${start_year} ${end_year} ${workspace}/input-data/</model>
+  % for model in constraints.getlist('model'):
+  <model>CMIP5 ${model} ${constraints.get('cmor_table')} ${constraints.get('experiment')} ${constraints.get('ensemble')} ${start_year} ${end_year} ${workspace}/input-data/</model>
   % endfor
 </MODELS>
 
@@ -42,72 +42,6 @@
       <field_type>T2Ms</field_type>
       <diag_script_cfg_dir>${prefix}/nml/cfg_overview</diag_script_cfg_dir>
       <diag_script cfg="cfg_precip.ncl">surfconplot_simple.ncl</diag_script>
-    </diag>
-    % elif diag == 'reformat':
-    <diag>
-      <description>Tutorial diagnostic used in the doc/toy-diagnostic-tutorial.pdf</description>
-      <variable_def_dir>${prefix}/variable_defs/</variable_def_dir>
-      <variable>psl</variable>
-      <field_type>T2Ms</field_type>
-      <diag_script_cfg_dir>${prefix}/nml/cfg_generic/</diag_script_cfg_dir>
-      <diag_script cfg="cfg_generic_tsline.ncl">tsline.ncl</diag_script>
-    </diag>
-    % elif diag == 'anncycplot':
-    <diag>
-      <description>Time series and monthly mean</description>
-      <variable_def_dir>${prefix}/variable_defs/</variable_def_dir>
-      <variable>pr_mmday</variable>
-      <field_type>T2Ms</field_type>
-      <diag_script_cfg_dir>${prefix}/nml/cfg_generic/</diag_script_cfg_dir>
-
-      <diag_script cfg="cfg_generic_tsline.ncl">tsline.ncl</diag_script>
-      <diag_script cfg="cfg_generic_monline.ncl">monline.ncl</diag_script>
-    </diag>
-    <diag>
-      <description>Annual cycle contour plot</description>
-      <variable_def_dir>${prefix}/variable_defs/</variable_def_dir>
-      <variable>pr_mmday</variable>
-      <!-- T2Ms: time series (T), 2-dim (2), monthly means (M), at the surface (s) -->
-      <field_type>T2Ms</field_type>
-      <diag_script_cfg_dir>${prefix}/nml/cfg_generic/</diag_script_cfg_dir>
-      <diag_script cfg="cfg_generic_anncycplot.ncl">anncycplot.ncl</diag_script>
-    </diag>
-    % elif diag == 'perfmetrics':
-    <diag>
-      <description>Temperature</description>
-      <variable_def_dir>${prefix}/variable_defs/</variable_def_dir>
-      <variable>ta</variable>
-      <field_type>T3M</field_type>
-      <diag_script_cfg_dir>${prefix}/nml/cfg_perfmetrics/CMIP5/</diag_script_cfg_dir>
-
-      <!-- Additional data sets specific for this section. 
-           Data sets defined here will be applied together with the models from the global section -->
-      <model>OBS   NCEP        reanaly     1           2000  2001  /home/pingu/Public/data/esmvaltool/ESMValTool_OBS/NCEP</model>
-      <model>OBS   ERA-Interim reanaly     1           2000  2001  /home/pingu/Public/data/esmvaltool/ESMValTool_OBS/ERA-Interim</model>
-
-      <!--
-      <model>  CMIP5  EC-EARTH       Amon  historical   r2i1p1  2000 2005  /home/pingu/anaconda/var/cache/pywps/ </model>
-      <model>  CMIP5  CanCM4         Amon  historical   r1i1p1  2000 2005  /home/pingu/anaconda/var/cache/pywps/ </model>
-      <model>  CMIP5  CMCC-CMS       Amon  historical   r1i1p1  2000 2005  /home/pingu/anaconda/var/cache/pywps/ </model>
-      <model>  CMIP5  GFDL-CM2p1     Amon  historical   r1i1p1  2000 2005  /home/pingu/anaconda/var/cache/pywps/ </model>
-      <model>  CMIP5  IPSL-CM5A-MR   Amon  historical   r1i1p1  2000 2005  /home/pingu/anaconda/var/cache/pywps/ </model>
-      <model>  CMIP5  IPSL-CM5B-LR   Amon  historical   r1i1p1  2000 2005  /home/pingu/anaconda/var/cache/pywps/ </model>
-      -->
-
-      <diag_script cfg="cfg_perfmetrics_grading_RMSD_850_glob.ncl">perfmetrics_main.ncl</diag_script>
-      <diag_script cfg="cfg_perfmetrics_grading_RMSD_200_glob.ncl">perfmetrics_main.ncl</diag_script>
-
-      <diag_script cfg="cfg_perfmetrics_grading_RMSD_850_glob.ncl">perfmetrics_grading.ncl</diag_script>
-      <diag_script cfg="cfg_perfmetrics_grading_RMSD_200_glob.ncl">perfmetrics_grading.ncl</diag_script>
-    </diag>
-    % elif diag == 'plot_perfmetrics':
-    <diag>
-      <description>Portrait diagram</description>
-      <variable_def_dir>${prefix}/variable_defs/</variable_def_dir>
-      <variable>ta</variable>
-      <field_type>T3M</field_type>
-      <diag_script_cfg_dir>${prefix}/nml/cfg_perfmetrics/CMIP5/</diag_script_cfg_dir>
-      <diag_script cfg="cfg_perfmetrics_grading_collect.ncl">perfmetrics_grading_collect.ncl</diag_script>
     </diag>
     % endif
 </DIAGNOSTICS>

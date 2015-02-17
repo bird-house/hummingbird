@@ -32,12 +32,13 @@ class ESMValToolMyDiagProcess(ESMValToolProcess):
         
         out, namelist_file, log_file, ack_file = esmvaltool.diag_mydiag(
             credentials=self.credentials.getValue(),
-            project="CMIP5",
-            models=self.getInputValues(identifier='model'),
-            variable=self.variable.getValue(),
-            cmor_table=self.cmor_table.getValue(),
-            experiment=self.experiment.getValue(),
-            ensemble=self.ensemble.getValue(),
+            constraints=esmvaltool.build_constraints(
+                project="CMIP5",
+                models=self.getInputValues(identifier='model'),
+                variable=self.variable.getValue(),
+                cmor_table=self.cmor_table.getValue(),
+                experiment=self.experiment.getValue(),
+                ensemble=self.ensemble.getValue()),
             start_year=self.start_year.getValue(),
             end_year=self.end_year.getValue(),
             output_format=self.output_format.getValue(),
