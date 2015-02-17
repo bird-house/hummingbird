@@ -15,14 +15,11 @@ def diag_mydiag(
     output_format='ps',
     monitor=None):
 
-    file_urls = retrieve_esgf_files(
+    workspace = esgf_workspace(
         constraints=constraints,
         start_year=start_year, end_year=end_year,
         credentials=credentials,
         monitor=monitor)
-
-    workspace = prepare_workspace(file_urls)
-
     namelist = generate_namelist(
         diag='mydiag',
         workspace=workspace,
@@ -50,13 +47,11 @@ def diag_surfconplot(
     output_format='ps',
     monitor=None):
 
-    file_urls = retrieve_esgf_files(
+    workspace = esgf_workspace(
         constraints=constraints,
         start_year=start_year, end_year=end_year,
         credentials=credentials,
         monitor=monitor)
-
-    workspace = prepare_workspace(file_urls)
 
     namelist = generate_namelist(
         diag='surfconplot',
@@ -86,14 +81,11 @@ def diag_perfmetrics(
     output_format='ps',
     monitor=None):
 
-    file_urls = retrieve_esgf_files(
+    workspace = esgf_workspace(
         constraints=constraints,
         start_year=start_year, end_year=end_year,
         credentials=credentials,
         monitor=monitor)
-
-    workspace = prepare_workspace(file_urls)
-
     namelist = generate_namelist(
         diag='perfmetrics',
         workspace=workspace,
@@ -232,6 +224,19 @@ def prepare_workspace(file_urls):
             symlink(filename, new_name)
             results.append(new_name)
     return workspace
+
+def esgf_workspace(
+        constraints,
+        start_year, end_year,
+        credentials,
+        monitor=None):
+    file_urls = retrieve_esgf_files(
+        constraints=constraints,
+        start_year=start_year, end_year=end_year,
+        credentials=credentials,
+        monitor=monitor)
+
+    return prepare_workspace(file_urls)
 
 def generate_namelist(diag, workspace,
                       constraints,
