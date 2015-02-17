@@ -29,8 +29,7 @@ class EsmValToolTestCase(TestCase):
             models=["MPI-ESM-LR", "MPI-ESM-MR"])
 
         result = esmvaltool.generate_namelist(
-            diag="MyDiag",
-            prefix="/opt/esmvaltool",
+            diag="mydiag",
             workspace="/tmp",
             constraints=constraints,
             start_year=2001,

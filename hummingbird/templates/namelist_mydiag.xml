@@ -1,0 +1,38 @@
+<namelist>
+  <namelist_summary>This file is generated</namelist_summary>
+
+  <GLOBAL>
+    <write_plots type="boolean">          True      </write_plots>
+    <write_netcdf type="boolean">         True      </write_netcdf>
+    <force_processing type="boolean">     False      </force_processing>
+    <wrk_dir type="path">                 ${workspace}/work/     </wrk_dir>
+    <plot_dir type="path">                ${workspace}/plots/     </plot_dir>
+    <climo_dir type="path">               ${workspace}/climo/     </climo_dir>
+    <write_plot_vars type="boolean">      True      </write_plot_vars>
+    <max_data_filesize type="integer">    100      </max_data_filesize>
+    <max_data_blocksize type="integer">   500      </max_data_blocksize>
+    <verbosity  type="integer">           1                 </verbosity>
+    <exit_on_warning  type="boolean">     True              </exit_on_warning>
+    <output_file_type>                    ${output_format}  </output_file_type>
+  </GLOBAL>
+
+  <MODELS>
+    % for model in constraints.getlist('model'):
+    <model>CMIP5 ${model} ${constraints.get('cmor_table')} ${constraints.get('experiment')} ${constraints.get('ensemble')} ${start_year} ${end_year} ${workspace}/input-data/</model>
+    % endfor
+  </MODELS>
+
+  <!-- Please do not change anything below this line, 
+       unless you want to modify the standard diagnostic settings. -->
+  <DIAGNOSTICS>
+    <diag>
+      <description>Tutorial diagnostic used in the doc/toy-diagnostic-tutorial.pdf</description>
+      <variable_def_dir>${prefix}/variable_defs/</variable_def_dir>
+      <variable>MyVar</variable>
+      <field_type>T3M</field_type>
+      <diag_script_cfg_dir>${prefix}/nml/cfg_MyDiag/</diag_script_cfg_dir>
+      <diag_script cfg="cfg_MyDiag.ncl">MyDiag.ncl</diag_script>
+    </diag>
+  </DIAGNOSTICS>
+
+</namelist>

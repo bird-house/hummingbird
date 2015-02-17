@@ -44,7 +44,6 @@ def diag_mydiag(
 
     namelist = generate_namelist(
         diag='mydiag',
-        prefix=config.getConfigValue("hummingbird", "esmval_root"),
         workspace=workspace,
         constraints=constraints,
         start_year=start_year,
@@ -89,7 +88,6 @@ def diag_surfconplot(
 
     namelist = generate_namelist(
         diag='surfconplot',
-        prefix=config.getConfigValue("hummingbird", "esmval_root"),
         workspace=workspace,
         constraints=constraints,
         start_year=start_year,
@@ -139,7 +137,6 @@ def diag_perfmetrics(
 
     namelist = generate_namelist(
         diag='perfmetrics',
-        prefix=config.getConfigValue("hummingbird", "esmval_root"),
         workspace=workspace,
         constraints=constraints,
         start_year=start_year,
@@ -253,16 +250,14 @@ def prepare_workspace(file_urls):
             results.append(new_name)
     return workspace
 
-def generate_namelist(prefix, workspace,
+def generate_namelist(diag, workspace,
                       constraints,
                       start_year, end_year,
-                      diag='mydiag',
                       output_format='ps'):
     logger.info("generate namelist: diag=%s", diag)
 
-    namelist = 'namelist_simple.xml'
-    if diag == 'perfmetrics':
-        namelist = 'namelist_perfmetrics.xml'
+    namelist = 'namelist_%s.xml' % diag
+    logger.debug("using namelist %s", namelist)
         
     from os.path import join, dirname
     from mako.template import Template
@@ -272,7 +267,7 @@ def generate_namelist(prefix, workspace,
         encoding_errors='replace')
     return mytemplate.render_unicode(
         diag=diag,
-        prefix=prefix,
+        prefix=config.getConfigValue("hummingbird", "esmval_root"),
         workspace=workspace,
         obs_root=config.getConfigValue("hummingbird", "obs_root"),
         constraints=constraints,
