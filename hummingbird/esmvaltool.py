@@ -3,30 +3,6 @@ from malleefowl import config
 from malleefowl import wpslogging as logging
 logger = logging.getLogger(__name__)
 
-def esmvaltool(namelist):
-    prefix = config.getConfigValue("hummingbird", "esmval_root")
-    logger.info("run esmvaltool: prefix=%s", prefix)
-    logger.debug("namelist=%s", namelist)
-
-    # set ncl path
-    ncarg_root = config.getConfigValue("hummingbird", "ncarg_root")
-    from os import environ
-    environ['NCARG_ROOT'] = ncarg_root.strip()
-    environ['PATH'] = environ['NCARG_ROOT'] + '/bin' + ':' + environ['PATH']
-    logger.debug('path with ncarg_root: %s', environ['PATH'])
-    
-    from os.path import join, curdir, abspath
-    script = join(prefix, "esmval.sh")
-    logfile = abspath(join(curdir, 'log.txt'))
-    cmd = [script, namelist, logfile]
-
-    from subprocess import check_output, STDOUT
-    try:
-        check_output(cmd, stderr=STDOUT)
-    except:
-        logger.exception('esmvaltool failed!')
-    return logfile
-
 def diag_mydiag(
         credentials,
         constraints,
@@ -164,6 +140,30 @@ def diag_perfmetrics(
     ack_file = join(workspace, 'work', 'namelist.txt')
 
     return out, namelist_file, log_file, ack_file
+
+def esmvaltool(namelist):
+    prefix = config.getConfigValue("hummingbird", "esmval_root")
+    logger.info("run esmvaltool: prefix=%s", prefix)
+    logger.debug("namelist=%s", namelist)
+
+    # set ncl path
+    ncarg_root = config.getConfigValue("hummingbird", "ncarg_root")
+    from os import environ
+    environ['NCARG_ROOT'] = ncarg_root.strip()
+    environ['PATH'] = environ['NCARG_ROOT'] + '/bin' + ':' + environ['PATH']
+    logger.debug('path with ncarg_root: %s', environ['PATH'])
+    
+    from os.path import join, curdir, abspath
+    script = join(prefix, "esmval.sh")
+    logfile = abspath(join(curdir, 'log.txt'))
+    cmd = [script, namelist, logfile]
+
+    from subprocess import check_output, STDOUT
+    try:
+        check_output(cmd, stderr=STDOUT)
+    except:
+        logger.exception('esmvaltool failed!')
+    return logfile
 
 def build_constraints(project=None, models=[], variable=None, cmor_table=None, experiment=None, ensemble=None):
     from werkzeug.datastructures import MultiDict
