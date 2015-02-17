@@ -1,21 +1,10 @@
 import nose.tools
-from unittest import TestCase
 from nose import SkipTest
 from nose.plugins.attrib import attr
 
 from owslib.wps import monitorExecution
 
-from __init__ import TESTDATA, SERVICE, CREDENTIALS
-
-class WpsTestCase(TestCase):
-    """
-    Base TestCase class, sets up a wps
-    """
-
-    @classmethod
-    def setUpClass(cls):
-        from owslib.wps import WebProcessingService
-        cls.wps = WebProcessingService(SERVICE, verbose=False, skip_caps=False)
+from __init__ import TESTDATA, SERVICE, CREDENTIALS, WpsTestCase
 
 class PerfmetricsProcessTestCase(WpsTestCase):
 

@@ -1,6 +1,8 @@
 import logging
 import os
 
+from unittest import TestCase
+
 SERVICE = "http://localhost:8092/wps"
 TESTDATA = {}
 CREDENTIALS = os.environ.get('TEST_CREDENTIALS')
