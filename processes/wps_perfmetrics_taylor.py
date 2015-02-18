@@ -33,16 +33,19 @@ class PerfmetricsTaylorProcess(ESMValToolProcess):
 
     def execute(self):
         self.show_status("starting", 0)
+
+        constraints= esmvaltool.build_constraints(
+            project="CMIP5",
+            models=self.getInputValues(identifier='model'),
+            variable=self.variable.getValue(),
+            cmor_table=self.cmor_table.getValue(),
+            experiment=self.experiment.getValue(),
+            ensemble=self.ensemble.getValue())
         
-        out, namelist, log_file, ack_file = esmvaltool.diag_perfmetrics_taylor(
+        out, namelist, log_file, ack_file = esmvaltool(
+            name="taylor",
             credentials=self.credentials.getValue(),
-            constraints= esmvaltool.build_constraints(
-                project="CMIP5",
-                models=self.getInputValues(identifier='model'),
-                variable=self.variable.getValue(),
-                cmor_table=self.cmor_table.getValue(),
-                experiment=self.experiment.getValue(),
-                ensemble=self.ensemble.getValue()),
+            constraints=constraints,
             start_year=self.start_year.getValue(),
             end_year=self.end_year.getValue(),
             output_format=self.output_format.getValue(),

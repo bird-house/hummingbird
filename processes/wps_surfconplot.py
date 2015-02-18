@@ -6,7 +6,7 @@ from hummingbird import esmvaltool
 from malleefowl import wpslogging as logging
 logger = logging.getLogger(__name__)
 
-class ESMValToolOverviewProcess(ESMValToolProcess):
+class SurfconPlotProcess(ESMValToolProcess):
     def __init__(self):
         ESMValToolProcess.__init__(self,
             identifier = "surfconplot",
@@ -17,15 +17,18 @@ class ESMValToolOverviewProcess(ESMValToolProcess):
     def execute(self):
         self.show_status("starting", 0)
         
-        out, namelist_file, log_file, ack_file = esmvaltool.diag_surfconplot(
+        constraints=esmvaltool.build_constraints(
+            project="CMIP5",
+            models=self.getInputValues(identifier='model'),
+            variable='pr',
+            cmor_table=self.cmor_table.getValue(),
+            experiment=self.experiment.getValue(),
+            ensemble=self.ensemble.getValue())
+        
+        out, namelist_file, log_file, ack_file = esmvaltool.diag(
+            name="surfconplot",
             credentials=self.credentials.getValue(),
-            constraints=esmvaltool.build_constraints(
-                project="CMIP5",
-                models=self.getInputValues(identifier='model'),
-                variable='pr',
-                cmor_table=self.cmor_table.getValue(),
-                experiment=self.experiment.getValue(),
-                ensemble=self.ensemble.getValue()),
+            constraints=constraints,
             start_year=self.start_year.getValue(),
             end_year=self.end_year.getValue(),
             output_format=self.output_format.getValue(),

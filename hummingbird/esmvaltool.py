@@ -8,93 +8,6 @@ from mako.lookup import TemplateLookup
 mylookup = TemplateLookup(directories=[join(dirname(__file__), 'templates')],
                           output_encoding='utf-8', encoding_errors='replace')
 
-def diag_mydiag(
-    credentials,
-    constraints,
-    start_year, end_year,
-    output_format='ps',
-    monitor=None):
-
-    # run diag
-    workspace, namelist, log_file, ack_file = diag(
-        name='mydiag',
-        credentials=credentials,
-        constraints=constraints,
-        start_year=start_year, end_year=end_year,
-        output_format=output_format,
-        monitor=monitor)
-   
-    # plot output
-    out = join(workspace, 'plots', 'MyDiag', 'MyDiag_MyVar.%s' % output_format)
-
-    return out, namelist, log_file, ack_file
-    
-def diag_surfconplot(
-    credentials,
-    constraints,
-    start_year, end_year,
-    output_format='ps',
-    monitor=None):
-
-    # run diag
-    workspace, namelist, log_file, ack_file = diag(
-        name='surfconplot',
-        credentials=credentials,
-        constraints=constraints,
-        start_year=start_year, end_year=end_year,
-        output_format=output_format,
-        monitor=monitor)
-
-    # plot output
-    filename = 'surfconplot_simple_%s_T2Ms_ANN.%s' % (constraints.get('variable'), output_format)
-    out = join(workspace, 'plots', 'surfconplot_simple', filename)
-
-    return out, namelist, log_file, ack_file
-
-def diag_perfmetrics(
-    credentials,
-    constraints,
-    start_year, end_year,
-    output_format='ps',
-    monitor=None):
-
-    # run diag
-    workspace, namelist, log_file, ack_file = diag(
-        name='perfmetrics',
-        credentials=credentials,
-        constraints=constraints,
-        start_year=start_year, end_year=end_year,
-        output_format=output_format,
-        monitor=monitor)
-
-    # plot output
-    filename = 'namelist_%s-850_Globta-200_Glob_RMSD_grading.%s' % (constraints.get('variable'), output_format)
-    out = join(workspace, 'plots', 'perfmetrics_grading', filename)
-
-    return out, namelist, log_file, ack_file
-
-def diag_perfmetrics_taylor(
-    credentials,
-    constraints,
-    start_year, end_year,
-    output_format='ps',
-    monitor=None):
-
-    # run diag
-    workspace, namelist, log_file, ack_file = diag(
-        name='taylor',
-        credentials=credentials,
-        constraints=constraints,
-        start_year=start_year, end_year=end_year,
-        output_format=output_format,
-        monitor=monitor)
-
-    # plot output
-    filename = 'namelist_%s-850_Globta-200_Glob_RMSD_grading.%s' % (constraints.get('variable'), output_format)
-    out = join(workspace, 'plots', 'perfmetrics_taylor', filename)
-
-    return out, namelist, log_file, ack_file
-
 def diag(
     name,
     credentials,
@@ -117,12 +30,15 @@ def diag(
         output_format=output_format,
         )
 
-    # run mydiag
+    # run diag
     monitor("%s ..." % name, 10)
     log_file, ack_file = esmvaltool(namelist, workspace)
     monitor("%s done" % name, 90)
 
-    return workspace, namelist, log_file, ack_file
+    # TODO: handle plot outputs
+    out = find_plot(workspace, output_format)
+
+    return out, namelist, log_file, ack_file
 
 def esmvaltool(namelist, workspace):
     prefix = config.getConfigValue("hummingbird", "esmval_root")
@@ -285,6 +201,12 @@ def write_namelist(namelist, workspace):
     with open(outfile, 'w') as fp:
         fp.write(namelist)
     return outfile
+
+def find_plot(workspace, output_format):
+    import glob
+    matches = glob.glob(join(workspace, 'plots', '*', '*.%s' % output_format))
+    return matches[0]
+
 
 
 
