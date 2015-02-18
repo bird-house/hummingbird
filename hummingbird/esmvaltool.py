@@ -18,6 +18,9 @@ def diag(
     output_format='ps',
     monitor=None):
 
+    # TODO: maybe use result dict
+    out = namelist = log_file = reference = None
+    
     try:
         workspace = esgf_workspace(
             constraints=constraints,
@@ -35,15 +38,18 @@ def diag(
 
         # run diag
         monitor("%s ..." % name, 10)
-        log_file, ack_file = esmvaltool(namelist, workspace)
+        log_file = esmvaltool(namelist, workspace)
         monitor("%s done" % name, 90)
 
-        # TODO: handle plot outputs
+        # references/acknowledgements document
+        reference = join(workspace, 'work', 'namelist.txt')
+
+        # plot output
         out = find_plot(workspace, output_format)
     except:
         logger.exception("diag %s failed!", name)
         raise
-    return out, namelist, log_file, ack_file
+    return out, namelist, log_file, reference
 
 def esmvaltool(namelist, workspace):
     prefix = config.getConfigValue("hummingbird", "esmval_root")
@@ -74,10 +80,8 @@ def esmvaltool(namelist, workspace):
     if logger.isEnabledFor(logging.DEBUG):
         with open(log_file, 'r') as f:
             logger.debug(f.read())
-    # references/acknowledgements document
-    ack_file = join(workspace, 'work', 'namelist.txt')
-
-    return log_file, ack_file
+    
+    return log_file
 
 def build_constraints(project=None, models=[], variable=None, cmor_table=None, experiment=None, ensemble=None):
     from werkzeug.datastructures import MultiDict

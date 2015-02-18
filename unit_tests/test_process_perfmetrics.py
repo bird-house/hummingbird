@@ -23,7 +23,7 @@ class PerfmetricsProcessTestCase(WpsTestCase):
         inputs.append(('start_year', '2000'))
         inputs.append(('end_year', '2001'))
         
-        output=[('output', True), ('namelist', True), ('log', True)]
+        output=[('output', True), ('namelist', True), ('log', True), ('reference', True)]
         execution = self.wps.execute(identifier="perfmetrics", inputs=inputs, output=output)
         monitorExecution(execution, sleepSecs=1)
 

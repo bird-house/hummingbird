@@ -72,8 +72,8 @@ class ESMValToolProcess(WPSProcess):
             identifier="start_year",
             title="Start Year",
             abstract="",
-            default="2001",
-            type=type(2001),
+            default="2000",
+            type=type(2000),
             minOccurs=1,
             maxOccurs=1
             )
@@ -82,8 +82,8 @@ class ESMValToolProcess(WPSProcess):
             identifier="end_year",
             title="End Year",
             abstract="",
-            default="2005",
-            type=type(2005),
+            default="2001",
+            type=type(2001),
             minOccurs=1,
             maxOccurs=1
             )
@@ -104,8 +104,8 @@ class ESMValToolProcess(WPSProcess):
 
         self.output = self.addComplexOutput(
             identifier="output",
-            title="output",
-            abstract="",
+            title="Plot",
+            abstract="Generated plot by this tool",
             formats=[
                 {"mimeType":"application/postscript"},
                 {"mimeType":"application/pdf"},
@@ -117,24 +117,24 @@ class ESMValToolProcess(WPSProcess):
 
         self.namelist = self.addComplexOutput(
             identifier="namelist",
-            title="namelist",
-            abstract="",
+            title="Namelist",
+            abstract="XML configuration file for this tool",
             formats=[{"mimeType":"application/xml"}],
             asReference=True,
             )
 
         self.log = self.addComplexOutput(
             identifier="log",
-            title="log",
-            abstract="",
+            title="Log File",
+            abstract="Logging output of this tool",
             formats=[{"mimeType":"text/plain"}],
             asReference=True,
             )
 
-        self.ack = self.addComplexOutput(
-            identifier="ack",
-            title="Acknowledgement",
-            abstract="references/acknowledgements of these diagnostics",
+        self.reference = self.addComplexOutput(
+            identifier="reference",
+            title="Reference",
+            abstract="references/acknowledgements of this tool",
             formats=[{"mimeType":"text/plain"}],
             asReference=True,
             )

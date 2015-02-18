@@ -36,7 +36,7 @@ class ESMValToolMyDiagProcess(ESMValToolProcess):
             experiment=self.experiment.getValue(),
             ensemble=self.ensemble.getValue())
         
-        out, namelist_file, log_file, ack_file = esmvaltool.diag(
+        out, namelist, log_file, reference = esmvaltool.diag(
             name="mydiag",
             credentials=self.credentials.getValue(),
             constraints=constraints,
@@ -55,10 +55,10 @@ class ESMValToolMyDiagProcess(ESMValToolProcess):
         PY  info: REFERENCES = /home/Shared/pingu/var/tmp/pywps-instanceTASv2H/workspace/work/namelist.txt
         """
 
-        self.namelist.setValue(namelist_file)
-        self.log.setValue( log_file )
         self.output.setValue(out)
-        self.ack.setValue(ack_file)
+        self.namelist.setValue(namelist)
+        self.log.setValue(log_file)
+        self.reference.setValue(reference)
         
 
  

@@ -23,7 +23,7 @@ class AnnCycleProcessTestCase(WpsTestCase):
         inputs.append(('start_year', '2000'))
         inputs.append(('end_year', '2001'))
         
-        output=[('output', True), ('namelist', True), ('log', True), ('ack', True)]
+        output=[('output', True), ('namelist', True), ('log', True), ('reference', True)]
         execution = self.wps.execute(identifier="anncycle", inputs=inputs, output=output)
         monitorExecution(execution, sleepSecs=1)
 

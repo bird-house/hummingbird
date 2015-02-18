@@ -20,7 +20,7 @@ class SurfConPlotProcessTestCase(WpsTestCase):
         inputs.append(('start_year', '2001'))
         inputs.append(('end_year', '2005'))
         
-        output=[('output', True), ('namelist', True), ('log', True), ('ack', True)]
+        output=[('output', True), ('namelist', True), ('log', True), ('reference', True)]
         execution = self.wps.execute(identifier="surfconplot", inputs=inputs, output=output)
         monitorExecution(execution, sleepSecs=1)
 
