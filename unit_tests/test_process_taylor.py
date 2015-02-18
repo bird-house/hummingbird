@@ -6,11 +6,11 @@ from owslib.wps import monitorExecution
 
 from __init__ import TESTDATA, SERVICE, CREDENTIALS, WpsTestCase
 
-class PerfmetricsProcessTestCase(WpsTestCase):
+class TaylorProcessTestCase(WpsTestCase):
 
     @attr('online')
     @attr('slow')
-    def test_perfmetrics_ta(self):
+    def test_taylor_ta(self):
         #raise SkipTest
         inputs = []
         inputs.append(('credentials', CREDENTIALS))

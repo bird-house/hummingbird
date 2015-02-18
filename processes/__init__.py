@@ -6,5 +6,5 @@ __all__ = [
            "wps_surfconplot",
            "wps_mydiag",
            "wps_perfmetrics",
-           "wps_perfmetrics_taylor",
+           "wps_taylor",
            ]

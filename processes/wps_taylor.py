@@ -42,14 +42,14 @@ class PerfmetricsTaylorProcess(ESMValToolProcess):
             experiment=self.experiment.getValue(),
             ensemble=self.ensemble.getValue())
         
-        out, namelist, log_file, ack_file = esmvaltool(
+        out, namelist, log_file, ack_file = esmvaltool.diag(
             name="taylor",
             credentials=self.credentials.getValue(),
             constraints=constraints,
             start_year=self.start_year.getValue(),
             end_year=self.end_year.getValue(),
             output_format=self.output_format.getValue(),
-            monitor=self.show_status )
+            monitor=self.show_status)
         
         self.show_status("done", 100)
 
