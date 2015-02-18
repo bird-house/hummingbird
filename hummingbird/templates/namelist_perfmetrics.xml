@@ -29,10 +29,12 @@
       <model>OBS   ERA-Interim reanaly     1           2000  2001  ${obs_root}/ERA-Interim</model>
 
       <diag_script cfg="cfg_perfmetrics_grading_RMSD_850_glob.ncl">perfmetrics_main.ncl</diag_script>
-      <diag_script cfg="cfg_perfmetrics_grading_RMSD_200_glob.ncl">perfmetrics_main.ncl</diag_script>
+      <!-- diag_script cfg="cfg_perfmetrics_grading_RMSD_200_glob.ncl">perfmetrics_main.ncl</diag_script -->
       
       <diag_script cfg="cfg_perfmetrics_grading_RMSD_850_glob.ncl">perfmetrics_grading.ncl</diag_script>
-      <diag_script cfg="cfg_perfmetrics_grading_RMSD_200_glob.ncl">perfmetrics_grading.ncl</diag_script>
+      <!-- diag_script cfg="cfg_perfmetrics_grading_RMSD_200_glob.ncl">perfmetrics_grading.ncl</diag_script -->
+
+      <!--diag_script cfg="cfg_perfmetrics_grading_RMSD_850_glob.ncl">perfmetrics_taylor.ncl</diag_script-->
     </diag>
   
     <diag>
