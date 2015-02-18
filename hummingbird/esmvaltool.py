@@ -73,6 +73,28 @@ def diag_perfmetrics(
 
     return out, namelist, log_file, ack_file
 
+def diag_perfmetrics_taylor(
+    credentials,
+    constraints,
+    start_year, end_year,
+    output_format='ps',
+    monitor=None):
+
+    # run diag
+    workspace, namelist, log_file, ack_file = diag(
+        name='taylor',
+        credentials=credentials,
+        constraints=constraints,
+        start_year=start_year, end_year=end_year,
+        output_format=output_format,
+        monitor=monitor)
+
+    # plot output
+    filename = 'namelist_%s-850_Globta-200_Glob_RMSD_grading.%s' % (constraints.get('variable'), output_format)
+    out = join(workspace, 'plots', 'perfmetrics_taylor', filename)
+
+    return out, namelist, log_file, ack_file
+
 def diag(
     name,
     credentials,
