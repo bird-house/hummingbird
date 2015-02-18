@@ -4,6 +4,8 @@ from malleefowl import config
 from malleefowl import wpslogging as logging
 logger = logging.getLogger(__name__)
 
+from hummingbird.exceptions import ProcessError
+
 from mako.lookup import TemplateLookup
 mylookup = TemplateLookup(directories=[join(dirname(__file__), 'templates')],
                           output_encoding='utf-8', encoding_errors='replace')
@@ -16,28 +18,31 @@ def diag(
     output_format='ps',
     monitor=None):
 
-    workspace = esgf_workspace(
-        constraints=constraints,
-        start_year=start_year, end_year=end_year,
-        credentials=credentials,
-        monitor=monitor)
-    namelist = generate_namelist(
-        diag=name,
-        workspace=workspace,
-        constraints=constraints,
-        start_year=start_year,
-        end_year=end_year,
-        output_format=output_format,
-        )
+    try:
+        workspace = esgf_workspace(
+            constraints=constraints,
+            start_year=start_year, end_year=end_year,
+            credentials=credentials,
+            monitor=monitor)
+        namelist = generate_namelist(
+            diag=name,
+            workspace=workspace,
+            constraints=constraints,
+            start_year=start_year,
+            end_year=end_year,
+            output_format=output_format,
+            )
 
-    # run diag
-    monitor("%s ..." % name, 10)
-    log_file, ack_file = esmvaltool(namelist, workspace)
-    monitor("%s done" % name, 90)
+        # run diag
+        monitor("%s ..." % name, 10)
+        log_file, ack_file = esmvaltool(namelist, workspace)
+        monitor("%s done" % name, 90)
 
-    # TODO: handle plot outputs
-    out = find_plot(workspace, output_format)
-
+        # TODO: handle plot outputs
+        out = find_plot(workspace, output_format)
+    except:
+        logger.exception("diag %s failed!", name)
+        raise
     return out, namelist, log_file, ack_file
 
 def esmvaltool(namelist, workspace):
@@ -205,6 +210,11 @@ def write_namelist(namelist, workspace):
 def find_plot(workspace, output_format):
     import glob
     matches = glob.glob(join(workspace, 'plots', '*', '*.%s' % output_format))
+    if len(matches) == 0:
+        raise ProcessError("no result plot found in workspace/plots")
+    elif len(matches) > 1:
+        raise ProcessError("more then one plot found %s", matches)
+    logger.info("plot file=%s", matches[0])
     return matches[0]
 
 
