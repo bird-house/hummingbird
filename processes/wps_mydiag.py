@@ -47,6 +47,14 @@ class ESMValToolMyDiagProcess(ESMValToolProcess):
         
         self.show_status("done", 100)
 
+        """
+        PY  info: NAMELIST   = namelist.xml
+        PY  info: WORKDIR    = /home/Shared/pingu/var/tmp/pywps-instanceTASv2H/workspace/work
+        PY  info: CLIMODIR   = /home/Shared/pingu/var/tmp/pywps-instanceTASv2H/workspace/climo
+        PY  info: PLOTDIR    = /home/Shared/pingu/var/tmp/pywps-instanceTASv2H/workspace/plots
+        PY  info: REFERENCES = /home/Shared/pingu/var/tmp/pywps-instanceTASv2H/workspace/work/namelist.txt
+        """
+
         self.namelist.setValue(namelist_file)
         self.log.setValue( log_file )
         self.output.setValue(out)
