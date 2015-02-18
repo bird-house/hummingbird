@@ -1,0 +1,42 @@
+<%def name="field_type()">
+  % if constraints.get('variable') in ['tas', 'rsut', 'rlut']:
+  <field_type>T2Ms</field_type>
+  % else:
+  <field_type>T3M</field_type>
+  % endif
+</%def>
+
+<%def name="obs()">
+  <model>OBS   NCEP        reanaly     1           2000  2001  ${obs_root}/NCEP</model>
+  <model>OBS   ERA-Interim reanaly     1           2000  2001  ${obs_root}/ERA-Interim</model>
+</%def>
+
+<namelist>
+  <namelist_summary>Diag: Perfmetrics (annual cycle line plot). This file is generated!</namelist_summary>
+
+  <%include file="global.xml"/>
+
+  <%include file="models.xml"/>
+
+  <!-- Please do not change anything below this line, 
+       unless you want to modify the standard diagnostic settings. -->
+  <DIAGNOSTICS>
+  
+    <diag>
+      <description>${constraints.get('variable')}</description>
+      <variable_def_dir>${prefix}/variable_defs/</variable_def_dir>
+      <variable>${constraints.get('variable')}</variable>
+      ${field_type()}
+      <diag_script_cfg_dir>${prefix}/nml/cfg_perfmetrics/CMIP5/</diag_script_cfg_dir>
+
+      <!-- Additional data sets specific for this section. 
+           Data sets defined here will be applied together with the models from the global section -->
+      ${obs()}
+
+      <diag_script cfg="cfg_perfmetrics_cycle_monthlyclim_850_glob.ncl">perfmetrics_main.ncl</diag_script> 
+
+    </diag>
+
+  </DIAGNOSTICS>
+
+</namelist>

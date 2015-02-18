@@ -7,4 +7,5 @@ __all__ = [
            "wps_mydiag",
            "wps_perfmetrics",
            "wps_taylor",
+           "wps_anncycle",
            ]

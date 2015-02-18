@@ -6,23 +6,13 @@ from hummingbird import esmvaltool
 from malleefowl import wpslogging as logging
 logger = logging.getLogger(__name__)
 
-class PerfmetricsProcess(ESMValToolProcess):
-    """
-    Plotting the performance metrics for the CMIP5 models.
-    
-    Calculation of performance metrics to quantify the ability of the models to reproduce the
-    climatological mean annual cycle for some selected EVCs  plus some additional
-    corresponding diagnostics and plots to better understand and interpret the results. 
-            
-    https://teamsites-extranet.dlr.de/pa/ESMValTool/Wiki/Performance%20Metrics%20for%20Essential%20Climate%20Parameters.aspx
-    """
-    
+class AnnualCycleProcess(ESMValToolProcess):
     def __init__(self):
         ESMValToolProcess.__init__(self,
-            identifier = "perfmetrics",
-            title = "ESMValTool: Perfmetrics",
+            identifier = "anncycle",
+            title = "ESMValTool: Perfmetrics Annual Cycle Line Plot",
             version = "0.1",
-            abstract="Plotting the performance metrics for the CMIP5 models."
+            abstract="Plotting an annual cycle line diagram of the performance metrics for the CMIP5 models."
             )
 
         self.variable = self.addLiteralInput(
@@ -47,13 +37,13 @@ class PerfmetricsProcess(ESMValToolProcess):
             ensemble=self.ensemble.getValue())
         
         out, namelist, log_file, ack_file = esmvaltool.diag(
-            name='perfmetrics',
+            name="anncycle",
             credentials=self.credentials.getValue(),
             constraints=constraints,
             start_year=self.start_year.getValue(),
             end_year=self.end_year.getValue(),
             output_format=self.output_format.getValue(),
-            monitor=self.show_status )
+            monitor=self.show_status)
         
         self.show_status("done", 100)
 
