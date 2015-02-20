@@ -51,6 +51,10 @@ class AnnualCycleProcess(ESMValToolProcess):
         self.namelist.setValue(namelist)
         self.log.setValue( log_file )
         self.reference.setValue(reference)
+
+        # TODO: get legend plot output
+        # gsnapp.epsi
+        #out = find_plot(workspace, "epsi")
         
 
  
