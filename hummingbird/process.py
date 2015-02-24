@@ -32,7 +32,7 @@ class ESMValToolProcess(WPSProcess):
             type=type(''),
             minOccurs=1,
             maxOccurs=10,
-            allowedValues=["IPSL-CM5A-LR", "MPI-ESM-LR", "MPI-ESM-MR", "MPI-ESM-P"]
+            allowedValues=["MPI-ESM-LR", "MPI-ESM-MR", "IPSL-CM5A-MR", "GFDL-CM3"]
             )
 
         self.cmor_table = self.addLiteralInput(
@@ -54,7 +54,7 @@ class ESMValToolProcess(WPSProcess):
             type=type(''),
             minOccurs=1,
             maxOccurs=1,
-            allowedValues=['historical']
+            allowedValues=['historical', 'rcp26', 'rcp85']
             )
 
         self.ensemble = self.addLiteralInput(
