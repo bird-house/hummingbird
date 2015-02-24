@@ -24,14 +24,14 @@ classifiers=[
         ]
 
 setup(name='hummingbird',
-      version='0.1.3',
+      version='0.2.0',
       description='WPS processes for general tools used in the climate science community like cdo',
       long_description=README + '\n\n' + CHANGES,
       classifiers=classifiers,
       author='Birdhouse',
       url='https://github.com/bird-house/hummingbird',
       license = "Apache License v2.0",
-      keywords='wps PyWPS Python Malleefowl Hummingbird',
+      keywords='wps pywps malleefowl hummingbirdi birdhouse conda anaconda',
       packages=find_packages(),
       include_package_data=True,
       zip_safe=False,
