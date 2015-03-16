@@ -23,6 +23,7 @@ Contents:
    configuration
    testing
    processes
+   examples
 
 Indices and tables
 ==================
