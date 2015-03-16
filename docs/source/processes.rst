@@ -16,7 +16,7 @@ http://localhost:8092/wps?service=WPS&version=1.0.0&request=GetCapabilities
 
 The XML response of the WPS service is the following document:
 
-.. literalinclude:: wps_caps.xml
+.. literalinclude:: processes/wps_caps.xml
     :language: xml
     :emphasize-lines: 52,58,64
     :linenos:
@@ -41,7 +41,7 @@ http://localhost:8092/wps?service=WPS&version=1.0.0&request=DescribeProcess&iden
 
 The XML response of the WPS service is the following document:
 
-.. literalinclude:: wps_cfchecker.xml
+.. literalinclude:: processes/wps_cfchecker.xml
     :language: xml
     :emphasize-lines: 9,26,46
     :linenos:
