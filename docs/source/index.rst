@@ -22,7 +22,7 @@ Contents:
    installation
    configuration
    testing
-   processes/index
+   processes
 
 Indices and tables
 ==================
