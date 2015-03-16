@@ -5,12 +5,32 @@ WPS Processes
 
 We describe here the WPS processes available in Hummingbird.
 
+.. _caps:
+
+WPS Capabilities
+================
+
+Using the default Hummingbird installation the ``GetCapabilities`` request is as follows:
+
+http://localhost:8092/wps?service=WPS&version=1.0.0&request=GetCapabilities
+
+The XML response of the WPS service is the following document:
+
+.. literalinclude:: wps_caps.xml
+    :language: xml
+    :emphasize-lines: 52,58,64
+    :linenos:
+
+.. _cfchecker:
+
 CFChecker
 =========
 
 The `cfchecker <https://pypi.python.org/pypi/cfchecker>`_ checks NetCDF files for compliance to the Climate Forcast Conventions (CF) standard.
 
 The process expects one or more NetCDF files which should be checked and an optional parameter for the CF version.
+
+.. _cfchecker_description:
 
 WPS process description
 -----------------------
