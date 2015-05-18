@@ -1,6 +1,12 @@
 Changes
 *******
 
+0.2.1 (2015-mm-dd)
+==================
+
+* updated supervisor/pywps recipe.
+* logging to stderr/supervisor.
+
 0.2.0 (2015-02-24)
 ==================
 
