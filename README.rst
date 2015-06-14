@@ -1,6 +1,9 @@
 Hummingbird
 ===========
 
+.. image:: https://travis-ci.org/bird-house/hummingbird.svg?branch=master
+   :alt: Travis Build
+
 Hummingbird (the bird)
   *Hummingbirds are among the smallest of birds. They hover in mid-air at rapid wing flapping rates, typically around 50 times per second, but possibly as high as 200 times per second, allowing them also to fly at speeds exceeding 15 m/s (54 km/h; 34 mph), backwards or upside down. [..].* (`Wikipedia https://en.wikipedia.org/wiki/Hummingbird`_).
 
