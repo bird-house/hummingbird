@@ -2,6 +2,7 @@ Hummingbird
 ===========
 
 .. image:: https://travis-ci.org/bird-house/hummingbird.svg?branch=master
+   :target: https://travis-ci.org/bird-house/hummingbird
    :alt: Travis Build
 
 Hummingbird (the bird)
