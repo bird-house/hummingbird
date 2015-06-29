@@ -1,4 +1,4 @@
-VERSION := 0.2.3
+VERSION := 0.2.4
 RELEASE := master
 
 # Application
@@ -162,7 +162,7 @@ bootstrap: init conda_env conda_pinned bootstrap-buildout.py
 	@test -f bin/buildout || bash -c "source $(ANACONDA_HOME)/bin/activate $(CONDA_ENV);python bootstrap-buildout.py -c custom.cfg --allow-site-packages --setuptools-version 14.3 --version 2.3.1"
 
 .PHONY: sysinstall
-sysinstall: bootstrap.sh requirements.sh
+sysinstall:
 	@echo "\nInstalling system packages for bootstrap ..."
 	@bash bootstrap.sh -i
 	@echo "\nInstalling system packages for your application ..."
@@ -195,13 +195,12 @@ buildclean:
 	@echo "Removing bootstrap.sh ..."
 	@test -e bootstrap.sh && rm -v bootstrap.sh
 
-.PHONY: bootstrap
-passwd:
+.PHONY: passwd
+passwd: custom.cfg
 	@echo "Generate Phoenix password ..."
 	@echo "Enter a password with at least 8 characters."
-	@bash -c "source $(ANACONDA_HOME)/bin/activate $(CONDA_ENV);python -c 'from IPython.lib import passwd; print passwd(algorithm=\"sha256\")'"
+	@bash -c "source $(ANACONDA_HOME)/bin/activate $(CONDA_ENV); python -c 'from IPython.lib import passwd; pw = passwd(algorithm=\"sha256\"); lines = [\"phoenix-password = \" + pw + \"\\n\" if line.startswith(\"phoenix-password\") else line for line in open(\"custom.cfg\", \"r\")]; file = open(\"custom.cfg\", \"w\"); file.writelines(lines); file.close()'"
 	@echo ""
-	@echo "Add this password to custom.cfg: phoenix-password = ..." 
 	@echo "Run 'make install restart' to activate this password." 
 
 .PHONY: test
@@ -222,7 +221,7 @@ docs:
 	@echo "open your browser: firefox docs/build/html/index.html"
 
 .PHONY: selfupdate
-selfupdate: bootstrap.sh
+selfupdate: bootstrap.sh requirements.sh
 	@wget -q --no-check-certificate -O Makefile "https://raw.githubusercontent.com/bird-house/birdhousebuilder.bootstrap/$(RELEASE)/Makefile"
 
 ## Supervisor targets
