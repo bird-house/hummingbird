@@ -26,7 +26,7 @@ Execute *CFChecker* process with public available data:
 Install *Birdy* WPS command line tool from Anaconda (Anaconda needs to be installed and in your ``PATH``)::
 
   $ source activate birdhouse # activate birdhouse environment (optional)
-  $ conda install -c https://conda.binstar.org/birdhouse birdhouse-birdy
+  $ conda install -c birdhouse birdhouse-birdy
 
 Use Birdy to access Hummingbird WPS service::
 
