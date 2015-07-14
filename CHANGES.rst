@@ -4,6 +4,7 @@ Changes
 0.2.1 (2015-mm-dd)
 ==================
 
+* tika metadata parser process added.
 * updated supervisor/pywps recipe.
 * logging to stderr/supervisor.
 
