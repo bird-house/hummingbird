@@ -38,9 +38,11 @@ class Tika(WPSProcess):
         from tika import parser
 
         metadata = []
-        for resource in resources:
+        for counter, resource in enumerate(resources):
             parsed = parser.from_file(resource)
             metadata.append( parsed["metadata"] )
+            progress = int( counter * 100.0 / len(resources) )
+            self.show_status("parsing {0}/{1}".format(counter, len(resources)), progress)
 
         import json
         out_filename = self.mktempfile(suffix='.json')
