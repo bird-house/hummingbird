@@ -23,6 +23,8 @@ class CDOOperation(WPSProcess):
             abstract="Apply CDO Operation like monmax on NetCDF File.",
             )
 
+        self.cdo = Cdo()
+
         self.netcdf_file = self.addComplexInput(
             identifier="netcdf_file",
             title="NetCDF File",
@@ -41,7 +43,7 @@ class CDOOperation(WPSProcess):
             type=type(''),
             minOccurs=1,
             maxOccurs=1,
-            allowedValues=['merge', 'dayavg', 'daymax', 'daymean', 'daymin','daysum', 'dayvar',    'daystd', 'monmax', 'monmin', 'monmean', 'monavg', 'monsum', 'monvar', 'monstd', 'ymonmin', 'ymonmax', 'ymonsum', 'ymonmean', 'ymonavg', 'ymonvar', 'ymonstd', 'yearavg', 'yearmax', 'yearmean', 'yearmin', 'yearsum', 'yearvar', 'yearstd', 'yseasvar']
+            allowedValues=sorted(self.cdo.operators),
             )
 
         self.output = self.addComplexOutput(
@@ -59,8 +61,7 @@ class CDOOperation(WPSProcess):
         nc_files = self.getInputValues(identifier='netcdf_file')
         operator = self.operator.getValue()
 
-        cdo = Cdo()
-        cdo_op = getattr(cdo, operator)
+        cdo_op = getattr(self.cdo, operator)
 
         outfile = self.mktempfile(suffix='.nc')
         cdo_op(input= " ".join(nc_files), output=outfile)
