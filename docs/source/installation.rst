@@ -20,8 +20,8 @@ The depolyed WPS service is by default available on http://localhost:8092/wps?se
 
 Check the log files for errors::
 
-   $ tail -f  ~/anaconda/var/log/pywps/hummingbird.log
-   $ tail -f  ~/anaconda/var/log/pywps/hummingbird_trace.log
+   $ cd ~/.conda/envs/birdhouse
+   $ tail -f  var/log/supervisor/hummingbird.log
 
 
 
