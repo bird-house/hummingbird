@@ -1,23 +1,10 @@
 import os
-from mako.template import Template
+from subprocess import check_output, CalledProcessError
 
 from malleefowl.process import WPSProcess
 
 from malleefowl import wpslogging as logging
 logger = logging.getLogger(__name__)
-
-templ_cfchecks = Template(
-"""
-#!/bin/bash
-source activate hummingbird
-cfchecks \
-    --cf_standard_names http://cfconventions.org/Data/cf-standard-names/28/src/cf-standard-name-table.xml \
-    --area_types http://cfconventions.org/Data/area-type-table/2/src/area-type-table.xml \
-    --version ${version} \
-    ${input_file} &> ${output_file}
-source deactivate
-"""
-)
 
 def cf_check(nc_file, version):
     logger.debug("start cf_check: nc_file=%s, version=%s", nc_file, version)
@@ -27,23 +14,12 @@ def cf_check(nc_file, version):
         from os import rename
         rename(nc_file, new_name)
         nc_file = new_name
-    from subprocess import check_call, CalledProcessError
-    # TODO: using anaconda env ... should be configured in pywps/gunicorn!
-    #from os.path import realpath
-    cfchecks_script = templ_cfchecks.render(
-        version=version,
-        input_file=nc_file,
-        output_file="output.txt")
-    with open("cfchecks.sh", 'w') as fp:
-        fp.write(cfchecks_script)
-    cmd = ["bash", "cfchecks.sh"]
+    cmd = ["cfchecks", "--version", version, nc_file]
     try:
-        check_call(cmd)
-        with open("output.txt", 'r') as fp:
-            cf_report = fp.read()
-    except Exception as e:
-        logger.exception("cfchecker failed!")
-        cf_report = "cfchecker failed, error=%s" % e.message
+        cf_report = check_output(cmd)
+    except CalledProcessError as err:
+        logger.exception("cfchecks failed!")
+        cf_report = err.output
     return cf_report
 
 class CFCheckerProcess(WPSProcess):

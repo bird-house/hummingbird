@@ -1,9 +1,10 @@
 Changes
 *******
 
-0.2.1 (2015-mm-dd)
+0.2.1 (2015-08-04)
 ==================
 
+* update cfchecker 2.0.8 ... using numpy 1.9.
 * tika metadata parser process added.
 * updated supervisor/pywps recipe.
 * logging to stderr/supervisor.

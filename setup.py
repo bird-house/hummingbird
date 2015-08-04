@@ -9,6 +9,7 @@ CHANGES = open(os.path.join(here, 'CHANGES.rst')).read()
 requires = [
     'malleefowl',
     'cdo',
+    'cfchecker',
     'netcdf4',
     'werkzeug',
     'nose',
@@ -24,7 +25,7 @@ classifiers=[
         ]
 
 setup(name='hummingbird',
-      version='0.2.0',
+      version='0.2.1',
       description='WPS processes for general tools used in the climate science community like cdo',
       long_description=README + '\n\n' + CHANGES,
       classifiers=classifiers,
