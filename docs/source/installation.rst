@@ -9,7 +9,7 @@ Check out code from the Hummingbird github repo and start the installation::
    $ cd hummingbird
    $ make
 
-For other install options run ``make help`` and read the documention of the `Makefile <https://github.com/bird-house/birdhousebuilder.bootstrap/blob/master/README.rst>`_.
+For other install options run ``make help`` and read the documention of the `Makefile <http://birdhousebuilderbootstrap.readthedocs.org/en/latest/usage.html#makefile>`_.
 
 After successful installation you need to start the services. Hummingbird is using `Anaconda <http://www.continuum.io/>`_ Python distribution system. All installed files (config etc ...) are below the Anaconda root folder which is by default in your home directory ``~/anaconda``. Now, start the services::
 
