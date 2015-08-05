@@ -12,7 +12,7 @@ CPU_ARCH := $(shell uname -m 2>/dev/null || uname -p 2>/dev/null || echo "unknow
 # Anaconda 
 ANACONDA_HOME ?= $(HOME)/anaconda
 CONDA_ENV := birdhouse
-CONDA_ENVS_DIR := $(HOME)/.conda/envs
+CONDA_ENVS_DIR ?= $(HOME)/.conda/envs
 PREFIX := $(CONDA_ENVS_DIR)/$(CONDA_ENV)
 
 # choose anaconda installer depending on your OS
