@@ -5,4 +5,5 @@ __all__ = [
            "wps_ensembles",
            "wps_cfchecker",
            "wps_tika",
+           "wps_tutorial"
            ]
