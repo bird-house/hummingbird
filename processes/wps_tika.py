@@ -10,7 +10,7 @@ class Tika(WPSProcess):
         WPSProcess.__init__(self,
             identifier = "tika",
             title = "Tika Metadata Parser",
-            version = "0.1",
+            version = "1.9.7-1",
             abstract="Extracts Metadata of Files")
 
         self.resource = self.addComplexInput(
@@ -30,7 +30,7 @@ class Tika(WPSProcess):
             )
 
     def execute(self):
-        self.show_status("starting tika", 0)
+        self.show_status("starting ...", 0)
 
         resources = self.getInputValues(identifier='resource')
 
@@ -50,7 +50,7 @@ class Tika(WPSProcess):
             json.dump(obj=metadata, fp=fp, indent=4, sort_keys=True)
         self.output.setValue( out_filename )
         
-        self.show_status("tika done", 100)
+        self.show_status("done", 100)
 
 
         

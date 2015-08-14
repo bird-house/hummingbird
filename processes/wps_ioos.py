@@ -25,16 +25,15 @@ def stdout_redirected(new_stdout):
 class CFCheckerProcess(WPSProcess):
     def __init__(self):
         WPSProcess.__init__(self,
-            identifier = "cchecker",
+            identifier = "ioos_cchecker",
             title = "IOOS Compliance Checker",
-            version = "0.1",
+            version = "1.1.1-2",
             abstract="The IOOS Compliance Checker is a Python tool to check local/remote datasets against a variety of compliance standards."
             )
 
-        self.resource = self.addComplexInput(
-            identifier="resource",
+        self.dataset = self.addComplexInput(
+            identifier="dataset",
             title="NetCDF File",
-            abstract="NetCDF File",
             minOccurs=1,
             maxOccurs=1000,
             maxmegabites=10000,
@@ -67,7 +66,7 @@ class CFCheckerProcess(WPSProcess):
         # TODO: generate html report with links to cfchecker output ...
         outfile = self.mktempfile(suffix='.txt')
         self.output.setValue( outfile )
-        nc_files = self.getInputValues(identifier='resource')
+        nc_files = self.getInputValues(identifier='dataset')
         count = 0
         max_count = len(nc_files)
         step = 100.0 / max_count

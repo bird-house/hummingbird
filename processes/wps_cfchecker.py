@@ -27,14 +27,13 @@ class CFCheckerProcess(WPSProcess):
         WPSProcess.__init__(self,
             identifier = "cfchecker",
             title = "CF Checker",
-            version = "0.1",
+            version = "2.0.9-1",
             abstract="The cfchecker checks NetCDF files for compliance to the CF standard."
             )
 
-        self.resource = self.addComplexInput(
-            identifier="resource",
+        self.dataset = self.addComplexInput(
+            identifier="dataset",
             title="NetCDF File",
-            abstract="NetCDF File",
             minOccurs=1,
             maxOccurs=1000,
             maxmegabites=10000,
@@ -67,7 +66,7 @@ class CFCheckerProcess(WPSProcess):
         # TODO: generate html report with links to cfchecker output ...
         outfile = self.mktempfile(suffix='.txt')
         self.output.setValue( outfile )
-        nc_files = self.getInputValues(identifier='resource')
+        nc_files = self.getInputValues(identifier='dataset')
         count = 0
         max_count = len(nc_files)
         step = 100.0 / max_count
