@@ -1,6 +1,12 @@
 Changes
 *******
 
+0.2.2 (2015-08-14)
+==================
+
+* IOOS compliance checker added.
+* qa-dkrz cf checker added.
+
 0.2.1 (2015-08-04)
 ==================
 
