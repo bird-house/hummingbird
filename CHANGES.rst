@@ -6,6 +6,7 @@ Changes
 
 * IOOS compliance checker added.
 * qa-dkrz cf checker added.
+* cdo ensembles operation added.
 
 0.2.1 (2015-08-04)
 ==================
