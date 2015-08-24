@@ -1,5 +1,5 @@
 import os
-from subprocess import check_output, CalledProcessError
+from subprocess import check_output, CalledProcessError, STDOUT
 
 from malleefowl.process import WPSProcess
 
@@ -16,11 +16,20 @@ def cf_check(nc_file):
         nc_file = new_name
     cmd = ["dkrz-cf-checker", nc_file]
     try:
-        cf_report = check_output(cmd)
+        output = check_output(cmd)
     except CalledProcessError as err:
         logger.exception("cfchecks failed!")
-        cf_report = err.output
-    return cf_report
+        output = err.output
+    return output
+
+def cordex_check(datasets):
+    cmd = ["qa-dkrz", "-m", "-f", "cordex.task"]
+    try:
+        output = check_output(cmd, stderr=STDOUT)
+    except CalledProcessError as err:
+        logger.exception("cordex check failed!")
+        output = err.output
+    return output
 
 class CFChecker(WPSProcess):
     def __init__(self):
@@ -66,6 +75,46 @@ class CFChecker(WPSProcess):
                 count = count + 1
                 self.show_status("cfchecker: %d/%d" % (count, max_count), int(count*step))
         self.show_status("cfchecker: done", 100)
+
+
+class CordexChecker(WPSProcess):
+    def __init__(self):
+        WPSProcess.__init__(self,
+            identifier = "qa_cordex_checker",
+            title = "QA DKRZ Cordex Checker",
+            version = "0.5-1",
+            abstract="Qualtiy Assurance Tools by DKRZ: cordex checks ..."
+            )
+
+        self.dataset = self.addComplexInput(
+            identifier="dataset",
+            title="NetCDF",
+            minOccurs=1,
+            maxOccurs=1000,
+            maxmegabites=10000,
+            formats=[{"mimeType":"application/x-netcdf"}],
+            )
+
+        self.output = self.addComplexOutput(
+            identifier="output",
+            title="Cordex Checker Report",
+            abstract="",
+            formats=[{"mimeType":"text/plain"}],
+            asReference=True,
+            )
+
+    def execute(self):
+        self.show_status("starting cordex checker ...", 0)
+
+        outfile = self.mktempfile(suffix='.txt')
+        self.output.setValue( outfile )
+        datasets = self.getInputValues(identifier='dataset')
+
+        report = cordex_check(datasets)
+        
+        with open(outfile, 'a') as fp:
+            fp.write(report)
+        self.show_status("cordex checker: done", 100)
 
 
         
