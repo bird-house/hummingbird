@@ -20,17 +20,31 @@ class Ncregrid(WPSProcess):
             version = '1.0', # Can this be ommited?
             )
 
-        self.netcdf_file = self.addComplexInput(
+        self.namelist = self.addComplexInput(
+            identifier="namelist",
+            title="Namelist",
+            abstract="Namelist",
+            formats=[{"mimeType":"text/nml"}],
+            )
+
+        self.infile = self.addComplexInput(
             identifier="infile",
-            title="NetCDF Input",
-            abstract="NetCDF Input",
+            title="Input File",
+            abstract="Input File",
+            formats=[{"mimeType":"application/x-netcdf"}],
+            )
+
+        self.gridfile = self.addComplexInput(
+            identifier="gridfile",
+            title="Grid File",
+            abstract="Grid File",
             formats=[{"mimeType":"application/x-netcdf"}],
             )
 
         self.output = self.addComplexOutput(
             identifier="output",
-            title="NetCDF Output",
-            abstract="NetCDF Output",
+            title="Output File",
+            abstract="Output File",
             metadata=[],
             formats=[{"mimeType":"application/x-netcdf"}],
             asReference=True,
@@ -39,12 +53,41 @@ class Ncregrid(WPSProcess):
     def execute(self):
         self.show_status("starting ncregrid operation", 10)
 
-        infile = self.getInputValues('infile')
+        namelist = self.getInputValue('namelist')
+        infile   = self.getInputValue('infile')
+        gridfile = self.getInputValue('gridfile')
+        outfile  = self.mktempfile(suffix='.nc')
+        alt_nml  = self.mktempfile(suffix='.nml')
+
+        # Manipulate namelist to match actual file names.
+        f = open(namelist, 'r')
+        config = f.readlines()
+        f.close()
+
+        from os import path
+        for i in range(len(config)):
+            if config[i].startswith('infile'):
+                config[i] = "infile = '" + path.abspath(infile) + "',\n"
+            if config[i].startswith('grdfile'):
+                config[i] = "grdfile = '" + path.abspath(gridfile) + "',\n"
+            if config[i].startswith('outfile'):
+                config[i] = "outfile = '" + path.abspath(outfile) + "',\n"
+
+        f = open(alt_nml, 'w')
+        f.writelines(config)
+        f.close()
+
+        # Delete empty outfile, otherwise ncregrid will fail.
+        from os import remove
+        remove(outfile)
 
         import subprocess
         ncregrid = '/home/fklemme/bin/ncregrid' # TODO!
-        proc = subprocess.Popen([ncregrid] + infile, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+        proc = subprocess.Popen([ncregrid, alt_nml], stdout = subprocess.PIPE, stderr = subprocess.PIPE)
         ret = proc.communicate()
 
         self.show_status(ret[0].decode('utf-8'), 90)
-        self.output.setValue(*infile) # is this correct?
+        self.output.setValue(outfile)
+
+        if proc.returncode != 0:
+            return proc.returncode
