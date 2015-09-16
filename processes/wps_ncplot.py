@@ -71,6 +71,7 @@ class SimplePlot(WPSProcess):
             lats = ds.variables['lat'][:]
 
         # Guess variable
+        name = longname = None
         for key, variable in ds.variables.items():
             if key.lower() in ds.dimensions:
                 # skip dimension variables
