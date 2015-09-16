@@ -69,9 +69,8 @@ class SimplePlot(WPSProcess):
         lon_0 = lons.mean()
         lat_0 = lats.mean()
 
-        m = Basemap(width=5000000,height=3500000,
-                resolution='l',projection='stere',\
-                lat_ts=40,lat_0=lat_0,lon_0=lon_0)
+        m = Basemap(llcrnrlon=lons[0],llcrnrlat=lats[0],urcrnrlon=lons[-1],urcrnrlat=lats[-1],
+                    resolution='l', projection='cyl', lat_0 = lat_0, lon_0 = lon_0)
 
         # Because our lon and lat variables are 1D, 
         # use meshgrid to create 2D arrays 
@@ -83,8 +82,8 @@ class SimplePlot(WPSProcess):
         cs = m.pcolor(xi,yi,np.squeeze(plotvar))
 
         # Add Grid Lines
-        m.drawparallels(np.arange(-80., 81., 10.), labels=[1,0,0,0], fontsize=10)
-        m.drawmeridians(np.arange(-180., 181., 10.), labels=[0,0,0,1], fontsize=10)
+        #m.drawparallels(np.arange(-80., 81., 10.), labels=[1,0,0,0], fontsize=10)
+        #m.drawmeridians(np.arange(-180., 181., 10.), labels=[0,0,0,1], fontsize=10)
 
         # Add Coastlines, States, and Country Boundaries
         m.drawcoastlines()
