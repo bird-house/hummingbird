@@ -8,4 +8,5 @@ __all__ = [
            "wps_hdh",
            "wps_ioos",
            "wps_stormtrack",
+           "wps_ncplot",
            ]
