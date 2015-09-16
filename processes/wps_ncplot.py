@@ -17,6 +17,14 @@ logger = logging.getLogger(__name__)
 
 class SimplePlot(WPSProcess):
     """Plots a simple 2D map of netcdf file"""
+
+    SPATIAL_VARIABLES = [
+        'longitude', 'lon', 'rlon',
+        'latitude', 'lat', 'rlat',
+        'altitude', 'alt', 'level', 'height',
+        'rotated_pole',
+        'time']
+    
     def __init__(self):
         WPSProcess.__init__(
             self,
@@ -35,14 +43,14 @@ class SimplePlot(WPSProcess):
             formats=[{"mimeType":"application/x-netcdf"}],
             )
 
-        self.variable = self.addLiteralInput(
-            identifier="variable",
-            title="Variable",
-            abstract="Variable to plot",
-            type=type(''),
-            minOccurs=1,
-            maxOccurs=1,
-            )
+        ## self.variable = self.addLiteralInput(
+        ##     identifier="variable",
+        ##     title="Variable",
+        ##     abstract="Variable to plot",
+        ##     type=type(''),
+        ##     minOccurs=1,
+        ##     maxOccurs=1,
+        ##     )
 
         self.output = self.addComplexOutput(
             identifier="output",
@@ -54,16 +62,31 @@ class SimplePlot(WPSProcess):
     def execute(self):
         self.show_status("starting simple plot", 0)
 
-        fh = Dataset(self.dataset.getValue(), mode='r')
-        if 'rlon' in fh.variables:
-            lons = fh.variables['rlon'][:]
-            lats = fh.variables['rlat'][:]
+        ds = Dataset(self.dataset.getValue(), mode='r')
+        if 'rlon' in ds.variables:
+            lons = ds.variables['rlon'][:]
+            lats = ds.variables['rlat'][:]
         else:
-            lons = fh.variables['lon'][:]
-            lats = fh.variables['lat'][:]
-        plotvar = fh.variables[self.variable.getValue()][0][:]
-        plotvar_units = fh.variables[self.variable.getValue()].units
-        fh.close()
+            lons = ds.variables['lon'][:]
+            lats = ds.variables['lat'][:]
+
+        # Guess variable
+        for key, variable in ds.variables.items():
+            if key.lower() in ds.dimensions:
+                # skip dimension variables
+                continue
+            if '_bnds' in key.lower():
+                continue
+            if key.lower() in self.SPATIAL_VARIABLES:
+                continue
+            name = key
+            longname = getattr(variable, 'long_name', key)
+            break
+
+            
+        var = ds.variables[name][0][:]
+        units = ds.variables[name].units
+        ds.close()
 
         # Get some parameters for the Stereographic Projection
         lon_0 = lons.mean()
@@ -79,7 +102,7 @@ class SimplePlot(WPSProcess):
         xi, yi = m(lon, lat)
 
         # Plot Data
-        cs = m.pcolor(xi,yi,np.squeeze(plotvar))
+        cs = m.pcolor(xi,yi,np.squeeze(var))
 
         # Add Grid Lines
         #m.drawparallels(np.arange(-80., 81., 10.), labels=[1,0,0,0], fontsize=10)
@@ -92,10 +115,10 @@ class SimplePlot(WPSProcess):
 
         # Add Colorbar
         cbar = m.colorbar(cs, location='bottom', pad="10%")
-        cbar.set_label(plotvar_units)
+        cbar.set_label(units)
 
         # Add Title
-        plt.title('Simple Plot')
+        plt.title(longname)
         plt.savefig('output.png')
 
         self.output.setValue( 'output.png' )
