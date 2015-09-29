@@ -1,0 +1,9 @@
+hummingbird:
+  image: birdhouse/hummingbird
+  ports:
+    - "38092:38092"
+    - "8092:8092"
+  environment:
+    HOSTNAME: localhost
+    OUTPUT_PORT: 38092
+
