@@ -10,4 +10,5 @@ __all__ = [
            "wps_stormtrack",
            "wps_ncplot",
            "wps_ncregrid",
+           "wps_cdo_introspected",
            ]
