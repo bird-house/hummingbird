@@ -21,9 +21,10 @@ for op in cdo.operators:
     else:
         wps[key].append(op)
 
-# TODO...
-debugfile = open('debugoutput.txt', 'a')
-for k, v in wps:
+# Print some debug information to a local file.
+import codecs
+debugfile = codecs.open('debug_cdo_introspection.txt', 'w+', 'utf-8')
+for k, v in wps.items():
     print >> debugfile, sorted(v)
     print >> debugfile, k, '\n\n'
 debugfile.close()
