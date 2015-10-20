@@ -82,7 +82,7 @@ class Ncregrid(WPSProcess):
         remove(outfile)
 
         import subprocess
-        ncregrid = '/home/fklemme/bin/ncregrid' # TODO!
+        ncregrid = 'ncregrid' # This seem to be okay, if ncregrid is copied to envs/birdhouse/bin/.
         proc = subprocess.Popen([ncregrid, alt_nml], stdout = subprocess.PIPE, stderr = subprocess.PIPE)
         ret = proc.communicate()
 
