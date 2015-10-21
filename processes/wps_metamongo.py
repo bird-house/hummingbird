@@ -39,7 +39,6 @@ class MetaMongo(WPSProcess):
             maxOccurs = 1000,
             )
 
-        # If both (start and end) are set, this is interpreted as an interval.
         self.timeBegin = self.addLiteralInput(
             identifier = 'timeBegin',
             title = 'Begin date',
@@ -58,7 +57,6 @@ class MetaMongo(WPSProcess):
             maxOccurs = 1,
             )
 
-        # Two values will be interpreted as a bounding box.
         self.latitude = self.addLiteralInput(
             identifier = 'latitude',
             title = 'Latitude',
@@ -68,7 +66,6 @@ class MetaMongo(WPSProcess):
             maxOccurs = 2,
             )
 
-        # Two values will be interpreted as a bounding box.
         self.longitude = self.addLiteralInput(
             identifier = 'longitude',
             title = 'Longitude',
@@ -78,7 +75,6 @@ class MetaMongo(WPSProcess):
             maxOccurs = 2,
             )
 
-        # Two values will be interpreted as a bounding box.
         self.pressure = self.addLiteralInput(
             identifier = 'pressure',
             title = 'Pressure levels',
@@ -88,7 +84,6 @@ class MetaMongo(WPSProcess):
             maxOccurs = 2,
             )
 
-        # Two values will be interpreted as a bounding box.
         self.intermediate = self.addLiteralInput(
             identifier = 'intermediate',
             title = 'Pressure intermediate levels',
