@@ -4,7 +4,7 @@ Processes for metamongo
 
 from malleefowl.process import WPSProcess
 
-from datetime import date
+from datetime import date, datetime
 from pymongo import MongoClient as mc
 
 from malleefowl import wpslogging as logging
@@ -116,12 +116,16 @@ class MetaMongo(WPSProcess):
             for dim in dimensions:
                 query[dim] = {'$exists': True}
 
+        # TODO: Maybe this can be ommited, if PyWPS input support such checks.
+        def checkDate(d):
+            return datetime.strptime(d, '%d.%m.%Y')
+
         timeBegin = self.getInputValue(identifier='timeBegin')
         timeEnd   = self.getInputValue(identifier='timeEnd')
         if timeBegin is not None:
-            query['time.maximum'] = {'$gte': timeBegin}
+            query['time.maximum'] = {'$gte': checkDate(timeBegin)}
         if timeEnd is not None:
-            query['time.minimum'] = {'$lte': timeEnd}
+            query['time.minimum'] = {'$lte': checkDate(timeEnd)}
 
         latitude = self.getInputValue(identifier='latitude')
         if latitude is not None:
