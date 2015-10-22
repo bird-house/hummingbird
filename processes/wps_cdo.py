@@ -128,51 +128,50 @@ class CdoIntvert(WPSProcess):
     def __init__(self):
         WPSProcess.__init__(
             self,
-            identifier = "cdo_intvert",
-            title = "CDO 2.12.5 INTVERT - Vertical interpolation",
-            abstract = "Interpolate 3D variables on hybrid model levels to pressure or height levels.",
-            metadata = [{"title":"CDO","href":"https://code.zmaw.de/projects/cdo"}],
+            identifier = 'cdo_intvert',
+            title = 'CDO 2.12.5 INTVERT - Vertical interpolation',
+            abstract = 'Interpolate 3D variables on hybrid model levels to pressure or height levels.',
+            metadata = [{'title': 'CDO', 'href': 'https://code.zmaw.de/projects/cdo'}],
             version = '1.0', # Can this be ommited?
             )
 
         self.netcdf_file = self.addComplexInput(
-            identifier="netcdf_file",
-            title="NetCDF File",
-            abstract="NetCDF File",
-            formats=[{"mimeType":"application/x-netcdf"}],
+            identifier = 'netcdf_file',
+            title = 'NetCDF File',
+            abstract = 'NetCDF File',
+            formats = [{'mimeType': 'application/x-netcdf'}],
             )
 
         self.operator = self.addLiteralInput(
-            identifier="operator",
-            title="CDO Operator",
-            abstract="Choose a CDO Operator",
-            type=type(''),
-            allowedValues=['ml2pl', 'ml2hl'],
+            identifier = 'operator',
+            title = 'CDO Operator',
+            abstract = 'Choose a CDO Operator',
+            type = type(''),
+            allowedValues = ['ml2pl', 'ml2hl'],
             )
 
         self.levels = self.addLiteralInput(
-            identifier="levels",
-            title="p/h levels",
-            abstract="Float; Pressure levels in pascal / Height levels in meter",
-            type=type(''),
-            maxOccurs=100,
+            identifier = 'levels',
+            title = 'p/h levels',
+            abstract = 'Float; Pressure levels in pascal / Height levels in meter',
+            type = type(''),
+            maxOccurs = 100,
             )
 
         self.output = self.addComplexOutput(
-            identifier="output",
-            title="NetCDF Output",
-            abstract="NetCDF Output",
-            metadata=[],
-            formats=[{"mimeType":"application/x-netcdf"}],
-            asReference=True,
+            identifier = 'output',
+            title = 'NetCDF Output',
+            abstract = 'NetCDF Output',
+            formats = [{'mimeType': 'application/x-netcdf'}],
+            asReference = True,
             )
 
     def execute(self):
-        self.show_status("starting cdo operattion", 10)
+        self.show_status('starting cdo operattion', 10)
 
-        operator = self.operator.getValue()
-        nc_file = self.getInputValues('netcdf_file')
-        levels = self.getInputValues('levels')
+        operator = self.getInputValue('operator')
+        nc_file = self.getInputValue('netcdf_file')
+        levels = self.getInputValue('levels')
 
         cdo = Cdo()
         cdo_op = getattr(cdo, operator)
@@ -180,5 +179,5 @@ class CdoIntvert(WPSProcess):
         outfile = self.mktempfile(suffix='.nc')
         cdo_op(*levels, input=nc_file, output=outfile)
 
-        self.show_status("cdo operation done", 90)
+        self.show_status('cdo operation done', 90)
         self.output.setValue(outfile)
