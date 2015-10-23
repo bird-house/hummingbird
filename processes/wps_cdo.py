@@ -123,20 +123,20 @@ class CDOInfo(WPSProcess):
         self.output.setValue( outfile )
 
 
-class CdoIntvert(WPSProcess):
+class CdoVertIntML(WPSProcess):
     """Vertical interpolation"""
     def __init__(self):
         WPSProcess.__init__(
             self,
-            identifier = 'cdo_intvert',
-            title = 'CDO 2.12.5 INTVERT - Vertical interpolation',
+            identifier = 'cdo_vertintml',
+            title = 'CDO 2.12.11 VERTINTML - Vertical interpolation',
             abstract = 'Interpolate 3D variables on hybrid model levels to pressure or height levels.',
             metadata = [{'title': 'CDO', 'href': 'https://code.zmaw.de/projects/cdo'}],
             version = '1.0', # Can this be ommited?
             )
 
-        self.netcdf_file = self.addComplexInput(
-            identifier = 'netcdf_file',
+        self.netcdfFile = self.addComplexInput(
+            identifier = 'netcdfFile',
             title = 'NetCDF File',
             abstract = 'NetCDF File',
             formats = [{'mimeType': 'application/x-netcdf'}],
@@ -154,8 +154,69 @@ class CdoIntvert(WPSProcess):
             identifier = 'levels',
             title = 'p/h levels',
             abstract = 'Float; Pressure levels in pascal / Height levels in meter',
-            type = type(''),
+            type = float,
             maxOccurs = 100,
+            )
+
+        self.output = self.addComplexOutput(
+            identifier = 'output',
+            title = 'NetCDF Output',
+            abstract = 'NetCDF Output',
+            formats = [{'mimeType': 'application/x-netcdf'}],
+            asReference = True,
+            )
+
+    def execute(self):
+        self.show_status('starting cdo operation', 10)
+
+        operator = self.getInputValue('operator')
+        netcdfFile = self.getInputValue('netcdfFile')
+        levels = self.getInputValue('levels')
+
+        cdo = Cdo()
+        cdoOperator = getattr(cdo, operator)
+
+        outfile = self.mktempfile(suffix='.nc')
+        cdoOperator(*levels, input=netcdfFile, output=outfile)
+
+        self.show_status('cdo operation done', 90)
+        self.output.setValue(outfile)
+
+
+class CdoZonStat(WPSProcess):
+    """Zonal statistical values"""
+    def __init__(self):
+        WPSProcess.__init__(
+            self,
+            identifier = 'cdo_zonstat',
+            title = 'CDO 2.8.6  ZONSTAT - Zonal statistical values',
+            abstract = 'This module computes zonal statistical values of the input fields.',
+            metadata = [{'title': 'CDO', 'href': 'https://code.zmaw.de/projects/cdo'}],
+            version = '1.0', # Can this be ommited?
+            )
+
+        self.netcdfFile = self.addComplexInput(
+            identifier = 'netcdfFile',
+            title = 'NetCDF File',
+            abstract = 'NetCDF File',
+            formats = [{'mimeType': 'application/x-netcdf'}],
+            )
+
+        self.operator = self.addLiteralInput(
+            identifier = 'operator',
+            title = 'CDO Operator',
+            abstract = 'Choose a CDO Operator',
+            type = type(''),
+            allowedValues = ['zonmin', 'zonmax', 'zonsum', 'zonmean', 'zonavg', 'zonstd', 'zonstd1', 'zonvar', 'zonvar1', 'zonpctl'],
+            )
+
+        self.percentile = self.addLiteralInput(
+            identifier = 'percentile',
+            title = 'Percentile (zonpctl only)',
+            abstract = 'FLOAT Percentile number in 0, ..., 100',
+            type = float,
+            minOccurs = 0
+            maxOccurs = 1,
             )
 
         self.output = self.addComplexOutput(
@@ -170,14 +231,22 @@ class CdoIntvert(WPSProcess):
         self.show_status('starting cdo operattion', 10)
 
         operator = self.getInputValue('operator')
-        nc_file = self.getInputValue('netcdf_file')
-        levels = self.getInputValue('levels')
+        netcdfFile = self.getInputValue('netcdfFile')
+        percentile = self.getInputValue('percentile')
+
+        if operator == 'zonpctl' and percentile is None:
+            raise RuntimeError('Missing input for parameter "percentile".')
+        else operator != 'zonpctl' and percentile is not None:
+            logger.warning('Unused input for paramter "percentile".')
 
         cdo = Cdo()
-        cdo_op = getattr(cdo, operator)
+        cdoOperator = getattr(cdo, operator)
 
         outfile = self.mktempfile(suffix='.nc')
-        cdo_op(*levels, input=nc_file, output=outfile)
+        if operator == 'zonpctl':
+            cdoOperator(percentile, input=netcdfFile, output=outfile)
+        else:
+            cdoOperator(input=netcdfFile, output=outfile)
 
         self.show_status('cdo operation done', 90)
         self.output.setValue(outfile)
