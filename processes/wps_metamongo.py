@@ -63,7 +63,7 @@ class MetaMongo(WPSProcess):
             abstract = 'Latitude points',
             type = int,
             minOccurs = 0,
-            maxOccurs = 2, # This seems to be ignore by the phoenix web interface. See issue https://github.com/bird-house/pyramid-phoenix/issues/52
+            maxOccurs = 2, # This seems to be ignored by the phoenix web interface. See issue https://github.com/bird-house/pyramid-phoenix/issues/52
             )
 
         self.longitude = self.addLiteralInput(
