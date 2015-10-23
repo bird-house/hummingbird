@@ -45,7 +45,7 @@ class MetaMongo(WPSProcess):
             abstract = 'Begin date (DD.MM.YYYY)',
             type = date, # TODO: This doesn't seem to be enough to prevent illegal dates.
             minOccurs = 0,
-            maxOccurs = 1,
+            maxOccurs = 1, # This seems to be ignore by the phoenix web interface.
             )
 
         self.timeEnd = self.addLiteralInput(

@@ -11,6 +11,6 @@ __all__ = [
            #"wps_ncplot",
            "wps_ncregrid",
            #"wps_cdo_introspected",
-           "wps_cdo_1"
+           "wps_cdo_1",
            "wps_metamongo",
            ]
