@@ -45,7 +45,7 @@ class MetaMongo(WPSProcess):
             abstract = 'Begin date (DD.MM.YYYY)',
             type = date, # TODO: This doesn't seem to be enough to prevent illegal dates.
             minOccurs = 0,
-            maxOccurs = 1, # This seems to be ignore by the phoenix web interface.
+            maxOccurs = 1,
             )
 
         self.timeEnd = self.addLiteralInput(
@@ -63,7 +63,7 @@ class MetaMongo(WPSProcess):
             abstract = 'Latitude points',
             type = int,
             minOccurs = 0,
-            maxOccurs = 2,
+            maxOccurs = 2, # This seems to be ignore by the phoenix web interface. See issue https://github.com/bird-house/pyramid-phoenix/issues/52
             )
 
         self.longitude = self.addLiteralInput(
@@ -102,11 +102,11 @@ class MetaMongo(WPSProcess):
         self.show_status('starting metamongo', 10)
         query = dict()
 
-        variables = self.getInputValue(identifier='variables')
+        variables = self.getInputValue('variables')
         if variables is not None:
             query['variables'] = {'$all': variables}
 
-        dimensions = self.getInputValue(identifier='dimensions')
+        dimensions = self.getInputValue('dimensions')
         if dimensions is not None:
             for dim in dimensions:
                 query[dim] = {'$exists': True}
@@ -115,29 +115,29 @@ class MetaMongo(WPSProcess):
         def checkDate(d):
             return datetime.strptime(d, '%d.%m.%Y')
 
-        timeBegin = self.getInputValue(identifier='timeBegin')
-        timeEnd   = self.getInputValue(identifier='timeEnd')
+        timeBegin = self.getInputValue('timeBegin')
+        timeEnd   = self.getInputValue('timeEnd')
         if timeBegin is not None:
             query['time.maximum'] = {'$gte': checkDate(timeBegin)}
         if timeEnd is not None:
             query['time.minimum'] = {'$lte': checkDate(timeEnd)}
 
-        latitude = self.getInputValue(identifier='latitude')
+        latitude = self.getInputValue('latitude')
         if latitude is not None:
             query['lat.maximum'] = {'$gte': max(latitude)}
             query['lat.minimum'] = {'$lte': min(latitude)}
 
-        longitude = self.getInputValue(identifier='longitude')
+        longitude = self.getInputValue('longitude')
         if longitude is not None:
             query['lon.maximum'] = {'$gte': max(longitude)}
             query['lon.minimum'] = {'$lte': min(longitude)}
 
-        pressure = self.getInputValue(identifier='pressure')
+        pressure = self.getInputValue('pressure')
         if pressure is not None:
             query['plev.maximum'] = {'$gte': max(pressure)}
             query['plev.minimal'] = {'$lte': min(pressure)}
 
-        intermediate = self.getInputValue(identifier='intermediate')
+        intermediate = self.getInputValue('intermediate')
         if intermediate is not None:
             query['ilev.maximum'] = {'$gte': max(intermediate)}
             query['ilev.minimum'] = {'$lte': min(intermediate)}
