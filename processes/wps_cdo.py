@@ -215,7 +215,7 @@ class CdoZonStat(WPSProcess):
             title = 'Percentile (zonpctl only)',
             abstract = 'FLOAT Percentile number in 0, ..., 100',
             type = float,
-            minOccurs = 0
+            minOccurs = 0,
             maxOccurs = 1,
             )
 
@@ -236,7 +236,7 @@ class CdoZonStat(WPSProcess):
 
         if operator == 'zonpctl' and percentile is None:
             raise RuntimeError('Missing input for parameter "percentile".')
-        else operator != 'zonpctl' and percentile is not None:
+        elif operator != 'zonpctl' and percentile is not None:
             logger.warning('Unused input for paramter "percentile".')
 
         cdo = Cdo()
