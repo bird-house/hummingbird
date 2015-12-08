@@ -22,7 +22,7 @@ custom.cfg
 .coverage
 .tox
 nosetests.xml
-unit_tests/testdata.json
+tests/testdata.json
 
 # Eclipse / PyDev
 .project
