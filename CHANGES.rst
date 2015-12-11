@@ -1,9 +1,13 @@
 Changes
 *******
 
-current
+
+0.2.3
 ==================
 
+* updated dockerfile and docker recipe.
+* using ioos conda channel.
+* updated compliance checker (ioos).
 * ncplot process added.
 * stormtrack process added.
 

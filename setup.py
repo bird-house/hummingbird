@@ -25,7 +25,7 @@ classifiers=[
         ]
 
 setup(name='hummingbird',
-      version='0.2.2',
+      version='0.2.3',
       description='WPS processes for general tools used in the climate science community like cdo',
       long_description=README + '\n\n' + CHANGES,
       classifiers=classifiers,
