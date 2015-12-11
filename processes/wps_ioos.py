@@ -1,6 +1,5 @@
 import os
-from compliance_checker.runner import ComplianceCheckerCheckSuite
-from compliance_checker.runner import ComplianceChecker as cc
+from compliance_checker.runner import ComplianceCheckerCheckSuite, ComplianceChecker
 
 from malleefowl.process import WPSProcess
 
@@ -9,6 +8,8 @@ logger = logging.getLogger(__name__)
 
 import sys
 from contextlib import contextmanager
+
+check_suite = ComplianceCheckerCheckSuite()
 
 @contextmanager
 def stdout_redirected(new_stdout):
@@ -27,7 +28,7 @@ class CFCheckerProcess(WPSProcess):
         WPSProcess.__init__(self,
             identifier = "ioos_cchecker",
             title = "IOOS Compliance Checker",
-            version = "1.1.1-2",
+            version = "1.1.1-3",
             abstract="The IOOS Compliance Checker is a Python tool to check local/remote datasets against a variety of compliance standards."
             )
 
@@ -48,7 +49,18 @@ class CFCheckerProcess(WPSProcess):
             type=type(''),
             minOccurs=1,
             maxOccurs=1,
-            allowedValues=["cf", "gliderdac", "acdd", "ioos"]
+            allowedValues=check_suite.checkers.keys()
+            )
+
+        self.criteria = self.addLiteralInput(
+            identifier="criteria",
+            title="Criteria",
+            abstract="Define the criteria for the checks.  Either Strict, Normal, or Lenient.  Defaults to Normal.",
+            type=type(''),
+            default="normal",
+            minOccurs=1,
+            maxOccurs=1,
+            allowedValues=["strict", "normal", "lenient"]
             )
 
         self.output = self.addComplexOutput(
@@ -66,22 +78,23 @@ class CFCheckerProcess(WPSProcess):
         # TODO: generate html report with links to cfchecker output ...
         outfile = self.mktempfile(suffix='.txt')
         self.output.setValue( outfile )
-        nc_files = self.getInputValues(identifier='dataset')
+        datasets = self.getInputValues(identifier='dataset')
+        checker_names = self.getInputValues(identifier='test')
+        
         count = 0
-        max_count = len(nc_files)
+        max_count = len(datasets)
         step = 100.0 / max_count
 
-        cs = ComplianceCheckerCheckSuite()
-        test=self.test.getValue()
-
         with open(outfile, "w") as f:
-            for nc_file in nc_files:
+            for ds in datasets:
                 f.write("\n\n####################################################################################\n")
-                f.write("checking: %s\n" % nc_file)
+                f.write("checking: %s\n" % ds)
                 with stdout_redirected(f):
-                    dataset = cs.load_dataset(nc_file)
-                    groups = cs.run(dataset, test)
-                    cc.stdout_output(cs, groups, verbose=0, limit=-1)
+                    ComplianceChecker.run_checker(
+                        ds,
+                        checker_names=checker_names,
+                        verbose=0,
+                        criteria=self.criteria.getValue())
                 count = count + 1
                 self.show_status("checks: %d/%d" % (count, max_count), int(count*step))
         self.show_status("done", 100)
