@@ -13,11 +13,12 @@ ENV OUTPUT_PORT 8090
 # Set current home
 ENV HOME /root
 
-# Add application sources
-ADD . /opt/birdhouse
+# Copy application sources
+COPY . /opt/birdhouse
 
 # cd into application
 WORKDIR /opt/birdhouse
+
 
 # Install system dependencies
 RUN bash bootstrap.sh -i && bash requirements.sh
