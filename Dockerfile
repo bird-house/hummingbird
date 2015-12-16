@@ -1,6 +1,6 @@
 # vim:set ft=dockerfile:
 FROM birdhouse/bird-base:latest
-MAINTAINER https://github.com/bird-house
+MAINTAINER https://github.com/bird-house/hummingbird
 
 LABEL Description="Hummingbird WPS Application" Vendor="Birdhouse" Version="0.2.3"
 
@@ -20,6 +20,7 @@ COPY . /opt/birdhouse
 WORKDIR /opt/birdhouse
 
 
+
 # Install system dependencies
 RUN bash bootstrap.sh -i && bash requirements.sh
 
@@ -37,11 +38,11 @@ VOLUME /data/cache
 VOLUME /data/lib
 
 # Ports used in birdhouse
-EXPOSE 9001 8092 28092 $OUTPUT_PORT
+EXPOSE 8092 28092 $OUTPUT_PORT
 
 # Start supervisor in foreground
 ENV DAEMON_OPTS --nodaemon --user $USER
 
-# Update config and start supervisor ...
-CMD ["make", "update-config", "start"]
+# Start service ...
+CMD ['make', 'update-config', 'start']
 

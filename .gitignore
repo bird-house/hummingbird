@@ -6,6 +6,7 @@
 
 # custom configs
 custom.cfg
+.docker.cfg
 
 # Python / Extensions etc.
 *~
@@ -22,7 +23,7 @@ custom.cfg
 .coverage
 .tox
 nosetests.xml
-tests/testdata.json
+unit_tests/testdata.json
 
 # Eclipse / PyDev
 .project
@@ -62,3 +63,9 @@ docs/build/
 # tests
 *.log
 *.lock
+
+# IPython
+.ipynb_checkpoints
+
+# tests
+testdata.json
