@@ -6,7 +6,6 @@
 
 # custom configs
 custom.cfg
-.docker.cfg
 
 # Python / Extensions etc.
 *~
@@ -63,9 +62,7 @@ docs/build/
 # tests
 *.log
 *.lock
+testdata.json
 
 # IPython
 .ipynb_checkpoints
-
-# tests
-testdata.json
