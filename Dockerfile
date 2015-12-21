@@ -7,7 +7,7 @@ LABEL Description="Hummingbird WPS Application" Vendor="Birdhouse" Version="0.2.
 # Configure hostname and user for services 
 ENV HOSTNAME localhost
 ENV USER www-data
-ENV OUTPUT_PORT 8090
+ENV OUTPUT_PORT 38092
 
 
 # Set current home
