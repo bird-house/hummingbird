@@ -6,4 +6,7 @@ hummingbird:
   environment:
     HOSTNAME: localhost
     OUTPUT_PORT: 38092
+  volumes:
+    - data:/data
+  volume_driver: local
 
