@@ -1,10 +1,10 @@
 hummingbird:
   image: birdhouse/hummingbird
   ports:
+    - "48092:9001"
     - "38092:38092"
     - "8092:8092"
   environment:
-    HOSTNAME: localhost
     OUTPUT_PORT: 38092
   volumes:
     - data:/data
