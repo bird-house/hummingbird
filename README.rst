@@ -13,6 +13,14 @@ For installation and configuration read the `documentation <http://birdhouse-hum
 
 Hummingbird is part of the `Birdhouse <http://bird-house.github.io>`_ project.
 
+Using docker-compose
+====================
+
+Start hummingbird with docker-compose (port 8092) on localhost:
+
+.. code-block:: sh
+
+   $ docker-compose run --service-ports -e HOSTNAME=localhost hummingbird
 
 
 
