@@ -1,6 +1,7 @@
 import os
 
-from malleefowl.process import WPSProcess
+from pywps.Process import WPSProcess
+from malleefowl.process import show_status, getInputValues, mktempfile
 
 from malleefowl import wpslogging as logging
 logger = logging.getLogger(__name__)
@@ -8,13 +9,15 @@ logger = logging.getLogger(__name__)
 class NetcdfMetadata(WPSProcess):
     def __init__(self):
         WPSProcess.__init__(self,
-            identifier = "ncmeta",
-            title = "NetCDF Metadata",
-            version = "0.1",
-            abstract="Retrieve Metadata of NetCDF File")
+            identifier="ncmeta",
+            title="NetCDF Metadata",
+            version="0.2",
+            abstract="Retrieve Metadata of NetCDF File",
+            statusSupported=True,
+            storeSupported=True)
 
-        self.netcdf_file = self.addComplexInput(
-            identifier="netcdf_file",
+        self.dataset = self.addComplexInput(
+            identifier="dataset",
             title="NetCDF File",
             abstract="NetCDF File",
             minOccurs=1,
@@ -32,9 +35,9 @@ class NetcdfMetadata(WPSProcess):
             )
 
     def execute(self):
-        self.show_status("starting netcdf metadata retrieval", 5)
+        show_status(self, "starting netcdf metadata retrieval", 5)
 
-        nc_file = self.getInputValues(identifier='netcdf_file')[0]
+        nc_file = getInputValues(self, identifier='dataset')[0]
 
         from netCDF4 import Dataset
         ds = Dataset(nc_file)
@@ -51,15 +54,15 @@ class NetcdfMetadata(WPSProcess):
                 if hasattr(ds.variables[var_name], att_name):
                     metadata['variables'][var_name][att_name] = getattr(ds.variables[var_name], att_name)
         
-        self.show_status("retrieved netcdf metadata", 80)
+        show_status(self, "retrieved netcdf metadata", 80)
 
         import json
-        out_filename = self.mktempfile(suffix='.json')
+        out_filename = mktempfile(suffix='.json')
         with open(out_filename, 'w') as fp:
             json.dump(obj=metadata, fp=fp, indent=4, sort_keys=True)
         self.output.setValue( out_filename )
         
-        self.show_status("netcdf metadata written", 90)
+        show_status(self, "netcdf metadata written", 90)
 
 
         
