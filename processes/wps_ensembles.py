@@ -1,4 +1,10 @@
-from malleefowl.process import WPSProcess
+"""
+Processes with cdo ensemble opertions
+"""
+
+from pywps.Process import WPSProcess
+from malleefowl.process import show_status, getInputValues, mktempfile
+
 from malleefowl import wpslogging as logging
 logger = logging.getLogger(__name__)
 
@@ -7,27 +13,28 @@ class Ensembles(WPSProcess):
     def __init__(self):
         WPSProcess.__init__(
             self,
-            identifier = "ensembles",
-            title = "Ensembles Operations",
-            version = "0.1",
+            identifier="ensembles",
+            title="Ensembles Operations",
+            version="0.2",
             metadata=[
                 {"title":"CDO ens","href":"https://code.zmaw.de/projects/cdo"},
                 ],
             abstract="Calling cdo to calculate ensembles operations.",
+            statusSupported=True,
+            storeSupported=True
             )
 
-        self.netcdf_file = self.addComplexInput(
-            identifier="netcdf_file",
-            title="NetCDF File",
-            abstract="NetCDF File",
+        self.dataset = self.addComplexInput(
+            identifier="dataset",
+            title="Dataset (NetCDF)",
             minOccurs=1,
-            maxOccurs=100,
+            maxOccurs=1000,
             maxmegabites=5000,
             formats=[{"mimeType":"application/x-netcdf"}],
             )
 
         # operators
-        self.operator_in = self.addLiteralInput(
+        self.operator = self.addLiteralInput(
             identifier="operator",
             title="Ensemble command",
             abstract="Choose a CDO Operator",
@@ -51,19 +58,18 @@ class Ensembles(WPSProcess):
             )
 
     def execute(self):
-        self.show_status("starting cdo operator", 0)
+        show_status(self, "starting cdo operator", 0)
 
-        nc_files = self.getInputValues(identifier='netcdf_file')
-        operator = self.operator_in.getValue()
+        nc_files = getInputValues(self, identifier='dataset')
 
-        out_filename = self.mktempfile(suffix='.nc')
+        out_filename = mktempfile(suffix='.nc')
         try:
-            cmd = ["cdo", operator]
+            cmd = ["cdo", self.operator.getValue()]
             cmd.extend(nc_files)
             cmd.append(out_filename)
             self.cmd(cmd=cmd, stdout=True)
         except:
             logger.exception('cdo failed')
             raise
-        self.show_status("ensembles calculation done", 100)
+        show_status(self, "ensembles calculation done", 100)
         self.output.setValue( out_filename )
