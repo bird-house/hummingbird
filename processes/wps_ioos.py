@@ -1,7 +1,8 @@
 import os
 from compliance_checker.runner import ComplianceCheckerCheckSuite, ComplianceChecker
 
-from malleefowl.process import WPSProcess
+from pywps.Process import WPSProcess
+from malleefowl.process import show_status, getInputValues, mktempfile
 
 from malleefowl import wpslogging as logging
 logger = logging.getLogger(__name__)
@@ -28,13 +29,15 @@ class CFCheckerProcess(WPSProcess):
         WPSProcess.__init__(self,
             identifier = "ioos_cchecker",
             title = "IOOS Compliance Checker",
-            version = "1.1.1-3",
-            abstract="The IOOS Compliance Checker is a Python tool to check local/remote datasets against a variety of compliance standards."
+            version = "1.1.1-4",
+            abstract="The IOOS Compliance Checker is a Python tool to check local/remote datasets against a variety of compliance standards.",
+            statusSupported=True,
+            storeSupported=True
             )
 
         self.dataset = self.addComplexInput(
             identifier="dataset",
-            title="NetCDF File",
+            title="Dataset (NetCDF)",
             minOccurs=1,
             maxOccurs=1000,
             maxmegabites=10000,
@@ -72,14 +75,14 @@ class CFCheckerProcess(WPSProcess):
             )
 
     def execute(self):
-        self.show_status("starting ...", 0)
+        show_status(self, "starting ...", 0)
 
         # TODO: iterate input files ... run parallel 
         # TODO: generate html report with links to cfchecker output ...
-        outfile = self.mktempfile(suffix='.txt')
+        outfile = mktempfile(suffix='.txt')
         self.output.setValue( outfile )
-        datasets = self.getInputValues(identifier='dataset')
-        checker_names = self.getInputValues(identifier='test')
+        datasets = getInputValues(self, identifier='dataset')
+        checker_names = getInputValues(self, identifier='test')
         
         count = 0
         max_count = len(datasets)
@@ -96,8 +99,8 @@ class CFCheckerProcess(WPSProcess):
                         verbose=0,
                         criteria=self.criteria.getValue())
                 count = count + 1
-                self.show_status("checks: %d/%d" % (count, max_count), int(count*step))
-        self.show_status("done", 100)
+                show_status(self, "checks: %d/%d" % (count, max_count), int(count*step))
+        show_status(self, "done", 100)
 
 
         
