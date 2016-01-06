@@ -5,6 +5,7 @@ Changes
 0.2.3
 ==================
 
+* replaced malleefowl.process.WPSProcess with pywps.Process.WPSProcess.
 * updated dockerfile and docker recipe.
 * using ioos conda channel.
 * updated compliance checker (ioos).
