@@ -1,7 +1,8 @@
 import os
 from c3stormtrack.processing import Stormtrack
 
-from malleefowl.process import WPSProcess
+from pywps.Process import WPSProcess
+from malleefowl.process import show_status, getInputValues, mktempfile
 
 from malleefowl import wpslogging as logging
 logger = logging.getLogger(__name__)
@@ -9,10 +10,12 @@ logger = logging.getLogger(__name__)
 class StormtrackProcess(WPSProcess):
     def __init__(self):
         WPSProcess.__init__(self,
-            identifier = "stormtrack",
-            title = "C3 Stormtrack",
-            version = "2.3.0-0",
-            abstract="Stormtrack calculates the standard deviation of bandpassfiltered geopotential height anomalies or air pressure at sea level anomalies."
+            identifier="stormtrack",
+            title="C3 Stormtrack",
+            version="2.3.0-1",
+            abstract="Stormtrack calculates the standard deviation of bandpassfiltered geopotential height anomalies or air pressure at sea level anomalies.",
+            statusSupported=True,
+            storeSupported=True
             )
 
         self.dataset = self.addComplexInput(
@@ -48,23 +51,21 @@ class StormtrackProcess(WPSProcess):
         self.output = self.addComplexOutput(
             identifier="output",
             title="CF Checker Report",
-            abstract="",
             formats=[{"mimeType":"text/plain"}],
             asReference=True,
             )
 
     def execute(self):
-        self.show_status("starting stormtrack ...", 0)
+        show_status(self, "starting stormtrack ...", 0)
 
         # TODO: run stormtracks in parallel
         stormtrack = Stormtrack(cache_dir='cache', output_dir='outputs')
-        result = stormtrack.run(datasets=self.getInputValues(identifier='dataset'),
+        result = stormtrack.run(datasets=getInputValues(self, identifier='dataset'),
                        accu=self.accu.getValue(),
                        level=self.level.getValue())
-
         self.output.setValue( result )
         
-        self.show_status("stormtrack: done", 100)
+        show_status(self, "stormtrack: done", 100)
 
 
         
