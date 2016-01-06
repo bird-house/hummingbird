@@ -1,6 +1,7 @@
 import os
 
-from malleefowl.process import WPSProcess
+from pywps.Process import WPSProcess
+from malleefowl.process import show_status, getInputValues, mktempfile
 
 from malleefowl import wpslogging as logging
 logger = logging.getLogger(__name__)
@@ -8,16 +9,19 @@ logger = logging.getLogger(__name__)
 class Tika(WPSProcess):
     def __init__(self):
         WPSProcess.__init__(self,
-            identifier = "tika",
-            title = "Tika Metadata Parser",
-            version = "1.9.7-1",
-            abstract="Extracts Metadata of Files")
+            identifier="tika",
+            title="Tika Metadata Parser",
+            version="1.9.7-2",
+            abstract="Extracts Metadata of Files",
+            statusSupported=True,
+            storeSupported=True
+            )
 
-        self.resource = self.addComplexInput(
-            identifier="resource",
-            title="File",
+        self.dataset = self.addComplexInput(
+            identifier="dataset",
+            title="Dataset (NetCDF)",
             minOccurs=1,
-            maxOccurs=100,
+            maxOccurs=1000,
             maxmegabites=5000,
             formats=[{"mimeType":"application/x-netcdf"}],
             )
@@ -30,9 +34,9 @@ class Tika(WPSProcess):
             )
 
     def execute(self):
-        self.show_status("starting ...", 0)
+        show_status(self, "starting ...", 0)
 
-        resources = self.getInputValues(identifier='resource')
+        resources = getInputValues(self, identifier='resource')
 
         import tika
         from tika import parser
@@ -42,15 +46,15 @@ class Tika(WPSProcess):
             parsed = parser.from_file(resource)
             metadata.append( parsed["metadata"] )
             progress = int( counter * 100.0 / len(resources) )
-            self.show_status("parsing {0}/{1}".format(counter, len(resources)), progress)
+            show_status(self, "parsing {0}/{1}".format(counter, len(resources)), progress)
 
         import json
-        out_filename = self.mktempfile(suffix='.json')
+        out_filename = mktempfile(suffix='.json')
         with open(out_filename, 'w') as fp:
             json.dump(obj=metadata, fp=fp, indent=4, sort_keys=True)
         self.output.setValue( out_filename )
         
-        self.show_status("done", 100)
+        show_status(self, "done", 100)
 
 
         
