@@ -10,7 +10,8 @@ import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
 
-from malleefowl.process import WPSProcess
+from pywps.Process import WPSProcess
+from malleefowl.process import show_status
 
 from malleefowl import wpslogging as logging
 logger = logging.getLogger(__name__)
@@ -28,15 +29,17 @@ class SimplePlot(WPSProcess):
     def __init__(self):
         WPSProcess.__init__(
             self,
-            identifier = "simple_plot",
-            title = "Simple NetCDF Plotter",
-            version = "0.1",
+            identifier="simple_plot",
+            title="Simple NetCDF Plotter",
+            version="0.2",
             abstract="Simple NetCDF Plotter",
+            statusSupported=True,
+            storeSupported=True
             )
 
         self.dataset = self.addComplexInput(
             identifier="dataset",
-            title="NetCDF File",
+            title="Dataset (NetCDF)",
             minOccurs=1,
             maxOccurs=1,
             maxmegabites=5000,
@@ -60,7 +63,7 @@ class SimplePlot(WPSProcess):
             )
 
     def execute(self):
-        self.show_status("starting simple plot", 0)
+        show_status(self, "starting simple plot", 0)
 
         ds = Dataset(self.dataset.getValue(), mode='r')
         if 'rlon' in ds.variables:
@@ -124,7 +127,7 @@ class SimplePlot(WPSProcess):
 
         self.output.setValue( 'output.png' )
         
-        self.show_status("simple plot done", 100)
+        show_status(self, "simple plot done", 100)
        
 
 
