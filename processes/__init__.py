@@ -7,6 +7,6 @@ __all__ = [
            "wps_tika",
            "wps_hdh",
            "wps_ioos",
-           "wps_stormtrack",
+           #"wps_stormtrack",
            "wps_ncplot",
            ]
