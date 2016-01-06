@@ -2,8 +2,8 @@
 Processes with cdo commands
 """
 
-from malleefowl.process import WPSProcess
-
+from pywps.Process import WPSProcess
+from malleefowl.process import show_status, getInputValues, mktempfile
 from cdo import Cdo
 
 from malleefowl import wpslogging as logging
@@ -14,17 +14,19 @@ class CDOOperation(WPSProcess):
     def __init__(self):
         WPSProcess.__init__(
             self,
-            identifier = "cdo_operation",
-            title = "CDO Operation",
-            version = "0.1",
+            identifier="cdo_operation",
+            title="CDO Operation",
+            version="0.2",
             metadata=[
                 {"title":"CDO","href":"https://code.zmaw.de/projects/cdo"},
                 ],
             abstract="Apply CDO Operation like monmax on NetCDF File.",
+            statusSupported=True,
+            storeSupported=True
             )
 
-        self.netcdf_file = self.addComplexInput(
-            identifier="netcdf_file",
+        self.dataset = self.addComplexInput(
+            identifier="dataset",
             title="NetCDF File",
             abstract="NetCDF File",
             minOccurs=1,
@@ -54,18 +56,18 @@ class CDOOperation(WPSProcess):
             )
 
     def execute(self):
-        self.show_status("starting cdo operator", 10)
+        show_status(self, "starting cdo operator", 10)
 
-        nc_files = self.getInputValues(identifier='netcdf_file')
+        datasets = getInputValues(self, identifier='dataset')
         operator = self.operator.getValue()
 
         cdo = Cdo()
         cdo_op = getattr(cdo, operator)
 
-        outfile = self.mktempfile(suffix='.nc')
-        cdo_op(input= " ".join(nc_files), output=outfile)
+        outfile = mktempfile(suffix='.nc')
+        cdo_op(input= " ".join(datasets), output=outfile)
         
-        self.show_status("cdo operator done", 90)
+        show_status(self, "cdo operator done", 90)
         self.output.setValue( outfile )
 
 
@@ -75,17 +77,19 @@ class CDOInfo(WPSProcess):
     def __init__(self):
         WPSProcess.__init__(
             self,
-            identifier = "cdo_sinfo",
-            title = "CDO sinfo",
-            version = "0.1",
+            identifier="cdo_sinfo",
+            title="CDO sinfo",
+            version="0.2",
             metadata=[
                 {"title":"CDO","href":"https://code.zmaw.de/projects/cdo"},
                 ],
             abstract="Apply CDO sinfo on NetCDF File.",
+            statusSupported=True,
+            storeSupported=True
             )
 
-        self.netcdf_file = self.addComplexInput(
-            identifier="netcdf_file",
+        self.dataset = self.addComplexInput(
+            identifier="dataset",
             title="NetCDF File",
             abstract="NetCDF File",
             minOccurs=1,
@@ -104,20 +108,20 @@ class CDOInfo(WPSProcess):
             )
 
     def execute(self):
-        self.show_status("starting cdo sinfo", 0)
+        show_status(self, "starting cdo sinfo", 0)
 
         cdo = Cdo()
 
-        nc_files = self.getInputValues(identifier='netcdf_file')
+        datasets = getInputValues(self, identifier='dataset')
 
-        outfile = self.mktempfile(suffix='.txt')
+        outfile = mktempfile(suffix='.txt')
         with open(outfile, 'w') as fp: 
-            for nc_file in nc_files:
-                sinfo = cdo.sinfo(input=nc_file, output=outfile)
+            for ds in datasets:
+                sinfo = cdo.sinfo(input=ds, output=outfile)
                 for line in sinfo:
                     fp.write(line + '\n')
                 fp.write('\n\n')
 
-        self.show_status("cdo sinfo done", 90)
+        show_status(self, "cdo sinfo done", 90)
 
         self.output.setValue( outfile )
