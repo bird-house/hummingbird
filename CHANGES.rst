@@ -1,8 +1,12 @@
 Changes
 *******
 
+0.3.0 (2016-01-21)
+==================
 
-0.2.3
+* removed malleefowl dependency.
+
+0.2.3 (2016-01-20)
 ==================
 
 * replaced malleefowl.process.WPSProcess with pywps.Process.WPSProcess.
