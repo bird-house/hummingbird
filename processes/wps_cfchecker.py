@@ -1,14 +1,12 @@
 import os
+import tempfile
 from subprocess import check_output, CalledProcessError
 
 from pywps.Process import WPSProcess
-from malleefowl.process import show_status, getInputValues, mktempfile
 
-from malleefowl import wpslogging as logging
-logger = logging.getLogger(__name__)
+import logging
 
 def cf_check(nc_file, version):
-    logger.debug("start cf_check: nc_file=%s, version=%s", nc_file, version)
     # TODO: maybe use local file path
     if not nc_file.endswith(".nc"):
         new_name = nc_file + ".nc"
@@ -19,7 +17,7 @@ def cf_check(nc_file, version):
     try:
         cf_report = check_output(cmd)
     except CalledProcessError as err:
-        logger.exception("cfchecks failed!")
+        logging.exception("cfchecks failed!")
         cf_report = err.output
     return cf_report
 
@@ -28,7 +26,7 @@ class CFCheckerProcess(WPSProcess):
         WPSProcess.__init__(self,
             identifier = "cfchecker",
             title = "CF Checker",
-            version = "2.0.9-2",
+            version = "2.0.9-3",
             abstract="The cfchecker checks NetCDF files for compliance to the CF standard.",
             statusSupported=True,
             storeSupported=True
@@ -63,13 +61,11 @@ class CFCheckerProcess(WPSProcess):
             )
 
     def execute(self):
-        show_status(self, "starting cfchecker ...", 0)
-
         # TODO: iterate input files ... run parallel 
         # TODO: generate html report with links to cfchecker output ...
-        outfile = mktempfile(suffix='.txt')
+        _,outfile = tempfile.mkstemp(suffix='.txt')
         self.output.setValue( outfile )
-        nc_files = getInputValues(self, identifier='dataset')
+        nc_files = self.getInputValues(identifier='dataset')
         count = 0
         max_count = len(nc_files)
         step = 100.0 / max_count
@@ -78,8 +74,8 @@ class CFCheckerProcess(WPSProcess):
             with open(outfile, 'a') as fp:
                 fp.write(cf_report)
                 count = count + 1
-                show_status(self, "cfchecker: %d/%d" % (count, max_count), int(count*step))
-        show_status(self, "cfchecker: done", 100)
+                self.status.set("cfchecker: %d/%d" % (count, max_count), int(count*step))
+        self.status.set("cfchecker: done", 100)
 
 
         

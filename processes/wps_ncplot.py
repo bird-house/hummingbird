@@ -11,10 +11,6 @@ mpl.use('Agg')
 import matplotlib.pyplot as plt
 
 from pywps.Process import WPSProcess
-from malleefowl.process import show_status
-
-from malleefowl import wpslogging as logging
-logger = logging.getLogger(__name__)
 
 class SimplePlot(WPSProcess):
     """Plots a simple 2D map of netcdf file"""
@@ -63,8 +59,6 @@ class SimplePlot(WPSProcess):
             )
 
     def execute(self):
-        show_status(self, "starting simple plot", 0)
-
         ds = Dataset(self.dataset.getValue(), mode='r')
         if 'rlon' in ds.variables:
             lons = ds.variables['rlon'][:]
@@ -127,7 +121,6 @@ class SimplePlot(WPSProcess):
 
         self.output.setValue( 'output.png' )
         
-        show_status(self, "simple plot done", 100)
        
 
 

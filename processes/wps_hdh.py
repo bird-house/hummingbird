@@ -1,12 +1,10 @@
 import os
 import shutil
+import tempfile
 from subprocess import check_output, CalledProcessError, STDOUT
 
 from pywps.Process import WPSProcess
-from malleefowl.process import show_status, getInputValues, mktempfile
-
-from malleefowl import wpslogging as logging
-logger = logging.getLogger(__name__)
+import logging
 
 qa_task = """
 PROJECT_DATA={1}/{0}
@@ -16,7 +14,6 @@ QC_CONF={0}_qc.conf
 """
 
 def cf_check(nc_file):
-    logger.debug("start cf_check: nc_file=%s", nc_file)
     # TODO: maybe use local file path
     if not nc_file.endswith(".nc"):
         new_name = nc_file + ".nc"
@@ -27,7 +24,7 @@ def cf_check(nc_file):
     try:
         output = check_output(cmd)
     except CalledProcessError as err:
-        logger.exception("cfchecks failed!")
+        logging.exception("cfchecks failed!")
         output = err.output
     return output
 
@@ -41,7 +38,7 @@ def cordex_check(project, archive_path):
     try:
         output = check_output(cmd, stderr=STDOUT)
     except CalledProcessError as err:
-        logger.exception("cordex check failed!")
+        logging.exception("cordex check failed!")
         output = err.output
     return output
 
@@ -74,13 +71,13 @@ class CFChecker(WPSProcess):
             )
 
     def execute(self):
-        show_status(self, "starting cfchecker ...", 0)
+        self.status.set(self, "starting cfchecker ...", 0)
 
         # TODO: iterate input files ... run parallel 
         # TODO: generate html report with links to cfchecker output ...
-        outfile = mktempfile(suffix='.txt')
+        outfile = tempfile.mkstemp(suffix='.txt')
         self.output.setValue( outfile )
-        nc_files = getInputValues(self, identifier='dataset')
+        nc_files = self.getInputValues(identifier='dataset')
         count = 0
         max_count = len(nc_files)
         step = 100.0 / max_count
@@ -89,8 +86,8 @@ class CFChecker(WPSProcess):
             with open(outfile, 'a') as fp:
                 fp.write(cf_report)
                 count = count + 1
-                show_status(self, "cfchecker: %d/%d" % (count, max_count), int(count*step))
-        show_status(self, "cfchecker: done", 100)
+                self.status.set("cfchecker: %d/%d" % (count, max_count), int(count*step))
+        self.status.set("cfchecker: done", 100)
 
 
 class CordexChecker(WPSProcess):
@@ -98,7 +95,7 @@ class CordexChecker(WPSProcess):
         WPSProcess.__init__(self,
             identifier = "qa_checker",
             title = "QA DKRZ Checker",
-            version = "0.5.2-1",
+            version = "0.5.2-2",
             abstract="Qualtiy Assurance Tools by DKRZ: project specific checks for cordex, cmip5, ...",
             statusSupported=True,
             storeSupported=True
@@ -131,16 +128,16 @@ class CordexChecker(WPSProcess):
             )
 
     def execute(self):
-        show_status(self, "starting cordex checker ...", 0)
+        self.status.set("starting cordex checker ...", 0)
 
-        outfile = mktempfile(suffix='.txt')
+        _,outfile = tempfile.mkstemp(suffix='.txt')
         self.output.setValue( outfile )
 
         report = cordex_check(self.project.getValue(), self.archive_path.getValue())
         
         with open(outfile, 'a') as fp:
             fp.write(report)
-        show_status(self, "cordex checker: done", 100)
+        self.status.set("cordex checker: done", 100)
 
 
         

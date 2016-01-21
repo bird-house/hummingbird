@@ -1,13 +1,10 @@
 """
 Processes with cdo commands
 """
-
-from pywps.Process import WPSProcess
-from malleefowl.process import show_status, getInputValues, mktempfile
+import tempfile
 from cdo import Cdo
 
-from malleefowl import wpslogging as logging
-logger = logging.getLogger(__name__)
+from pywps.Process import WPSProcess
 
 class CDOOperation(WPSProcess):
     """This process calls cdo with operation on netcdf file"""
@@ -16,7 +13,7 @@ class CDOOperation(WPSProcess):
             self,
             identifier="cdo_operation",
             title="CDO Operation",
-            version="0.2",
+            version="0.3",
             metadata=[
                 {"title":"CDO","href":"https://code.zmaw.de/projects/cdo"},
                 ],
@@ -56,19 +53,18 @@ class CDOOperation(WPSProcess):
             )
 
     def execute(self):
-        show_status(self, "starting cdo operator", 10)
-
-        datasets = getInputValues(self, identifier='dataset')
+        datasets = self.getInputValues(identifier='dataset')
         operator = self.operator.getValue()
 
         cdo = Cdo()
         cdo_op = getattr(cdo, operator)
 
-        outfile = mktempfile(suffix='.nc')
+        _,outfile = tempfile.mkstemp(suffix='.nc')
         cdo_op(input= " ".join(datasets), output=outfile)
-        
-        show_status(self, "cdo operator done", 90)
+
         self.output.setValue( outfile )
+        
+        self.status.set("cdo operator done", 100)
 
 
 class CDOInfo(WPSProcess):
@@ -79,7 +75,7 @@ class CDOInfo(WPSProcess):
             self,
             identifier="cdo_sinfo",
             title="CDO sinfo",
-            version="0.2",
+            version="0.3",
             metadata=[
                 {"title":"CDO","href":"https://code.zmaw.de/projects/cdo"},
                 ],
@@ -108,20 +104,20 @@ class CDOInfo(WPSProcess):
             )
 
     def execute(self):
-        show_status(self, "starting cdo sinfo", 0)
-
         cdo = Cdo()
 
-        datasets = getInputValues(self, identifier='dataset')
+        datasets = self.getInputValues(identifier='dataset')
 
-        outfile = mktempfile(suffix='.txt')
+        _,outfile = tempfile.mkstemp(suffix='.txt')
         with open(outfile, 'w') as fp: 
             for ds in datasets:
                 sinfo = cdo.sinfo(input=ds, output=outfile)
                 for line in sinfo:
                     fp.write(line + '\n')
                 fp.write('\n\n')
-
-        show_status(self, "cdo sinfo done", 90)
-
+                
         self.output.setValue( outfile )
+
+        self.status.set("cdo sinfo done", 90)
+
+        

@@ -1,17 +1,17 @@
 import os
+import tempfile
+import json
+import tika
+from tika import parser
 
 from pywps.Process import WPSProcess
-from malleefowl.process import show_status, getInputValues, mktempfile
-
-from malleefowl import wpslogging as logging
-logger = logging.getLogger(__name__)
 
 class Tika(WPSProcess):
     def __init__(self):
         WPSProcess.__init__(self,
             identifier="tika",
             title="Tika Metadata Parser",
-            version="1.9.7-2",
+            version="1.9.7-3",
             abstract="Extracts Metadata of Files",
             statusSupported=True,
             storeSupported=True
@@ -34,27 +34,20 @@ class Tika(WPSProcess):
             )
 
     def execute(self):
-        show_status(self, "starting ...", 0)
-
-        resources = getInputValues(self, identifier='resource')
-
-        import tika
-        from tika import parser
+        resources = self.getInputValues(identifier='resource')
 
         metadata = []
         for counter, resource in enumerate(resources):
             parsed = parser.from_file(resource)
             metadata.append( parsed["metadata"] )
             progress = int( counter * 100.0 / len(resources) )
-            show_status(self, "parsing {0}/{1}".format(counter, len(resources)), progress)
+            self.status.set("parsing {0}/{1}".format(counter, len(resources)), progress)
 
-        import json
-        out_filename = mktempfile(suffix='.json')
+        _,out_filename = tempfile.mkstemp(suffix='.json')
         with open(out_filename, 'w') as fp:
             json.dump(obj=metadata, fp=fp, indent=4, sort_keys=True)
         self.output.setValue( out_filename )
         
-        show_status(self, "done", 100)
 
 
         

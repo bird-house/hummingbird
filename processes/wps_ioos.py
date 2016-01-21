@@ -1,14 +1,10 @@
 import os
+import tempfile
+import sys
+from contextlib import contextmanager
 from compliance_checker.runner import ComplianceCheckerCheckSuite, ComplianceChecker
 
 from pywps.Process import WPSProcess
-from malleefowl.process import show_status, getInputValues, mktempfile
-
-from malleefowl import wpslogging as logging
-logger = logging.getLogger(__name__)
-
-import sys
-from contextlib import contextmanager
 
 check_suite = ComplianceCheckerCheckSuite()
 
@@ -29,7 +25,7 @@ class CFCheckerProcess(WPSProcess):
         WPSProcess.__init__(self,
             identifier = "ioos_cchecker",
             title = "IOOS Compliance Checker",
-            version = "1.1.1-4",
+            version = "1.1.1-5",
             abstract="The IOOS Compliance Checker is a Python tool to check local/remote datasets against a variety of compliance standards.",
             statusSupported=True,
             storeSupported=True
@@ -75,14 +71,12 @@ class CFCheckerProcess(WPSProcess):
             )
 
     def execute(self):
-        show_status(self, "starting ...", 0)
-
         # TODO: iterate input files ... run parallel 
         # TODO: generate html report with links to cfchecker output ...
-        outfile = mktempfile(suffix='.txt')
+        _,outfile = tempfile.mkstemp(suffix='.txt')
         self.output.setValue( outfile )
-        datasets = getInputValues(self, identifier='dataset')
-        checker_names = getInputValues(self, identifier='test')
+        datasets = self.getInputValues(identifier='dataset')
+        checker_names = self.getInputValues(identifier='test')
         
         count = 0
         max_count = len(datasets)
@@ -99,8 +93,7 @@ class CFCheckerProcess(WPSProcess):
                         verbose=0,
                         criteria=self.criteria.getValue())
                 count = count + 1
-                show_status(self, "checks: %d/%d" % (count, max_count), int(count*step))
-        show_status(self, "done", 100)
+                self.status.set("checks: %d/%d" % (count, max_count), int(count*step))
 
 
         

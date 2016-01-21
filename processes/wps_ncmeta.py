@@ -1,10 +1,7 @@
 import os
+import tempfile
 
 from pywps.Process import WPSProcess
-from malleefowl.process import show_status, getInputValues, mktempfile
-
-from malleefowl import wpslogging as logging
-logger = logging.getLogger(__name__)
 
 class NetcdfMetadata(WPSProcess):
     def __init__(self):
@@ -35,9 +32,7 @@ class NetcdfMetadata(WPSProcess):
             )
 
     def execute(self):
-        show_status(self, "starting netcdf metadata retrieval", 5)
-
-        nc_file = getInputValues(self, identifier='dataset')[0]
+        nc_file = self.getInputValues(identifier='dataset')[0]
 
         from netCDF4 import Dataset
         ds = Dataset(nc_file)
@@ -54,15 +49,14 @@ class NetcdfMetadata(WPSProcess):
                 if hasattr(ds.variables[var_name], att_name):
                     metadata['variables'][var_name][att_name] = getattr(ds.variables[var_name], att_name)
         
-        show_status(self, "retrieved netcdf metadata", 80)
+        self.status.set("retrieved netcdf metadata", 80)
 
         import json
-        out_filename = mktempfile(suffix='.json')
+        _,out_filename = tempfile.mkstemp(suffix='.json')
         with open(out_filename, 'w') as fp:
             json.dump(obj=metadata, fp=fp, indent=4, sort_keys=True)
         self.output.setValue( out_filename )
         
-        show_status(self, "netcdf metadata written", 90)
 
 
         

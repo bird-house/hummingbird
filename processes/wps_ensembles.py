@@ -1,12 +1,8 @@
 """
 Processes with cdo ensemble opertions
 """
-
+import tempfile
 from pywps.Process import WPSProcess
-from malleefowl.process import show_status, getInputValues, mktempfile
-
-from malleefowl import wpslogging as logging
-logger = logging.getLogger(__name__)
 
 class Ensembles(WPSProcess):
 
@@ -58,18 +54,15 @@ class Ensembles(WPSProcess):
             )
 
     def execute(self):
-        show_status(self, "starting cdo operator", 0)
+        nc_files = self.getInputValues(identifier='dataset')
 
-        nc_files = getInputValues(self, identifier='dataset')
-
-        out_filename = mktempfile(suffix='.nc')
+        _,out_filename = tempfile.mkstemp(suffix='.nc')
         try:
             cmd = ["cdo", self.operator.getValue()]
             cmd.extend(nc_files)
             cmd.append(out_filename)
             self.cmd(cmd=cmd, stdout=True)
         except:
-            logger.exception('cdo failed')
+            logging.exception('cdo failed')
             raise
-        show_status(self, "ensembles calculation done", 100)
         self.output.setValue( out_filename )
