@@ -10,8 +10,7 @@ def cf_check(nc_file, version):
     # TODO: maybe use local file path
     if not nc_file.endswith(".nc"):
         new_name = nc_file + ".nc"
-        from os import rename
-        rename(nc_file, new_name)
+        os.rename(nc_file, new_name)
         nc_file = new_name
     cmd = ["cfchecks", "--version", version, nc_file]
     try:
