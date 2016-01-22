@@ -1,5 +1,4 @@
 import os
-import tempfile
 from subprocess import check_output, CalledProcessError
 
 from pywps.Process import WPSProcess
@@ -62,7 +61,7 @@ class CFCheckerProcess(WPSProcess):
     def execute(self):
         # TODO: iterate input files ... run parallel 
         # TODO: generate html report with links to cfchecker output ...
-        _,outfile = tempfile.mkstemp(suffix='.txt')
+        outfile = 'output.txt'
         self.output.setValue( outfile )
         nc_files = self.getInputValues(identifier='dataset')
         count = 0
