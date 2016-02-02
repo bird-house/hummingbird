@@ -11,7 +11,7 @@ class Tika(WPSProcess):
         WPSProcess.__init__(self,
             identifier="tika",
             title="Tika Metadata Parser",
-            version="1.9.7-3",
+            version="1.9.7-4",
             abstract="Extracts Metadata of Files",
             statusSupported=True,
             storeSupported=True
