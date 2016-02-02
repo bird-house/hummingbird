@@ -54,16 +54,13 @@ class CDOOperation(WPSProcess):
 
     def execute(self):
         datasets = self.getInputValues(identifier='dataset')
-        logging.debug("datasets %s", datasets)
         operator = self.operator.getValue()
 
         cdo = Cdo()
         cdo_op = getattr(cdo, operator)
         
         outfile = 'out.nc'
-        input_files = " ".join(datasets)
-        logging.debug("inputs = %s", input_files)
-        cdo_op(input=input_files, output=outfile)
+        cdo_op(input=datasets, output=outfile)
 
         self.output.setValue( outfile )
         
@@ -111,9 +108,10 @@ class CDOInfo(WPSProcess):
 
         datasets = self.getInputValues(identifier='dataset')
 
-        with open('out.txt', 'w') as fp: 
+        outfile = 'out.txt'
+        with open(outfile, 'w') as fp: 
             for ds in datasets:
-                sinfo = cdo.sinfo(input=ds, output=outfile)
+                sinfo = cdo.sinfo(input=[ds], output=outfile)
                 for line in sinfo:
                     fp.write(line + '\n')
                 fp.write('\n\n')
