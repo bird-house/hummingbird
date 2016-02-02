@@ -1,5 +1,4 @@
 import os
-import tempfile
 
 from pywps.Process import WPSProcess
 
@@ -52,7 +51,7 @@ class NetcdfMetadata(WPSProcess):
         self.status.set("retrieved netcdf metadata", 80)
 
         import json
-        _,out_filename = tempfile.mkstemp(suffix='.json')
+        out_filename = 'out.json'
         with open(out_filename, 'w') as fp:
             json.dump(obj=metadata, fp=fp, indent=4, sort_keys=True)
         self.output.setValue( out_filename )
