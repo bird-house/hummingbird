@@ -1,6 +1,5 @@
 import os
 import shutil
-import tempfile
 from subprocess import check_output, CalledProcessError, STDOUT
 
 from pywps.Process import WPSProcess
@@ -47,7 +46,7 @@ class CFChecker(WPSProcess):
         WPSProcess.__init__(self,
             identifier="qa_cfchecker",
             title="QA DKRZ CF Checker",
-            version="0.5.2-1",
+            version="0.5.3-0",
             abstract="Qualtiy Assurance Tools by DKRZ: cfchecker checks NetCDF files for compliance to the CF standard.",
             statusSupported=True,
             storeSupported=True
@@ -71,11 +70,11 @@ class CFChecker(WPSProcess):
             )
 
     def execute(self):
-        self.status.set(self, "starting cfchecker ...", 0)
+        self.status.set("starting cfchecker ...", 0)
 
         # TODO: iterate input files ... run parallel 
         # TODO: generate html report with links to cfchecker output ...
-        outfile = tempfile.mkstemp(suffix='.txt')
+        outfile = 'out.txt'
         self.output.setValue( outfile )
         nc_files = self.getInputValues(identifier='dataset')
         count = 0
@@ -95,7 +94,7 @@ class CordexChecker(WPSProcess):
         WPSProcess.__init__(self,
             identifier = "qa_checker",
             title = "QA DKRZ Checker",
-            version = "0.5.2-2",
+            version = "0.5.3-0",
             abstract="Qualtiy Assurance Tools by DKRZ: project specific checks for cordex, cmip5, ...",
             statusSupported=True,
             storeSupported=True
@@ -130,7 +129,7 @@ class CordexChecker(WPSProcess):
     def execute(self):
         self.status.set("starting cordex checker ...", 0)
 
-        _,outfile = tempfile.mkstemp(suffix='.txt')
+        outfile = 'out.txt'
         self.output.setValue( outfile )
 
         report = cordex_check(self.project.getValue(), self.archive_path.getValue())
