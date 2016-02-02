@@ -1,7 +1,6 @@
 """
 Processes with cdo ensemble opertions
 """
-import tempfile
 from pywps.Process import WPSProcess
 
 class Ensembles(WPSProcess):
@@ -11,7 +10,7 @@ class Ensembles(WPSProcess):
             self,
             identifier="ensembles",
             title="Ensembles Operations",
-            version="0.2",
+            version="0.3",
             metadata=[
                 {"title":"CDO ens","href":"https://code.zmaw.de/projects/cdo"},
                 ],
@@ -56,13 +55,9 @@ class Ensembles(WPSProcess):
     def execute(self):
         nc_files = self.getInputValues(identifier='dataset')
 
-        _,out_filename = tempfile.mkstemp(suffix='.nc')
-        try:
-            cmd = ["cdo", self.operator.getValue()]
-            cmd.extend(nc_files)
-            cmd.append(out_filename)
-            self.cmd(cmd=cmd, stdout=True)
-        except:
-            logging.exception('cdo failed')
-            raise
+        out_filename = 'out.nc'
+        cmd = ["cdo", self.operator.getValue()]
+        cmd.extend(nc_files)
+        cmd.append(out_filename)
+        self.cmd(cmd=cmd, stdout=True)
         self.output.setValue( out_filename )
