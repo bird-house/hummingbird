@@ -1,5 +1,4 @@
 import os
-import tempfile
 import sys
 from contextlib import contextmanager
 from compliance_checker.runner import ComplianceCheckerCheckSuite, ComplianceChecker
@@ -25,7 +24,7 @@ class CFCheckerProcess(WPSProcess):
         WPSProcess.__init__(self,
             identifier = "ioos_cchecker",
             title = "IOOS Compliance Checker",
-            version = "1.1.1-5",
+            version = "1.1.1-6",
             abstract="The IOOS Compliance Checker is a Python tool to check local/remote datasets against a variety of compliance standards.",
             statusSupported=True,
             storeSupported=True
@@ -73,7 +72,7 @@ class CFCheckerProcess(WPSProcess):
     def execute(self):
         # TODO: iterate input files ... run parallel 
         # TODO: generate html report with links to cfchecker output ...
-        _,outfile = tempfile.mkstemp(suffix='.txt')
+        outfile = 'out.txt'
         self.output.setValue( outfile )
         datasets = self.getInputValues(identifier='dataset')
         checker_names = self.getInputValues(identifier='test')
