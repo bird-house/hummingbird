@@ -1,5 +1,4 @@
 import os
-import tempfile
 import json
 import tika
 from tika import parser
@@ -43,10 +42,9 @@ class Tika(WPSProcess):
             progress = int( counter * 100.0 / len(resources) )
             self.status.set("parsing {0}/{1}".format(counter, len(resources)), progress)
 
-        _,out_filename = tempfile.mkstemp(suffix='.json')
-        with open(out_filename, 'w') as fp:
+        with open('out.json', 'w') as fp:
             json.dump(obj=metadata, fp=fp, indent=4, sort_keys=True)
-        self.output.setValue( out_filename )
+            self.output.setValue( fp.name )
         
 
 
