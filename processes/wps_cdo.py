@@ -1,10 +1,11 @@
 """
 Processes with cdo commands
 """
-import tempfile
 from cdo import Cdo
 
 from pywps.Process import WPSProcess
+
+import logging
 
 class CDOOperation(WPSProcess):
     """This process calls cdo with operation on netcdf file"""
@@ -13,7 +14,7 @@ class CDOOperation(WPSProcess):
             self,
             identifier="cdo_operation",
             title="CDO Operation",
-            version="0.3",
+            version="0.4",
             metadata=[
                 {"title":"CDO","href":"https://code.zmaw.de/projects/cdo"},
                 ],
@@ -47,20 +48,22 @@ class CDOOperation(WPSProcess):
             identifier="output",
             title="NetCDF Output",
             abstract="NetCDF Output",
-            metadata=[],
             formats=[{"mimeType":"application/x-netcdf"}],
             asReference=True,
             )
 
     def execute(self):
         datasets = self.getInputValues(identifier='dataset')
+        logging.debug("datasets %s", datasets)
         operator = self.operator.getValue()
 
         cdo = Cdo()
         cdo_op = getattr(cdo, operator)
-
-        _,outfile = tempfile.mkstemp(suffix='.nc')
-        cdo_op(input= " ".join(datasets), output=outfile)
+        
+        outfile = 'out.nc'
+        input_files = " ".join(datasets)
+        logging.debug("inputs = %s", input_files)
+        cdo_op(input=input_files, output=outfile)
 
         self.output.setValue( outfile )
         
@@ -75,7 +78,7 @@ class CDOInfo(WPSProcess):
             self,
             identifier="cdo_sinfo",
             title="CDO sinfo",
-            version="0.3",
+            version="0.4",
             metadata=[
                 {"title":"CDO","href":"https://code.zmaw.de/projects/cdo"},
                 ],
@@ -108,16 +111,13 @@ class CDOInfo(WPSProcess):
 
         datasets = self.getInputValues(identifier='dataset')
 
-        _,outfile = tempfile.mkstemp(suffix='.txt')
-        with open(outfile, 'w') as fp: 
+        with open('out.txt', 'w') as fp: 
             for ds in datasets:
                 sinfo = cdo.sinfo(input=ds, output=outfile)
                 for line in sinfo:
                     fp.write(line + '\n')
                 fp.write('\n\n')
-                
-        self.output.setValue( outfile )
-
-        self.status.set("cdo sinfo done", 90)
+            self.output.setValue( fp.name )
+            self.status.set("cdo sinfo done", 100)
 
         
