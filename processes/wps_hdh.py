@@ -4,6 +4,7 @@ from subprocess import check_output, CalledProcessError, STDOUT
 
 from pywps.Process import WPSProcess
 import logging
+logger = logging.getLogger(__name__)
 
 qa_task = """
 PROJECT_DATA={1}/{0}
@@ -23,7 +24,7 @@ def cf_check(nc_file):
     try:
         output = check_output(cmd)
     except CalledProcessError as err:
-        logging.exception("cfchecks failed!")
+        logger.exception("cfchecks failed!")
         output = err.output
     return output
 
@@ -37,7 +38,7 @@ def cordex_check(project, archive_path):
     try:
         output = check_output(cmd, stderr=STDOUT)
     except CalledProcessError as err:
-        logging.exception("cordex check failed!")
+        logger.exception("cordex check failed!")
         output = err.output
     return output
 
