@@ -34,7 +34,7 @@ class CFChecker(WPSProcess):
         WPSProcess.__init__(self,
             identifier="qa_cfchecker",
             title="QA DKRZ CF Checker",
-            version="0.5.3-1",
+            version="0.5.4-0",
             abstract="Qualtiy Assurance Tools by DKRZ: cfchecker checks NetCDF files for compliance to the CF standard.",
             statusSupported=True,
             storeSupported=True
