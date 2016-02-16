@@ -9,6 +9,6 @@ def test_wps_caps():
                             '/wps:Process'
                             '/ows:Identifier')
     sorted_names = sorted(names.split())
-    expected_names = ['cdo_operation', 'cdo_sinfo', 'cfchecker', 'ensembles', 'ioos_cchecker', 'ncmeta', 'qa_cfchecker', 'simple_plot', 'tika']
+    expected_names = ['cdo_operation', 'cdo_sinfo', 'cfchecker', 'ensembles', 'ioos_cchecker', 'ncmeta', 'qa_cfchecker', 'tika']
     nose.tools.ok_(sorted_names == expected_names, sorted_names)
 

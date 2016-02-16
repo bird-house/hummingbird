@@ -9,5 +9,5 @@ __all__ = [
            #"wps_hdh_qachecker",
            "wps_ioos",
            #"wps_stormtrack",
-           "wps_ncplot",
+           #"wps_ncplot",
            ]
