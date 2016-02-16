@@ -1,11 +1,12 @@
 import os
 import sys
 from contextlib import contextmanager
-from compliance_checker.runner import ComplianceCheckerCheckSuite, ComplianceChecker
+from compliance_checker.runner import ComplianceChecker
 
 from pywps.Process import WPSProcess
 
-check_suite = ComplianceCheckerCheckSuite()
+import logging
+logger = logging.getLogger(__name__)
 
 @contextmanager
 def stdout_redirected(new_stdout):
@@ -24,8 +25,9 @@ class CFCheckerProcess(WPSProcess):
         WPSProcess.__init__(self,
             identifier = "ioos_cchecker",
             title = "IOOS Compliance Checker",
-            version = "1.1.1-6",
+            version = "1.1.1-7",
             abstract="The IOOS Compliance Checker is a Python tool to check local/remote datasets against a variety of compliance standards.",
+            metadata = [{'title': "Compliance Checker on GitHub", 'href': "https://github.com/ioos/compliance-checker"}],
             statusSupported=True,
             storeSupported=True
             )
@@ -47,7 +49,7 @@ class CFCheckerProcess(WPSProcess):
             type=type(''),
             minOccurs=1,
             maxOccurs=1,
-            allowedValues=check_suite.checkers.keys()
+            allowedValues=['cf', 'ioos', 'acdd']
             )
 
         self.criteria = self.addLiteralInput(
@@ -72,11 +74,12 @@ class CFCheckerProcess(WPSProcess):
     def execute(self):
         # TODO: iterate input files ... run parallel 
         # TODO: generate html report with links to cfchecker output ...
+        # TODO: update to compliance checker 2.0
         outfile = 'out.txt'
         self.output.setValue( outfile )
         datasets = self.getInputValues(identifier='dataset')
-        checker_names = self.getInputValues(identifier='test')
-        
+        checker = self.getInputValues(identifier='test')
+
         count = 0
         max_count = len(datasets)
         step = 100.0 / max_count
@@ -88,7 +91,7 @@ class CFCheckerProcess(WPSProcess):
                 with stdout_redirected(f):
                     ComplianceChecker.run_checker(
                         ds,
-                        checker_names=checker_names,
+                        checker_names=checker,
                         verbose=0,
                         criteria=self.criteria.getValue())
                 count = count + 1
