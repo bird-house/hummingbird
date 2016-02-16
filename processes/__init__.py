@@ -4,7 +4,7 @@ __all__ = [
            "wps_cdo",
            "wps_ensembles",
            "wps_cfchecker",
-           "wps_tika",
+           #"wps_tika",
            "wps_hdh_cfchecker",
            #"wps_hdh_qachecker",
            "wps_ioos",
