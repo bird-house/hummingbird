@@ -3,13 +3,13 @@
 Example: Using Docker
 =====================
 
-If you just want to try the Hummingbird Web Processing Service you can also use the `Docker <https://registry.hub.docker.com/u/birdhouse/emu/>`_ image::
+If you just want to try the Hummingbird Web Processing Service you can also use the `Docker <https://hub.docker.com/r/birdhouse/emu/>`_ image::
 
   $ docker run -i -d -p 9001:9001 -p 8090:8090 -p 8092:8092 birdhouse/hummingbird
 
 Open your browser and enter the url of the supervisor service:
 
-  http://localhost:9001
+  http://localhost:9001/
 
 Run a GetCapabilites WPS request:
 

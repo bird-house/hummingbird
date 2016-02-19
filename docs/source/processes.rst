@@ -50,10 +50,10 @@ The WPS Parameters are:
 
 *resource*
      Is the input parameter to provide one or more URLs (``http://``, ``file://``) to NetCDF files. 
-     It is a WPS `ComplexData <http://pywps.wald.intevation.org/documentation/course/ogc-wps/index.html#complexdata>`_ type with MIME-type ``application/x-netcdf``.
+     It is a WPS `ComplexData <http://geopython.github.io/pywps/doc/build/html/process/puts.html#complexvalue-input-and-output>`_ type with MIME-type ``application/x-netcdf``.
 
 *cf_version*
-     Is an optional input parameter to provide the CF version to check against. It is a WPS `LiteralData <http://pywps.wald.intevation.org/documentation/course/ogc-wps/index.html#literaldata>`_ type with a set of allowed values (1.1, 1.2, ..., auto).
+     Is an optional input parameter to provide the CF version to check against. It is a WPS `LiteralData <http://geopython.github.io/pywps/doc/build/html/process/puts.html#literalvalue-input-and-output>`_ type with a set of allowed values (1.1, 1.2, ..., auto).
 
 *output*
      Is the output parameter to provide the report of the CF check as text document. 
