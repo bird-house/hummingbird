@@ -2,7 +2,7 @@
 FROM birdhouse/bird-base:latest
 MAINTAINER https://github.com/bird-house/hummingbird
 
-LABEL Description="Hummingbird WPS Application" Vendor="Birdhouse" Version="0.2.3"
+LABEL Description="Hummingbird WPS Application" Vendor="Birdhouse" Version="0.2.4"
 
 # Configure hostname and user for services 
 ENV OUTPUT_PORT 38092

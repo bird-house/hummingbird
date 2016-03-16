@@ -6,7 +6,7 @@ __all__ = [
            "wps_cfchecker",
            #"wps_tika",
            "wps_hdh_cfchecker",
-           #"wps_hdh_qachecker",
+           "wps_hdh_qachecker",
            "wps_ioos",
            #"wps_stormtrack",
            #"wps_ncplot",

@@ -23,9 +23,10 @@ class CFCheckerProcess(WPSProcess):
     def __init__(self):
         WPSProcess.__init__(self,
             identifier = "cfchecker",
-            title = "CF Checker",
-            version = "2.0.9-3",
-            abstract="The cfchecker checks NetCDF files for compliance to the CF standard.",
+            title = "CF Checker by BADC",
+            version = "2.0.8-0",
+            abstract="The NetCDF Climate Forcast Conventions compliance checker.",
+            metadata= [ {"title": "Homepage" , "href": "https://pypi.python.org/pypi/cfchecker"} ],
             statusSupported=True,
             storeSupported=True
             )

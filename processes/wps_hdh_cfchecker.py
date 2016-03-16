@@ -6,21 +6,15 @@ from pywps.Process import WPSProcess
 import logging
 logger = logging.getLogger(__name__)
 
-qa_task = """
-PROJECT_DATA={1}/{0}
-QC_RESULTS=results
-PROJECT={0}
-QC_CONF={0}_qc.conf
-"""
-
-def cf_check(nc_file):
+def cf_check(filename):
     # TODO: maybe use local file path
-    if not nc_file.endswith(".nc"):
-        new_name = nc_file + ".nc"
+    if not filename.endswith(".nc"):
+        new_name = filename + ".nc"
         from os import rename
-        rename(nc_file, new_name)
-        nc_file = new_name
-    cmd = ["dkrz-cf-checker", nc_file]
+        rename(filename, new_name)
+        filename = new_name
+    filename = os.path.abspath(filename)
+    cmd = ["dkrz-cf-checker", filename]
     try:
         output = check_output(cmd)
     except CalledProcessError as err:
@@ -33,9 +27,10 @@ class CFChecker(WPSProcess):
     def __init__(self):
         WPSProcess.__init__(self,
             identifier="qa_cfchecker",
-            title="QA DKRZ CF Checker",
-            version="0.5.4-0",
-            abstract="Qualtiy Assurance Tools by DKRZ: cfchecker checks NetCDF files for compliance to the CF standard.",
+            title="CF Checker by DKRZ",
+            version="0.5.7-0",
+            abstract="cfchecker checks NetCDF files for compliance to the CF standard.",
+            metadata= [ {"title": "Homepage" , "href": "http://qa-dkrz.readthedocs.org/en/latest/"} ],
             statusSupported=True,
             storeSupported=True
             )
