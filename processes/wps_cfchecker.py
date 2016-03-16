@@ -7,6 +7,7 @@ import logging
 
 def cf_check(nc_file, version):
     # TODO: maybe use local file path
+    # TODO: avoid downloading of cf table for each check (see pypi page)
     if not nc_file.endswith(".nc"):
         new_name = nc_file + ".nc"
         os.rename(nc_file, new_name)
@@ -24,7 +25,7 @@ class CFCheckerProcess(WPSProcess):
         WPSProcess.__init__(self,
             identifier = "cfchecker",
             title = "CF Checker by BADC",
-            version = "2.0.8-0",
+            version = "2.0.9-0",
             abstract="The NetCDF Climate Forcast Conventions compliance checker.",
             metadata= [ {"title": "Homepage" , "href": "https://pypi.python.org/pypi/cfchecker"} ],
             statusSupported=True,
