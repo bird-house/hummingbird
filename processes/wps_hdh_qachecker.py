@@ -13,9 +13,10 @@ def qa_checker(filename, project):
     try:
         output = check_output(cmd, stderr=STDOUT)
     except CalledProcessError as e:
-        logger.exception("qa checker failed!")
+        msg = "qa checker failed!"
+        logger.exception(msg)
         logger.error("qa checker output=%s", e.output)
-
+        raise Exception(msg)
 
 
 class QualityChecker(WPSProcess):
@@ -23,7 +24,7 @@ class QualityChecker(WPSProcess):
         WPSProcess.__init__(self,
             identifier = "qa_checker",
             title = "Quality Assurance Checker by DKRZ",
-            version = "0.5.7-0",
+            version = "0.5.7-1",
             abstract="Project specific qualtiy checks for CORDEX, CMIP5, ...",
             metadata= [ {"title": "Homepage" , "href": "http://qa-dkrz.readthedocs.org/en/latest/"} ],
             statusSupported=True,
