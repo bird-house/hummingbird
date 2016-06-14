@@ -1,9 +1,7 @@
-import nose.tools
-from nose.plugins.attrib import attr
-
+import pytest
 from tests.common import WpsTestClient, TESTDATA, assert_response_success
 
-@attr('online')
+@pytest.mark.online
 def test_wps_ensembles():
     wps = WpsTestClient()
     datainputs = "[dataset={0};operator=ensmean]".format(TESTDATA['noaa_nc_1'])

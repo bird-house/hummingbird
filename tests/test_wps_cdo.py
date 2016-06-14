@@ -1,9 +1,8 @@
-import nose.tools
-from nose.plugins.attrib import attr
+import pytest
 
 from tests.common import WpsTestClient, TESTDATA, assert_response_success
 
-@attr('online')
+@pytest.mark.online
 def test_wps_cdo_operation():
     wps = WpsTestClient()
     datainputs = "[dataset={0};operator=monmax]".format(TESTDATA['noaa_nc_1'])
@@ -12,7 +11,7 @@ def test_wps_cdo_operation():
     assert_response_success(resp)
 
 
-@attr('online')
+@pytest.mark.online
 def test_wps_cdo_sinfo():
     wps = WpsTestClient()
     datainputs = "[dataset={0}]".format(TESTDATA['noaa_nc_1'])

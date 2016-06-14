@@ -1,4 +1,3 @@
-import nose.tools
 from tests.common import WpsTestClient
 
 def test_wps_caps():
@@ -10,5 +9,5 @@ def test_wps_caps():
                             '/ows:Identifier')
     sorted_names = sorted(names.split())
     expected_names = ['cdo_operation', 'cdo_sinfo', 'cfchecker', 'ensembles', 'ioos_cchecker', 'ncmeta', 'qa_cfchecker', 'qa_checker']
-    nose.tools.ok_(sorted_names == expected_names, sorted_names)
+    assert sorted_names == expected_names
 

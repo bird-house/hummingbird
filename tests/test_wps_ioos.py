@@ -1,9 +1,8 @@
-import nose.tools
-from nose.plugins.attrib import attr
+import pytest
 
 from tests.common import WpsTestClient, TESTDATA, assert_response_success
 
-@attr('online')
+@pytest.mark.online
 def test_wps_ioos_cchecker():
     wps = WpsTestClient()
     datainputs = "[dataset={0}]".format(TESTDATA['noaa_nc_1'])
