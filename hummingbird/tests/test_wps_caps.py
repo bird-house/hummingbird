@@ -1,4 +1,4 @@
-from tests.common import WpsTestClient
+from hummingbird.tests.common import WpsTestClient
 
 def test_wps_caps():
     wps = WpsTestClient()

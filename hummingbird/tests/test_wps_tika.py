@@ -1,5 +1,5 @@
 import pytest
-from tests.common import WpsTestClient, TESTDATA, assert_response_success
+from hummingbird.tests.common import WpsTestClient, TESTDATA, assert_response_success
 
 @pytest.mark.skip(reason="no way of currently testing this")
 def test_wps_tika():
