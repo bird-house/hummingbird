@@ -1,6 +1,14 @@
 Changes
 *******
 
+0.3.1 (2016-06-14)
+==================
+
+* using pytest.
+* moved processes and tests to hummingbird package.
+* updated pywps recipe.
+* update dkrz checker, cfchecker and ioos checker
+
 0.3.0 (2016-01-21)
 ==================
 
