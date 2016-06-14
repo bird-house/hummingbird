@@ -7,7 +7,7 @@ Check out code from the Hummingbird github repo and start the installation::
 
    $ git clone https://github.com/bird-house/hummingbird.git
    $ cd hummingbird
-   $ make
+   $ make clean install
 
 For other install options run ``make help`` and read the documention of the `Makefile <http://birdhousebuilderbootstrap.readthedocs.org/en/latest/usage.html#makefile>`_.
 
@@ -22,6 +22,15 @@ Check the log files for errors::
 
    $ cd ~/.conda/envs/birdhouse
    $ tail -f  var/log/supervisor/hummingbird.log
+
+Using docker-compose
+====================
+
+Start hummingbird with docker-compose (port 8092) on localhost:
+
+.. code-block:: sh
+
+   $ docker-compose run --service-ports -e HOSTNAME=localhost hummingbird
 
 
 
