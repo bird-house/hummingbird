@@ -24,9 +24,9 @@ class QualityChecker(WPSProcess):
         WPSProcess.__init__(self,
             identifier = "qa_checker",
             title = "Quality Assurance Checker by DKRZ",
-            version = "0.5.9-0",
+            version = "0.5.11-0",
             abstract="Project specific qualtiy checks for CORDEX, CMIP5, ...",
-            metadata= [ {"title": "Homepage" , "href": "http://qa-dkrz.readthedocs.org/en/latest/"} ],
+            metadata= [ {"title": "Documentation" , "href": "http://qa-dkrz.readthedocs.io/en/latest/"} ],
             statusSupported=True,
             storeSupported=True
             )
