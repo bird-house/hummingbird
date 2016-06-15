@@ -14,7 +14,7 @@ class CDOOperation(WPSProcess):
             self,
             identifier="cdo_operation",
             title="CDO Operation",
-            version="0.4",
+            version="1.7.0-0",
             metadata=[
                 {"title":"CDO","href":"https://code.zmaw.de/projects/cdo"},
                 ],
@@ -75,7 +75,7 @@ class CDOInfo(WPSProcess):
             self,
             identifier="cdo_sinfo",
             title="CDO sinfo",
-            version="0.4",
+            version="1.7.0-0",
             metadata=[
                 {"title":"CDO","href":"https://code.zmaw.de/projects/cdo"},
                 ],
