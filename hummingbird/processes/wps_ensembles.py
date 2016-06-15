@@ -9,10 +9,10 @@ class Ensembles(WPSProcess):
         WPSProcess.__init__(
             self,
             identifier="ensembles",
-            title="Ensembles Operations",
-            version="0.3",
+            title="CDO Ensembles Operations",
+            version="1.7.0-0",
             metadata=[
-                {"title":"CDO ens","href":"https://code.zmaw.de/projects/cdo"},
+                {"title":"CDO","href":"https://code.zmaw.de/projects/cdo"},
                 ],
             abstract="Calling cdo to calculate ensembles operations.",
             statusSupported=True,
