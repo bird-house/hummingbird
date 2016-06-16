@@ -6,12 +6,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.rst')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.rst')).read()
 
-requires = [
-    'cdo',
-    'cfchecker',
-    'netcdf4',
-    'nose',
-    ]
+reqs = [line.strip() for line in open('requirements/deploy.txt')]
 
 classifiers=[
         'Development Status :: 3 - Alpha',
@@ -34,8 +29,8 @@ setup(name='hummingbird',
       packages=find_packages(),
       include_package_data=True,
       zip_safe=False,
-      test_suite='nose.collector',
-      install_requires=requires,
+      test_suite='hummingbird',
+      install_requires=reqs,
       entry_points = {
           'console_scripts': [
               ]}     
