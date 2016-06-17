@@ -62,7 +62,7 @@ class QualityChecker(WPSProcess):
             identifier="logfile",
             title="Quality Checker Logfile",
             abstract="Qualtiy checker summary logfile",
-            formats=[{"mimeType":"text/plain"}],
+            formats=[{"mimeType":"text/yaml"}],
             asReference=True,
             )
 
