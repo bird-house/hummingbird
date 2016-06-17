@@ -2,6 +2,7 @@
 Processes with cdo commands
 """
 from cdo import Cdo
+cdo_version = Cdo().version()
 
 from pywps.Process import WPSProcess
 
@@ -14,7 +15,7 @@ class CDOOperation(WPSProcess):
             self,
             identifier="cdo_operation",
             title="CDO Operation",
-            version="1.7.0-0",
+            version="cdo_version",
             metadata=[
                 {"title":"CDO","href":"https://code.zmaw.de/projects/cdo"},
                 ],
@@ -75,7 +76,7 @@ class CDOInfo(WPSProcess):
             self,
             identifier="cdo_sinfo",
             title="CDO sinfo",
-            version="1.7.0-0",
+            version="cdo_version",
             metadata=[
                 {"title":"CDO","href":"https://code.zmaw.de/projects/cdo"},
                 ],
