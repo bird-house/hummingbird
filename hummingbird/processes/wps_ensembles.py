@@ -2,7 +2,7 @@
 Processes with cdo ensemble opertions
 """
 from cdo import Cdo
-cdo_version = cdo.version()
+cdo_version = Cdo().version()
 
 from pywps.Process import WPSProcess
 
