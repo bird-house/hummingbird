@@ -13,7 +13,7 @@ class Ensembles(WPSProcess):
             self,
             identifier="ensembles",
             title="CDO Ensembles Operations",
-            version="cdo_version",
+            version=cdo_version,
             metadata=[
                 {"title":"CDO","href":"https://code.zmaw.de/projects/cdo"},
                 ],
