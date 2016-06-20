@@ -10,8 +10,8 @@ OS_NAME := $(shell uname -s 2>/dev/null || echo "unknown")
 CPU_ARCH := $(shell uname -m 2>/dev/null || uname -p 2>/dev/null || echo "unknown")
 
 # Python
-SETUPTOOLS_VERSION=20.1.1
-BUILDOUT_VERSION=2.5.0
+SETUPTOOLS_VERSION=23.0.0
+BUILDOUT_VERSION=2.5.2
 
 # Anaconda 
 ANACONDA_HOME ?= $(HOME)/anaconda
@@ -162,7 +162,7 @@ conda_env: anaconda conda_config
 .PHONY: conda_pinned
 conda_pinned: conda_env
 	@echo "Update pinned conda packages ..."
-	@test -d $(CONDA_ENV_PATH) && curl https://raw.githubusercontent.com/bird-house/birdhousebuilder.bootstrap/master/conda_pinned --silent --insecure --output "$(CONDA_ENV_PATH)/conda-meta/pinned" 
+	@test -d $(CONDA_ENV_PATH) && curl https://raw.githubusercontent.com/bird-house/birdhousebuilder.bootstrap/$(RELEASE)/conda_pinned --silent --insecure --output "$(CONDA_ENV_PATH)/conda-meta/pinned" 
 
 ## Build targets
 
