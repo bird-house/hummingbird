@@ -5,7 +5,7 @@ channels:
 dependencies:
   - python=2 
   - setuptools=23.0.0
-  - curl=7.49.0 
+  - curl=7.45.0 
   - pyopenssl=0.15.1 
   - cryptography=1.0.2 
   - mako=1.0.4
