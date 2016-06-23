@@ -16,7 +16,7 @@ BUILDOUT_VERSION=2.5.2
 # Anaconda 
 ANACONDA_HOME ?= $(HOME)/anaconda
 CONDA_ENV ?= $(APP_NAME)
-CONDA_ENVS_DIR ?= parts/conda
+CONDA_ENVS_DIR ?= $(APP_ROOT)/parts/conda
 CONDA_ENV_PATH := $(CONDA_ENVS_DIR)/$(CONDA_ENV)
 
 # Configuration used by update-config
@@ -192,7 +192,7 @@ update-config:
 	bash -c "source $(ANACONDA_HOME)/bin/activate $(CONDA_ENV);bin/buildout buildout:anaconda-home=$(ANACONDA_HOME) settings:hostname=$(HOSTNAME) settings:output-port=$(OUTPUT_PORT) settings:log-level=$(LOG_LEVEL) -o -c custom.cfg"
 
 .PHONY: clean
-clean: stop srcclean
+clean: srcclean
 	@echo "Cleaning buildout files ..."
 	@-for i in $(BUILDOUT_FILES); do \
             test -e $$i && rm -v -rf $$i; \
