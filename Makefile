@@ -21,6 +21,7 @@ ANACONDA_HOME ?= $(HOME)/anaconda
 CONDA_ENV ?= $(APP_NAME)
 CONDA_ENVS_DIR ?= $(HOME)/.conda/envs
 CONDA_ENV_PATH := $(CONDA_ENVS_DIR)/$(CONDA_ENV)
+CONDA_PINNED := $(APP_ROOT)/requirements/conda_pinned
 
 # Configuration used by update-config
 HOSTNAME ?= localhost
@@ -30,9 +31,9 @@ LOG_LEVEL ?= WARN
 # choose anaconda installer depending on your OS
 ANACONDA_URL = http://repo.continuum.io/miniconda
 ifeq "$(OS_NAME)" "Linux"
-FN := Miniconda-latest-Linux-x86_64.sh
+FN := Miniconda2-latest-Linux-x86_64.sh
 else ifeq "$(OS_NAME)" "Darwin"
-FN := Miniconda-3.7.0-MacOSX-x86_64.sh
+FN := Miniconda2-latest-MacOSX-x86_64.sh
 else
 FN := unknown
 endif
@@ -62,6 +63,7 @@ help:
 	@echo "  sysinstall  to install system packages from requirements.sh. You can also call 'bash requirements.sh' directly."
 	@echo "  update      to update your application by running 'bin/buildout -o -c custom.cfg' (buildout offline mode)."
 	@echo "  clean       to delete all files that are created by running buildout."
+	@echo "  export      to export the conda environment. Caution! You always need to check it the enviroment.yml is working."
 	@echo "\nTesting targets:"
 	@echo "  test        to run tests (but skip long running tests)."
 	@echo "  testall     to run all tests (including long running tests)."
@@ -150,7 +152,9 @@ anaconda:
 conda_config: anaconda
 	@echo "Update ~/.condarc"
 	@"$(ANACONDA_HOME)/bin/conda" config --add envs_dirs $(CONDA_ENVS_DIR)
-	@"$(ANACONDA_HOME)/bin/conda" config --set ssl_verify true
+	@"$(ANACONDA_HOME)/bin/conda" config --set ssl_verify True
+	@"$(ANACONDA_HOME)/bin/conda" config --set update_dependencies True
+	@"$(ANACONDA_HOME)/bin/conda" config --set use_pip True
 	@"$(ANACONDA_HOME)/bin/conda" config --add channels defaults
 	@"$(ANACONDA_HOME)/bin/conda" config --add channels birdhouse
 
@@ -163,7 +167,12 @@ conda_env: anaconda conda_config
 .PHONY: conda_pinned
 conda_pinned: conda_env
 	@echo "Update pinned conda packages ..."
-	@test -d $(CONDA_ENV_PATH) && curl https://raw.githubusercontent.com/bird-house/birdhousebuilder.bootstrap/$(RELEASE)/conda_pinned --silent --insecure --output "$(CONDA_ENV_PATH)/conda-meta/pinned" 
+	@test -d $(CONDA_ENV_PATH) && test -f $(CONDA_PINNED) && cp -f "$(CONDA_PINNED)" "$(CONDA_ENV_PATH)/conda-meta/pinned" 
+
+.PHONY: export
+export:
+	@echo "Exporting conda enviroment ..."
+	@test -d $(CONDA_ENV_PATH) && "$(ANACONDA_HOME)/bin/conda" env export -n $(CONDA_ENV) -f environment.yml
 
 ## Build targets
 
@@ -196,16 +205,16 @@ update-config:
 	bash -c "source $(ANACONDA_HOME)/bin/activate $(CONDA_ENV);bin/buildout buildout:anaconda-home=$(ANACONDA_HOME) settings:hostname=$(HOSTNAME) settings:output-port=$(OUTPUT_PORT) settings:log-level=$(LOG_LEVEL) -o -c custom.cfg"
 
 .PHONY: clean
-clean: srcclean
+clean: srcclean envclean
 	@echo "Cleaning buildout files ..."
 	@-for i in $(BUILDOUT_FILES); do \
             test -e $$i && rm -v -rf $$i; \
         done
 
 .PHONY: envclean
-envclean: 
+envclean: stop
 	@echo "Removing conda env $(CONDA_ENV)"
-	@"$(ANACONDA_HOME)/bin/conda" remove -n $(CONDA_ENV) --yes --all
+	@-"$(ANACONDA_HOME)/bin/conda" remove -n $(CONDA_ENV) --yes --all
 
 .PHONY: srcclean
 srcclean:
@@ -217,11 +226,6 @@ distclean: backup clean
 	@echo "Cleaning distribution ..."
 	@git diff --quiet HEAD || echo "There are uncommited changes! Not doing 'git clean' ..."
 	@-git clean -dfx --exclude=*.bak
-
-.PHONY: buildclean
-buildclean:
-	@echo "Removing bootstrap.sh ..."
-	@test -e bootstrap.sh && rm -v bootstrap.sh
 
 .PHONY: passwd
 passwd: custom.cfg
@@ -261,7 +265,7 @@ start:
 .PHONY: stop
 stop:
 	@echo "Stopping supervisor service ..."
-	bin/supervisord stop
+	-bin/supervisord stop
 
 .PHONY: restart
 restart:
