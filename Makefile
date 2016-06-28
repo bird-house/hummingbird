@@ -1,6 +1,9 @@
 VERSION := 0.3.0
 RELEASE := develop
 
+# Include custom config if it is available
+-include Makefile.config
+
 # Application
 APP_ROOT := $(CURDIR)
 APP_NAME := $(shell basename $(APP_ROOT))
@@ -10,13 +13,13 @@ OS_NAME := $(shell uname -s 2>/dev/null || echo "unknown")
 CPU_ARCH := $(shell uname -m 2>/dev/null || uname -p 2>/dev/null || echo "unknown")
 
 # Python
-SETUPTOOLS_VERSION=23.0.0
-BUILDOUT_VERSION=2.5.2
+SETUPTOOLS_VERSION := 23.0.0
+BUILDOUT_VERSION := 2.5.2
 
 # Anaconda 
 ANACONDA_HOME ?= $(HOME)/anaconda
 CONDA_ENV ?= $(APP_NAME)
-CONDA_ENVS_DIR ?= $(APP_ROOT)/parts/conda
+CONDA_ENVS_DIR ?= $(HOME)/.conda/envs
 CONDA_ENV_PATH := $(CONDA_ENVS_DIR)/$(CONDA_ENV)
 
 # Configuration used by update-config
@@ -63,6 +66,7 @@ help:
 	@echo "  test        to run tests (but skip long running tests)."
 	@echo "  testall     to run all tests (including long running tests)."
 	@echo "\nSupporting targets:"
+	@echo "  envclean    to remove the conda enviroment $(CONDA_ENV)."
 	@echo "  srcclean    to remove all *.pyc files."
 	@echo "  distclean   to remove *all* files that are not controlled by 'git'. WARNING: use it *only* if you know what you do!"
 	@echo "  passwd      to generate password for 'phoenix-password' in custom.cfg."
@@ -201,7 +205,7 @@ clean: srcclean
 .PHONY: envclean
 envclean: 
 	@echo "Removing conda env $(CONDA_ENV)"
-	@"$(ANACONDA_HOME)/bin/conda" env remove -n $(CONDA_ENV)
+	@"$(ANACONDA_HOME)/bin/conda" remove -n $(CONDA_ENV) --yes --all
 
 .PHONY: srcclean
 srcclean:
