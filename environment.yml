@@ -108,4 +108,3 @@ dependencies:
   - ipython-genutils==0.1.0
   - simplegeneric==0.8.1
   - sphinx-rtd-theme==0.1.9
-prefix: /home/pingu/.conda/envs/hummingbird
