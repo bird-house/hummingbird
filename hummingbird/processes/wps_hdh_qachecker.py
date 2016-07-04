@@ -69,9 +69,6 @@ class QualityChecker(WPSProcess):
     def execute(self):
         self.status.set("starting qa checker ...", 0)
 
-        outfile = 'output.tar.gz'
-        self.output.setValue( outfile )
-
         datasets = self.getInputValues(identifier='dataset')
         for idx,ds in enumerate(datasets):
             progress = idx * 100 / len(datasets)
@@ -79,21 +76,30 @@ class QualityChecker(WPSProcess):
             qa_checker(ds, project=self.project.getValue())
 
         results_path = os.path.join("QA_Results", "check_logs")
+        if not os.path.isdir(results_path):
+            raise Exception("QA results are missing.")
 
         # output logfile
         logs = glob.glob(os.path.join(results_path, "*.log"))
         dot_logs = glob.glob(os.path.join(results_path, ".*.log"))
         if len(logs) > 0:
-            self.logfile.setValue(logs[0])
+            # use .txt extension
+            filename = logs[0].replace('.log', '.txt')
+            os.link(logs[0], filename)
+            self.logfile.setValue(filename)
         elif len(dot_logs) > 0:
-            self.logfile.setValue(dot_logs[0])
+            filename = dot_logs[0].replace('.log', '.txt')
+            os.link(dot_logs[0], filename)
+            self.logfile.setValue(filename)
         else:
             logger.warn("could not set logfile")
             self.logfile.setValue('logfile.txt')
             with open('logfile.txt', 'w') as fp:
-                fp.write('could not file logfile')
+                fp.write('could not write logfile')
 
         # output tar archive
+        outfile = 'output.tar.gz'
+        self.output.setValue( outfile )
         tar = tarfile.open(outfile, "w:gz")
         tar.add(results_path)
         tar.close()
