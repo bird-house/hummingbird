@@ -52,7 +52,7 @@ dependencies:
 - mkl=11.3.3=0
 - netcdf-fortran=4.4.3=2
 - netcdf4=1.2.4=np111py27_1
-- nginx=1.8.0=0
+- nginx=1.10.1=1
 - numpy=1.11.0=py27_2
 - openssl=1.0.2h=1
 - owslib=0.11.2=py27_59
