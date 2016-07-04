@@ -119,4 +119,63 @@ class CDOInfo(WPSProcess):
             self.output.setValue( fp.name )
             self.status.set("cdo sinfo done", 100)
 
+class CDOLonLatBox(WPSProcess):
+    """This process calls cdo sellonlatbox on netcdf file"""
+
+    def __init__(self):
+        WPSProcess.__init__(
+            self,
+            identifier="cdo_lonlatbox",
+            title="CDO select lon/lat box",
+            version=cdo_version,
+            metadata=[
+                {"title":"CDO","href":"https://code.zmaw.de/projects/cdo"},
+                ],
+            abstract="Apply CDO sellonlatbox on NetCDF File.",
+            statusSupported=True,
+            storeSupported=True
+            )
+
+        self.dataset = self.addComplexInput(
+            identifier="dataset",
+            title="NetCDF File",
+            abstract="NetCDF File",
+            minOccurs=1,
+            maxOccurs=100,
+            maxmegabites=5000,
+            formats=[{"mimeType":"application/x-netcdf"}],
+            )
+
+        self.bbox = self.addBBoxInput(
+            identifier="bbox",
+            title="Bounding Box",
+            minOccurs=1,
+            maxOccurs=1,
+            crss=["EPSG:4326", "EPSG:3035"],
+            )
+
+        self.output = self.addComplexOutput(
+            identifier="output",
+            title="CDO result",
+            abstract="CDO sellonlatbox result",
+            metadata=[],
+            formats=[{"mimeType":"application/x-netcdf"}],
+            asReference=True,
+            )
+
+    def execute(self):
+        cdo = Cdo()
+
+        # TODO handle mutliple input files
+        datasets = self.getInputValues(identifier='dataset')
+        bbox = self.bbox.getValue()
+
+        logging.debug("bbox: %s", bbox.coords)
+        outfile = "out.nc"
+        op_bbox="%d,%d,%d,%d" % (bbox.coords[0][0], bbox.coords[1][0], bbox.coords[0][1], bbox.coords[1][1])
+        cdo.sellonlatbox(op_bbox, input=datasets[0], output=outfile)
+        self.output.setValue( outfile )
+        
+        self.status.set("cdo sellonlatbox done", 100)
+
         
