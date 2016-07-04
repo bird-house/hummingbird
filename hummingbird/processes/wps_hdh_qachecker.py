@@ -81,21 +81,15 @@ class QualityChecker(WPSProcess):
 
         # output logfile
         logs = glob.glob(os.path.join(results_path, "*.log"))
-        dot_logs = glob.glob(os.path.join(results_path, ".*.log"))
-        if len(logs) > 0:
+        if not logs:
+            logs = glob.glob(os.path.join(results_path, ".*.log"))
+        if logs:
             # use .txt extension
-            filename = logs[0].replace('.log', '.txt')
+            filename = logs[0][:-4] + '.txt'
             os.link(logs[0], filename)
             self.logfile.setValue(filename)
-        elif len(dot_logs) > 0:
-            filename = dot_logs[0].replace('.log', '.txt')
-            os.link(dot_logs[0], filename)
-            self.logfile.setValue(filename)
         else:
-            logger.warn("could not set logfile")
-            self.logfile.setValue('logfile.txt')
-            with open('logfile.txt', 'w') as fp:
-                fp.write('could not write logfile')
+            raise Exception("could not find log file.")
 
         # output tar archive
         outfile = 'output.tar.gz'
