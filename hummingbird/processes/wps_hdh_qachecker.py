@@ -4,12 +4,16 @@ import tarfile
 import glob
 from subprocess import check_output, CalledProcessError, STDOUT
 
+from hummingbird import config
+from hummingbird import utils
+
 from pywps.Process import WPSProcess
+
 import logging
 logger = logging.getLogger(__name__)
 
-def qa_checker(filename, project):
-    cmd = ["qa-dkrz", "-P", project, filename]
+def qa_checker(filename, project, qa_home):
+    cmd = ["qa-dkrz", "--work", qa_home, "-P", project, filename]
     try:
         output = check_output(cmd, stderr=STDOUT)
     except CalledProcessError as e:
@@ -68,11 +72,15 @@ class QualityChecker(WPSProcess):
     def execute(self):
         self.status.set("starting qa checker ...", 0)
 
+        # create qa_home
+        qa_home = os.path.join(config.cache_path(), "qa_dkrz")
+        utils.make_dirs(qa_home)
+
         datasets = self.getInputValues(identifier='dataset')
         for idx,ds in enumerate(datasets):
             progress = idx * 100 / len(datasets)
             self.status.set("checking %s" % ds, progress)
-            qa_checker(ds, project=self.project.getValue())
+            qa_checker(ds, project=self.project.getValue(), qa_home=qa_home)
 
         results_path = os.path.join("QA_Results", "check_logs")
         if not os.path.isdir(results_path):
