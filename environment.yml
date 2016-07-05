@@ -27,11 +27,11 @@ dependencies:
 - gunicorn=19.1.0=py27_0
 - hdf5=1.8.15.1=2
 - htmltmpl=1.22=py27_1
+- ipython
 - icu=56.1=3
 - idna=2.0=py27_0
 - imagesize=0.7.1=py27_0
 - ipaddress=1.0.14=py27_0
-- ipython=4.2.0=py27_2
 - ipython_genutils=0.1.0=py27_0
 - isl=0.12.2=0
 - jasper=1.900.1=2
@@ -79,7 +79,6 @@ dependencies:
 - python-decorator=4.0.10=py27_0
 - python-magic=0.4.6=py27_1
 - python-pathlib2=2.1.0=py27_0
-- python-simplegeneric=0.8.1=py27_0
 - pytz=2016.3=py27_0
 - pywps=3.2.6=py27_0
 - pyyaml=3.11=py27_4
