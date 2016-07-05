@@ -43,7 +43,7 @@ class CFCheckerProcess(WPSProcess):
             title="URL to your NetCDF File",
             abstract="You may provide a URL or upload a NetCDF file.",
             minOccurs=1,
-            maxOccurs=1000,
+            maxOccurs=100,
             maxmegabites=10000,
             formats=[{"mimeType":"application/x-netcdf"}],
             )
