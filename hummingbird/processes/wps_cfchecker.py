@@ -62,7 +62,7 @@ class CFCheckerProcess(WPSProcess):
         self.output = self.addComplexOutput(
             identifier="output",
             title="CF Checker Report",
-            abstract="",
+            abstract="Summary of the CF compliance check",
             formats=[{"mimeType":"text/plain"}],
             asReference=True,
             )
@@ -70,7 +70,7 @@ class CFCheckerProcess(WPSProcess):
     def execute(self):
         # TODO: iterate input files ... run parallel 
         # TODO: generate html report with links to cfchecker output ...
-        outfile = 'output.txt'
+        outfile = 'cfchecker_output.txt'
         self.output.setValue( outfile )
         nc_files = self.getInputValues(identifier='dataset')
         count = 0
