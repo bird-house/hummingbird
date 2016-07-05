@@ -78,6 +78,13 @@ class QualityChecker(WPSProcess):
         if not os.path.isdir(results_path):
             raise Exception("QA results are missing.")
 
+        # output tar archive
+        outfile = 'output.tar.gz'
+        self.output.setValue( outfile )
+        tar = tarfile.open(outfile, "w:gz")
+        tar.add(results_path)
+        tar.close()
+
         # output logfile
         logs = glob.glob(os.path.join(results_path, "*.log"))
         if not logs:
@@ -90,13 +97,6 @@ class QualityChecker(WPSProcess):
         else:
             raise Exception("could not find log file.")
 
-        # output tar archive
-        outfile = 'output.tar.gz'
-        self.output.setValue( outfile )
-        tar = tarfile.open(outfile, "w:gz")
-        tar.add(results_path)
-        tar.close()
-        
         self.status.set("qa checker: done", 100)
 
 
