@@ -6,7 +6,7 @@ from pywps.Process import WPSProcess
 import logging
 logger = logging.getLogger(__name__)
 
-def cf_check(filename):
+def cf_check(filename, version="auto"):
     # TODO: maybe use local file path
     if not filename.endswith(".nc"):
         new_name = filename + ".nc"
@@ -15,6 +15,8 @@ def cf_check(filename):
         filename = new_name
     filename = os.path.abspath(filename)
     cmd = ["dkrz-cf-checker", filename]
+    if version != "auto":
+        cmd.extend(['-C', version])
     try:
         output = check_output(cmd)
     except CalledProcessError as err:
@@ -49,6 +51,17 @@ class CFChecker(WPSProcess):
             formats=[{"mimeType":"application/x-netcdf"}],
             )
 
+        self.cf_version = self.addLiteralInput(
+            identifier="cf_version",
+            title="Check against CF version",
+            abstract="Version of CF conventions that the NetCDF file should be check against. Use auto to auto-detect the CF version.",
+            default="auto",
+            type=type(''),
+            minOccurs=1,
+            maxOccurs=1,
+            allowedValues=["auto", "1.6", "1.5", "1.4"],
+            )
+
         self.output=self.addComplexOutput(
             identifier="output",
             title="CF Checker Report",
@@ -69,7 +82,7 @@ class CFChecker(WPSProcess):
         max_count = len(nc_files)
         step = 100.0 / max_count
         for nc_file in nc_files:
-            cf_report = cf_check(nc_file)
+            cf_report = cf_check(nc_file, version=self.cf_version.getValue())
             with open(outfile, 'a') as fp:
                 fp.write(cf_report)
                 count = count + 1
