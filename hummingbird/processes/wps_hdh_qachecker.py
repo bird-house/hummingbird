@@ -28,18 +28,22 @@ class QualityChecker(WPSProcess):
             identifier = "qa_checker",
             title = "Quality Assurance Checker by DKRZ",
             version = "0.5.13",
-            abstract="Project specific qualtiy checks for CORDEX, CMIP5, ...",
-            metadata= [ {"title": "Documentation" , "href": "http://qa-dkrz.readthedocs.io/en/latest/"} ],
+            abstract="The Quality Assurance checker QA-DKRZ checks conformance of meta-data of climate simulations given in NetCDF format with conventions and rules of climate model projects. At present, checking of CF Conventions, CMIP5, and CORDEX is supported. Development and maintenance for the QA checker is done by the German Climate Computing Centre (DKRZ). If you have suggestions for improvement then please contact Heinz-Dieter Hollweg at DKRZ (hollweg@dkrz.de).",
+            metadata= [
+                {"title": "Documentation" , "href": "http://qa-dkrz.readthedocs.io/en/latest/"},
+                {"title": "CF Conventions", "href": "http://cfconventions.org/"},
+                {"title": "Conda Package", "href": "http://anaconda.org/birdhouse/qa-dkrz"},
+                {"title": "GitHub", "href": "https://github.com/IS-ENES-Data/QA-DKRZ"}, ],
             statusSupported=True,
             storeSupported=True
             )
 
         self.dataset = self.addComplexInput(
             identifier="dataset",
-            title="Dataset (NetCDF)",
-            abstract="NetCDF files to be checked.",
+            title="URL to your NetCDF File",
+            abstract="You may provide a URL or upload a NetCDF file.",
             minOccurs=1,
-            maxOccurs=1000,
+            maxOccurs=100,
             maxmegabites=10000,
             formats=[{"mimeType":"application/x-netcdf"}],
             )
@@ -47,6 +51,7 @@ class QualityChecker(WPSProcess):
         self.project = self.addLiteralInput(
             identifier="project",
             title="Project",
+            abstract="Climate model data project to be checked: CORDEX or CMIP5",
             default="CORDEX",
             type=type(''),
             minOccurs=1,
