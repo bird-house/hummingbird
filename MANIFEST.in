@@ -1,0 +1,3 @@
+include *.rst
+graft hummingbird 
+global-exclude *.pyc *.*~
