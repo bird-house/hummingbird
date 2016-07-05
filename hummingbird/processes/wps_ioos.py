@@ -27,15 +27,18 @@ class CFCheckerProcess(WPSProcess):
             identifier = "ioos_cchecker",
             title = "IOOS Compliance Checker",
             version = cchecker_version,
-            abstract="The IOOS Compliance Checker is a Python tool to check local/remote datasets against a variety of compliance standards.",
-            metadata = [{'title': "Compliance Checker on GitHub", 'href': "https://github.com/ioos/compliance-checker"}],
+            abstract="The IOOS Compliance Checker is a Python tool to check local/remote datasets against a variety of compliance standards. Each compliance standard is executed by a Check Suite, which functions similar to a Python standard Unit Test. A Check Suite runs one or more checks against a dataset, returning a list of Results which are then aggregated into a summary. Development and maintenance for the compliance checker is done by the Integrated Ocean Observing System (IOOS).",
+            metadata = [
+                {'title': "Compliance Checker on GitHub", 'href': "https://github.com/ioos/compliance-checker"},
+                {'title': "IOOS", 'href': 'https://ioos.noaa.gov/'}],
             statusSupported=True,
             storeSupported=True
             )
 
         self.dataset = self.addComplexInput(
             identifier="dataset",
-            title="Dataset (NetCDF)",
+            title="URL to your NetCDF File",
+            abstract="You may provide a URL or upload a NetCDF file.",
             minOccurs=1,
             maxOccurs=1000,
             maxmegabites=10000,
@@ -66,8 +69,8 @@ class CFCheckerProcess(WPSProcess):
 
         self.output = self.addComplexOutput(
             identifier="output",
-            title="Report",
-            abstract="",
+            title="Results Summary",
+            abstract="Summary report of all check results.",
             formats=[{"mimeType":"text/plain"}],
             asReference=True,
             )
