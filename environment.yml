@@ -2,7 +2,7 @@ name: hummingbird
 channels:
 - defaults
 - birdhouse
-- conda-forge
+- ioos
 dependencies:
 - python=2.7.12
 - pyopenssl=0.16.0
@@ -26,11 +26,11 @@ dependencies:
 - gevent=1.1.1
 - eventlet=0.16.1
 # cdo
-- cdo=1.7.1
-- jpeg==9b
+- cdo=1.7.0
+- jpeg==8d
 # cf checker
 - cfchecker=2.0.9
-- cdat-lite=6.0rc2=py27_0
+- cdat-lite=6.0rc2
 # qa dkrz
 - qa-dkrz=0.5.13
 # compliance checker ioos
