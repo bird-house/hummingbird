@@ -1,6 +1,9 @@
 """
 Processes with cdo ensemble opertions
 """
+from cdo import Cdo
+cdo_version = Cdo().version()
+
 from pywps.Process import WPSProcess
 
 class Ensembles(WPSProcess):
@@ -10,7 +13,7 @@ class Ensembles(WPSProcess):
             self,
             identifier="ensembles",
             title="CDO Ensembles Operations",
-            version="1.7.0-0",
+            version=cdo_version,
             metadata=[
                 {"title":"CDO","href":"https://code.zmaw.de/projects/cdo"},
                 ],
