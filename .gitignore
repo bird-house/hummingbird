@@ -25,6 +25,9 @@ custom.cfg
 nosetests.xml
 unit_tests/testdata.json
 
+# R 
+*.Rhistory
+
 # Eclipse / PyDev
 .project
 .pydevproject
