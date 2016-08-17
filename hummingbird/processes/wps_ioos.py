@@ -31,7 +31,7 @@ class CFCheckerProcess(WPSProcess):
             metadata = [
                 {'title': "Compliance Checker on GitHub", 'href': "https://github.com/ioos/compliance-checker"},
                 {'title': "IOOS", 'href': 'https://ioos.noaa.gov/'},
-                {'title': "IOOS Compliancs Online Checker", 'href': 'http://data.ioos.us/compliance/index.html'}],
+                {'title': "IOOS Compliance Online Checker", 'href': 'http://data.ioos.us/compliance/index.html'}],
             statusSupported=True,
             storeSupported=True
             )
