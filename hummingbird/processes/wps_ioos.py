@@ -46,7 +46,7 @@ class CFCheckerProcess(WPSProcess):
         self.criteria = self.addLiteralInput(
             identifier="criteria",
             title="Criteria",
-            abstract="Define the criteria for the checks.  Either Strict, Normal, or Lenient.  Defaults to Normal.",
+            abstract="Define the criteria for the checks.  Either Strict, Normal or Lenient.  Defaults to Normal.",
             type=type(''),
             default="normal",
             minOccurs=1,
@@ -54,19 +54,36 @@ class CFCheckerProcess(WPSProcess):
             allowedValues=["strict", "normal", "lenient"]
             )
 
+        # self.output_format = self.addLiteralInput(
+        #     identifier="format",
+        #     title="Output Format",
+        #     abstract="The format of the check reporst. Either text, json or html. Defaults to json.",
+        #     type=type(''),
+        #     default="json",
+        #     minOccurs=1,
+        #     maxOccurs=1,
+        #     allowedValues=["json", "html"]
+        #     )
+
         self.output = self.addComplexOutput(
             identifier="output",
-            title="Results Summary",
-            abstract="Summary report of all check results.",
-            formats=[{"mimeType": "text/plain"}],
+            title="Summary",
+            abstract="Summary report of check results.",
+            formats=[{"mimeType": "plain/text"}],
+            asReference=True,
+            )
+
+        self.output_report = self.addComplexOutput(
+            identifier="report",
+            title="HTML Report",
+            abstract="Report of check result as HTML.",
+            formats=[{"mimeType": "plain/text"}],
             asReference=True,
             )
 
     def execute(self):
         # TODO: iterate input files ... run parallel
         # TODO: generate html report with links to cfchecker output ...
-        outfile = 'out.txt'
-        self.output.setValue(outfile)
         datasets = self.getInputValues(identifier='dataset')
         checkers = self.getInputValues(identifier='test')
 
@@ -80,26 +97,30 @@ class CFCheckerProcess(WPSProcess):
         return_values = []
         had_errors = []
 
-        for ds in datasets:
-            return_value, errors = ComplianceChecker.run_checker(
-                ds,
-                checker_names=checkers,
-                verbose=True,
-                criteria=self.criteria.getValue(),
-                output_filename=outfile,
-                output_format='json')
-            return_values.append(return_value)
-            had_errors.append(errors)
-            count = count + 1
-            self.status.set("checks: %d/%d" % (count, max_count), int(count*step))
+        # output
+        outfile = 'summary.txt'
+        self.output.setValue(outfile)
+        self.output_report.setValue("report-0.html")
 
-        if any(had_errors):
-            msg = "complince checker finshed with errors."
-            logger.warning(msg)
-            self.status.set(msg, 100)
-        elif all(return_values):
-            self.status.set("compliance checker finshed successfully", 100)
-        else:
-            msg = "complince checker finshed with errors."
-            logger.warning(msg)
-            self.status.set(msg, 100)
+        with open(outfile, 'w') as fp:
+            for ds in datasets:
+                logger.info("checking dataset %s", ds)
+                report_file = "report-{0}.html".format(count)
+                return_value, errors = ComplianceChecker.run_checker(
+                    ds,
+                    checker_names=checkers,
+                    verbose=True,
+                    criteria=self.criteria.getValue(),
+                    output_filename=report_file,
+                    output_format='html')
+                if return_value is False:
+                    logger.info("dataset %s with errors %s" % (ds, errors))
+                    fp.write("{0} FAIL".format(ds))
+                else:
+                    fp.write("{0} PASS".format(ds))
+                count = count + 1
+
+                self.status.set("checks: %d/%d"
+                                % (count, max_count), int(count*step))
+
+        self.status.set("compliance checker finshed.", 100)
