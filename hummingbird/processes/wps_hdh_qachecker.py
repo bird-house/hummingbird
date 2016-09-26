@@ -27,7 +27,7 @@ class QualityChecker(WPSProcess):
         WPSProcess.__init__(self,
             identifier = "qa_checker",
             title = "Quality Assurance Checker by DKRZ",
-            version = "0.5.13",
+            version = "0.5.14",
             abstract="The Quality Assurance checker QA-DKRZ checks conformance of meta-data of climate simulations given in NetCDF format with conventions and rules of climate model projects. At present, checking of CF Conventions, CMIP5, and CORDEX is supported. Development and maintenance for the QA checker is done by the German Climate Computing Centre (DKRZ). If you have suggestions for improvement then please contact Heinz-Dieter Hollweg at DKRZ (hollweg@dkrz.de).",
             metadata= [
                 {"title": "Documentation" , "href": "http://qa-dkrz.readthedocs.io/en/latest/"},
@@ -77,7 +77,7 @@ class QualityChecker(WPSProcess):
     def execute(self):
         from hummingbird import config
         from hummingbird import utils
-        
+
         self.status.set("starting qa checker ...", 0)
 
         # create qa_home
@@ -114,6 +114,3 @@ class QualityChecker(WPSProcess):
             raise Exception("could not find log file.")
 
         self.status.set("qa checker: done", 100)
-
-
-        

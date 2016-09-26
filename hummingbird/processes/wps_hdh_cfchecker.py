@@ -30,7 +30,7 @@ class CFChecker(WPSProcess):
         WPSProcess.__init__(self,
             identifier="qa_cfchecker",
             title="CF Checker by DKRZ",
-            version="0.5.13",
+            version="0.5.14",
             abstract="The NetCDF Climate Forcast Conventions compliance checker by DKRZ. This process allows you to run the compliance checker to check that the contents of a NetCDF file comply with the Climate and Forecasts (CF) Metadata Convention. The CF Conformance checker applies to conventions 1.4 -1.7draft. Development and maintenance for the CF-checker is done by the German Climate Computing Centre (DKRZ). If you have suggestions for improvement then please contact Heinz-Dieter Hollweg at DKRZ (hollweg@dkrz.de).",
             metadata= [
                 {"title": "Documentation" , "href": "http://qa-dkrz.readthedocs.io/en/latest/"},
@@ -73,7 +73,7 @@ class CFChecker(WPSProcess):
     def execute(self):
         self.status.set("starting cfchecker ...", 0)
 
-        # TODO: iterate input files ... run parallel 
+        # TODO: iterate input files ... run parallel
         # TODO: generate html report with links to cfchecker output ...
         outfile = 'cfchecker_output.txt'
         self.output.setValue( outfile )
@@ -88,5 +88,3 @@ class CFChecker(WPSProcess):
                 count = count + 1
                 self.status.set("cfchecker: %d/%d" % (count, max_count), int(count*step))
         self.status.set("cfchecker: done", 100)
-
-
