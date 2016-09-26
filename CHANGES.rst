@@ -1,6 +1,18 @@
 Changes
 *******
 
+0.4.1 (2016-09-26)
+==================
+
+* updated ioos compliance-checker 2.2.1 and qa-dkrz 0.5.14.
+
+
+0.4.0 (2016-07-30)
+==================
+
+* update buildout
+* update pywps 3.2.6
+
 0.3.1 (2016-06-14)
 ==================
 
