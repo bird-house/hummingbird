@@ -1,3 +1,6 @@
+import os
+import tarfile
+
 from compliance_checker.runner import ComplianceChecker, CheckSuite
 from compliance_checker import __version__ as cchecker_version
 
@@ -5,6 +8,7 @@ from pywps.Process import WPSProcess
 
 import logging
 logger = logging.getLogger(__name__)
+
 
 class CFCheckerProcess(WPSProcess):
     def __init__(self):
@@ -76,8 +80,16 @@ class CFCheckerProcess(WPSProcess):
         self.output_report = self.addComplexOutput(
             identifier="report",
             title="HTML Report",
-            abstract="Report of check result as HTML.",
-            formats=[{"mimeType": "plain/text"}],
+            abstract="HTML Report of check result.",
+            formats=[{"mimeType": "text/html"}],
+            asReference=True,
+            )
+
+        self.output_report_tar = self.addComplexOutput(
+            identifier="report_tar",
+            title="HTML Reports as tarfile",
+            abstract="HTML Report of check result for each file as tarfile.",
+            formats=[{"mimeType": "application/x-tar"}],
             asReference=True,
             )
 
@@ -98,14 +110,16 @@ class CFCheckerProcess(WPSProcess):
         had_errors = []
 
         # output
-        outfile = 'summary.txt'
+        os.mkdir("report")
+        outfile = 'report/summary.txt'
         self.output.setValue(outfile)
-        self.output_report.setValue("report-0.html")
+        self.output_report.setValue("report/0.html")
+        self.output_report_tar.setValue("report.tar")
 
         with open(outfile, 'w') as fp:
             for ds in datasets:
                 logger.info("checking dataset %s", ds)
-                report_file = "report-{0}.html".format(count)
+                report_file = "report/{0}.html".format(count)
                 return_value, errors = ComplianceChecker.run_checker(
                     ds,
                     checker_names=checkers,
@@ -115,12 +129,14 @@ class CFCheckerProcess(WPSProcess):
                     output_format='html')
                 if return_value is False:
                     logger.info("dataset %s with errors %s" % (ds, errors))
-                    fp.write("{0} FAIL".format(ds))
+                    fp.write("{0} FAIL {1}".format(ds, report_file))
                 else:
-                    fp.write("{0} PASS".format(ds))
+                    fp.write("{0} PASS {1}".format(ds, report_file))
                 count = count + 1
 
                 self.status.set("checks: %d/%d"
                                 % (count, max_count), int(count*step))
+        with tarfile.open("report.tar", "w") as tar:
+            tar.add("report")
 
         self.status.set("compliance checker finshed.", 100)
