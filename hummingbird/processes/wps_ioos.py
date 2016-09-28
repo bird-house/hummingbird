@@ -17,11 +17,21 @@ class CFCheckerProcess(WPSProcess):
             identifier="ioos_cchecker",
             title="IOOS Compliance Checker",
             version=cchecker_version,
-            abstract="The IOOS Compliance Checker is a Python tool to check local/remote datasets against a variety of compliance standards. Each compliance standard is executed by a Check Suite, which functions similar to a Python standard Unit Test. A Check Suite runs one or more checks against a dataset, returning a list of Results which are then aggregated into a summary. Development and maintenance for the compliance checker is done by the Integrated Ocean Observing System (IOOS).",
+            abstract="The IOOS Compliance Checker is a Python tool to\
+             check local/remote datasets against a variety of\
+             compliance standards. Each compliance standard is executed\
+             by a Check Suite, which functions similar to a\
+             Python standard Unit Test.\
+             A Check Suite runs one or more checks against a dataset,\
+             returning a list of Results which are then aggregated\
+             into a summary. Development and maintenance for the compliance\
+             checker is done by the Integrated Ocean Observing System (IOOS).",
             metadata=[
-                {'title': "Compliance Checker on GitHub", 'href': "https://github.com/ioos/compliance-checker"},
+                {'title': "Compliance Checker on GitHub", 'href':
+                 "https://github.com/ioos/compliance-checker"},
                 {'title': "IOOS", 'href': 'https://ioos.noaa.gov/'},
-                {'title': "IOOS Compliance Online Checker", 'href': 'http://data.ioos.us/compliance/index.html'}],
+                {'title': "IOOS Compliance Online Checker",
+                 'href': 'http://data.ioos.us/compliance/index.html'}],
             statusSupported=True,
             storeSupported=True
             )
@@ -39,11 +49,12 @@ class CFCheckerProcess(WPSProcess):
         self.test = self.addLiteralInput(
             identifier="test",
             title="Test Suite",
-            abstract="Select the Checks you want to perform. Default: cf (climate forecast conventions)",
+            abstract="Select the Checks you want to perform.\
+             Default: cf (climate forecast conventions)",
             default="cf",
             type=type(''),
             minOccurs=1,
-            maxOccurs=3,
+            maxOccurs=1,
             allowedValues=['cf', 'ioos', 'acdd']
             )
 
