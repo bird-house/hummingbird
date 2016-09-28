@@ -140,9 +140,9 @@ class CFCheckerProcess(WPSProcess):
                     output_format='html')
                 if return_value is False:
                     logger.info("dataset %s with errors %s" % (ds, errors))
-                    fp.write("{0} FAIL {1}".format(ds, report_file))
+                    fp.write("{0}, FAIL, {1}\n".format(ds, report_file))
                 else:
-                    fp.write("{0} PASS {1}".format(ds, report_file))
+                    fp.write("{0}, PASS, {1}\n".format(ds, report_file))
                 count = count + 1
 
                 self.status.set("checks: %d/%d"
