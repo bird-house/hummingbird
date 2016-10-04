@@ -69,16 +69,16 @@ class CFCheckerProcess(WPSProcess):
             allowedValues=["strict", "normal", "lenient"]
             )
 
-        # self.output_format = self.addLiteralInput(
-        #     identifier="format",
-        #     title="Output Format",
-        #     abstract="The format of the check reporst. Either text, json or html. Defaults to json.",
-        #     type=type(''),
-        #     default="json",
-        #     minOccurs=1,
-        #     maxOccurs=1,
-        #     allowedValues=["text", "json", "html"]
-        #     )
+        self.output_format = self.addLiteralInput(
+            identifier="format",
+            title="Output Format",
+            abstract="The format of the check reporst. Either text, json or html. Defaults to html.",
+            type=type(''),
+            default="html",
+            minOccurs=1,
+            maxOccurs=1,
+            allowedValues=["text", "json", "html"]
+            )
 
         self.output = self.addComplexOutput(
             identifier="output",
@@ -88,26 +88,18 @@ class CFCheckerProcess(WPSProcess):
             asReference=True,
             )
 
-        self.output_text = self.addComplexOutput(
-            identifier="text",
-            title="Text Report",
-            abstract="Text report of check results.",
-            formats=[{"mimeType": "plain/text"}],
+        self.output_report = self.addComplexOutput(
+            identifier="report",
+            title="Check Report",
+            abstract="Report of check result.",
+            formats=[{"mimeType": "text/html"}, {"mimeType": "plain/text"}],
             asReference=True,
             )
 
-        self.output_html = self.addComplexOutput(
-            identifier="html",
-            title="HTML Report",
-            abstract="HTML Report of check result.",
-            formats=[{"mimeType": "text/html"}],
-            asReference=True,
-            )
-
-        self.output_html_tar = self.addComplexOutput(
-            identifier="html_tar",
-            title="HTML Reports as tarfile",
-            abstract="HTML Report of check result for each file as tarfile.",
+        self.output_tar = self.addComplexOutput(
+            identifier="report_tar",
+            title="Reports as tarfile",
+            abstract="Report of check result for each file as tarfile.",
             formats=[{"mimeType": "application/x-tar"}],
             asReference=True,
             )
@@ -117,6 +109,7 @@ class CFCheckerProcess(WPSProcess):
         # TODO: generate html report with links to cfchecker output ...
         datasets = self.getInputValues(identifier='dataset')
         checkers = self.getInputValues(identifier='test')
+        output_format = self.getInputValue(identifier='format')
 
         count = 0
         max_count = len(datasets)
@@ -132,25 +125,12 @@ class CFCheckerProcess(WPSProcess):
         os.mkdir("report")
         outfile = 'report/summary.txt'
         self.output.setValue(outfile)
-        self.output_html.setValue("report/0.html")
-        self.output_html_tar.setValue("report.tar")
-        self.output_text.setValue("report/0.text")
+        self.output_report.setValue("report/0.{0}".format(output_format))
+        self.output_tar.setValue("report.tar")
 
         with open(outfile, 'w') as fp:
             for ds in datasets:
                 logger.info("checking dataset %s", ds)
-                # html
-                output_format = 'html'
-                report_file = "report/{0}.{1}".format(count, output_format)
-                return_value, errors = ComplianceChecker.run_checker(
-                    ds,
-                    checker_names=checkers,
-                    verbose=True,
-                    criteria=self.criteria.getValue(),
-                    output_filename=report_file,
-                    output_format=output_format)
-                # text
-                output_format = 'text'
                 report_file = "report/{0}.{1}".format(count, output_format)
                 return_value, errors = ComplianceChecker.run_checker(
                     ds,
