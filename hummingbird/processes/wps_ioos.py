@@ -88,13 +88,13 @@ class CFCheckerProcess(WPSProcess):
             asReference=True,
             )
 
-        # self.output_text = self.addComplexOutput(
-        #     identifier="text",
-        #     title="Text Report",
-        #     abstract="Text report of check results.",
-        #     formats=[{"mimeType": "plain/text"}],
-        #     asReference=True,
-        #     )
+        self.output_text = self.addComplexOutput(
+            identifier="text",
+            title="Text Report",
+            abstract="Text report of check results.",
+            formats=[{"mimeType": "plain/text"}],
+            asReference=True,
+            )
 
         self.output_html = self.addComplexOutput(
             identifier="html",
@@ -134,19 +134,31 @@ class CFCheckerProcess(WPSProcess):
         self.output.setValue(outfile)
         self.output_html.setValue("report/0.html")
         self.output_html_tar.setValue("report.tar")
-        #self.output_text.setValue("report/0.txt")
+        self.output_text.setValue("report/0.text")
 
         with open(outfile, 'w') as fp:
             for ds in datasets:
                 logger.info("checking dataset %s", ds)
-                report_file = "report/{0}.html".format(count)
+                # html
+                output_format = 'html'
+                report_file = "report/{0}.{1}".format(count, output_format)
                 return_value, errors = ComplianceChecker.run_checker(
                     ds,
                     checker_names=checkers,
                     verbose=True,
                     criteria=self.criteria.getValue(),
                     output_filename=report_file,
-                    output_format='html')
+                    output_format=output_format)
+                # text
+                output_format = 'text'
+                report_file = "report/{0}.{1}".format(count, output_format)
+                return_value, errors = ComplianceChecker.run_checker(
+                    ds,
+                    checker_names=checkers,
+                    verbose=True,
+                    criteria=self.criteria.getValue(),
+                    output_filename=report_file,
+                    output_format=output_format)
                 if return_value is False:
                     logger.info("dataset %s with errors %s" % (ds, errors))
                     fp.write("{0}, FAIL, {1}\n".format(ds, report_file))
