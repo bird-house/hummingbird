@@ -77,7 +77,7 @@ class CFCheckerProcess(WPSProcess):
         #     default="json",
         #     minOccurs=1,
         #     maxOccurs=1,
-        #     allowedValues=["json", "html"]
+        #     allowedValues=["text", "json", "html"]
         #     )
 
         self.output = self.addComplexOutput(
@@ -88,16 +88,24 @@ class CFCheckerProcess(WPSProcess):
             asReference=True,
             )
 
-        self.output_report = self.addComplexOutput(
-            identifier="report",
+        # self.output_text = self.addComplexOutput(
+        #     identifier="text",
+        #     title="Text Report",
+        #     abstract="Text report of check results.",
+        #     formats=[{"mimeType": "plain/text"}],
+        #     asReference=True,
+        #     )
+
+        self.output_html = self.addComplexOutput(
+            identifier="html",
             title="HTML Report",
             abstract="HTML Report of check result.",
             formats=[{"mimeType": "text/html"}],
             asReference=True,
             )
 
-        self.output_report_tar = self.addComplexOutput(
-            identifier="report_tar",
+        self.output_html_tar = self.addComplexOutput(
+            identifier="html_tar",
             title="HTML Reports as tarfile",
             abstract="HTML Report of check result for each file as tarfile.",
             formats=[{"mimeType": "application/x-tar"}],
@@ -124,8 +132,9 @@ class CFCheckerProcess(WPSProcess):
         os.mkdir("report")
         outfile = 'report/summary.txt'
         self.output.setValue(outfile)
-        self.output_report.setValue("report/0.html")
-        self.output_report_tar.setValue("report.tar")
+        self.output_html.setValue("report/0.html")
+        self.output_html_tar.setValue("report.tar")
+        #self.output_text.setValue("report/0.txt")
 
         with open(outfile, 'w') as fp:
             for ds in datasets:
