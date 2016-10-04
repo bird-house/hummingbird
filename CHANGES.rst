@@ -1,6 +1,12 @@
 Changes
 *******
 
+0.4.2 (2016-10-04)
+==================
+
+* update ioos compliance-checker 2.3.0. 
+* added output_format option to compliance-checker.
+
 0.4.1 (2016-09-26)
 ==================
 
