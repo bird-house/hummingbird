@@ -30,7 +30,7 @@ dependencies:
 - cdo=1.7.1=1
 - python-cdo=1.3.0
 - proj.4=4.9.2  # fix cdo and qa-dkrz deps
-- jpeg=9 # fix cdo and qa-dkrz deps
+- jpeg=9b # fix cdo and qa-dkrz deps
 # cf checker
 - cfchecker=2.0.9
 - cdat-lite=6.0rc2
