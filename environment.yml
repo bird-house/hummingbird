@@ -13,6 +13,7 @@ dependencies:
 - mako
 # tests
 - pytest
+- flake8
 # ipython
 - ipython
 # docs
