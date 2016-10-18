@@ -34,7 +34,7 @@ class CFCheckerProcess(WPSProcess):
                  'href': 'http://data.ioos.us/compliance/index.html'}],
             statusSupported=True,
             storeSupported=True
-            )
+        )
 
         self.dataset = self.addComplexInput(
             identifier="dataset",
@@ -44,7 +44,7 @@ class CFCheckerProcess(WPSProcess):
             maxOccurs=1000,
             maxmegabites=10000,
             formats=[{"mimeType": "application/x-netcdf"}],
-            )
+        )
 
         self.test = self.addLiteralInput(
             identifier="test",
@@ -56,7 +56,7 @@ class CFCheckerProcess(WPSProcess):
             minOccurs=1,
             maxOccurs=1,
             allowedValues=['cf', 'ioos', 'acdd']
-            )
+        )
 
         self.criteria = self.addLiteralInput(
             identifier="criteria",
@@ -67,7 +67,7 @@ class CFCheckerProcess(WPSProcess):
             minOccurs=1,
             maxOccurs=1,
             allowedValues=["strict", "normal", "lenient"]
-            )
+        )
 
         self.output_format = self.addLiteralInput(
             identifier="format",
@@ -78,7 +78,7 @@ class CFCheckerProcess(WPSProcess):
             minOccurs=1,
             maxOccurs=1,
             allowedValues=["text", "json", "html"]
-            )
+        )
 
         self.output = self.addComplexOutput(
             identifier="output",
@@ -86,7 +86,7 @@ class CFCheckerProcess(WPSProcess):
             abstract="Summary report of check results.",
             formats=[{"mimeType": "plain/text"}],
             asReference=True,
-            )
+        )
 
         self.output_report = self.addComplexOutput(
             identifier="report",
@@ -94,7 +94,7 @@ class CFCheckerProcess(WPSProcess):
             abstract="Report of check result.",
             formats=[{"mimeType": "text/html"}, {"mimeType": "plain/text"}],
             asReference=True,
-            )
+        )
 
         self.output_tar = self.addComplexOutput(
             identifier="report_tar",
@@ -102,7 +102,7 @@ class CFCheckerProcess(WPSProcess):
             abstract="Report of check result for each file as tarfile.",
             formats=[{"mimeType": "application/x-tar"}],
             asReference=True,
-            )
+        )
 
     def execute(self):
         # TODO: iterate input files ... run parallel
@@ -118,8 +118,8 @@ class CFCheckerProcess(WPSProcess):
         check_suite = CheckSuite()
         check_suite.load_all_available_checkers()
 
-        return_values = []
-        had_errors = []
+        # return_values = []
+        # had_errors = []
 
         # output
         os.mkdir("report")
@@ -147,7 +147,7 @@ class CFCheckerProcess(WPSProcess):
                 count = count + 1
 
                 self.status.set("checks: %d/%d"
-                                % (count, max_count), int(count*step))
+                                % (count, max_count), int(count * step))
         with tarfile.open("report.tar", "w") as tar:
             tar.add("report")
 

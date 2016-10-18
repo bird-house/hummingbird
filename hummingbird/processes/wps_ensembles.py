@@ -6,6 +6,7 @@ cdo_version = Cdo().version()
 
 from pywps.Process import WPSProcess
 
+
 class Ensembles(WPSProcess):
 
     def __init__(self):
@@ -15,12 +16,12 @@ class Ensembles(WPSProcess):
             title="CDO Ensembles Operations",
             version=cdo_version,
             metadata=[
-                {"title":"CDO","href":"https://code.zmaw.de/projects/cdo"},
-                ],
+                {"title": "CDO", "href": "https://code.zmaw.de/projects/cdo"},
+            ],
             abstract="Calling cdo to calculate ensembles operations.",
             statusSupported=True,
             storeSupported=True
-            )
+        )
 
         self.dataset = self.addComplexInput(
             identifier="dataset",
@@ -28,8 +29,8 @@ class Ensembles(WPSProcess):
             minOccurs=1,
             maxOccurs=1000,
             maxmegabites=5000,
-            formats=[{"mimeType":"application/x-netcdf"}],
-            )
+            formats=[{"mimeType": "application/x-netcdf"}],
+        )
 
         # operators
         self.operator = self.addLiteralInput(
@@ -41,7 +42,7 @@ class Ensembles(WPSProcess):
             minOccurs=1,
             maxOccurs=1,
             allowedValues=['ensmin', 'ensmax', 'enssum', 'ensmean', 'ensavg', 'ensvar', 'ensstd', 'enspctl']
-            )
+        )
 
         # complex output
         # -------------
@@ -51,9 +52,9 @@ class Ensembles(WPSProcess):
             title="NetCDF Output",
             abstract="NetCDF Output",
             metadata=[],
-            formats=[{"mimeType":"application/x-netcdf"}],
+            formats=[{"mimeType": "application/x-netcdf"}],
             asReference=True,
-            )
+        )
 
     def execute(self):
         nc_files = self.getInputValues(identifier='dataset')
@@ -63,4 +64,4 @@ class Ensembles(WPSProcess):
         cmd.extend(nc_files)
         cmd.append(out_filename)
         self.cmd(cmd=cmd, stdout=True)
-        self.output.setValue( out_filename )
+        self.output.setValue(out_filename)

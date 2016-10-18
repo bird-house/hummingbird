@@ -4,6 +4,7 @@ from pywps import config as wpsconfig
 import logging
 logger = logging.getLogger(__name__)
 
+
 def cache_path():
     cache_path = None
     try:

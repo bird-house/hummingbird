@@ -2,9 +2,11 @@ import os
 
 from pywps.Process import WPSProcess
 
+
 class NetcdfMetadata(WPSProcess):
     def __init__(self):
-        WPSProcess.__init__(self,
+        WPSProcess.__init__(
+            self,
             identifier="ncmeta",
             title="NetCDF Metadata",
             version="0.2",
@@ -19,16 +21,16 @@ class NetcdfMetadata(WPSProcess):
             minOccurs=1,
             maxOccurs=100,
             maxmegabites=5000,
-            formats=[{"mimeType":"application/x-netcdf"}],
-            )
+            formats=[{"mimeType": "application/x-netcdf"}],
+        )
 
         self.output = self.addComplexOutput(
             identifier="output",
             title="NetCDF Metadata",
             abstract="NetCDF Metadata",
-            formats=[{"mimeType":"application/json"}],
+            formats=[{"mimeType": "application/json"}],
             asReference=True,
-            )
+        )
 
     def execute(self):
         nc_file = self.getInputValues(identifier='dataset')[0]
@@ -47,15 +49,11 @@ class NetcdfMetadata(WPSProcess):
             for att_name in ["axis", "bounds", "calendar", "long_name", "standard_name", "units", "shape"]:
                 if hasattr(ds.variables[var_name], att_name):
                     metadata['variables'][var_name][att_name] = getattr(ds.variables[var_name], att_name)
-        
+
         self.status.set("retrieved netcdf metadata", 80)
 
         import json
         out_filename = 'out.json'
         with open(out_filename, 'w') as fp:
             json.dump(obj=metadata, fp=fp, indent=4, sort_keys=True)
-        self.output.setValue( out_filename )
-        
-
-
-        
+        self.output.setValue(out_filename)

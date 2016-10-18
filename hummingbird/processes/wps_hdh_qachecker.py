@@ -9,13 +9,14 @@ from pywps.Process import WPSProcess
 import logging
 logger = logging.getLogger(__name__)
 
+
 def qa_checker(filename, project, qa_home=None):
     cmd = ["qa-dkrz", "-P", project]
     if qa_home:
-        cmd.append("--work="+qa_home)
+        cmd.append("--work=" + qa_home)
     cmd.append(filename)
     try:
-        output = check_output(cmd, stderr=STDOUT)
+        check_output(cmd, stderr=STDOUT)
     except CalledProcessError as e:
         msg = "qa checker failed: %s" % (e.output)
         logger.error(msg)
@@ -24,19 +25,25 @@ def qa_checker(filename, project, qa_home=None):
 
 class QualityChecker(WPSProcess):
     def __init__(self):
-        WPSProcess.__init__(self,
-            identifier = "qa_checker",
-            title = "Quality Assurance Checker by DKRZ",
-            version = "0.5.14",
-            abstract="The Quality Assurance checker QA-DKRZ checks conformance of meta-data of climate simulations given in NetCDF format with conventions and rules of climate model projects. At present, checking of CF Conventions, CMIP5, and CORDEX is supported. Development and maintenance for the QA checker is done by the German Climate Computing Centre (DKRZ). If you have suggestions for improvement then please contact Heinz-Dieter Hollweg at DKRZ (hollweg@dkrz.de).",
-            metadata= [
-                {"title": "Documentation" , "href": "http://qa-dkrz.readthedocs.io/en/latest/"},
+        WPSProcess.__init__(
+            self,
+            identifier="qa_checker",
+            title="Quality Assurance Checker by DKRZ",
+            version="0.5.14",
+            abstract="The Quality Assurance checker QA-DKRZ checks conformance of meta-data of climate simulations\
+                given in NetCDF format with conventions and rules of climate model projects.\
+                At present, checking of CF Conventions, CMIP5, and CORDEX is supported.\
+                Development and maintenance for the QA checker is done by the German Climate Computing Centre (DKRZ).\
+                If you have suggestions for improvement then please contact\
+                Heinz-Dieter Hollweg at DKRZ (hollweg@dkrz.de).",
+            metadata=[
+                {"title": "Documentation", "href": "http://qa-dkrz.readthedocs.io/en/latest/"},
                 {"title": "CF Conventions", "href": "http://cfconventions.org/"},
                 {"title": "Conda Package", "href": "http://anaconda.org/birdhouse/qa-dkrz"},
                 {"title": "GitHub", "href": "https://github.com/IS-ENES-Data/QA-DKRZ"}, ],
             statusSupported=True,
             storeSupported=True
-            )
+        )
 
         self.dataset = self.addComplexInput(
             identifier="dataset",
@@ -45,8 +52,8 @@ class QualityChecker(WPSProcess):
             minOccurs=1,
             maxOccurs=100,
             maxmegabites=10000,
-            formats=[{"mimeType":"application/x-netcdf"}],
-            )
+            formats=[{"mimeType": "application/x-netcdf"}],
+        )
 
         self.project = self.addLiteralInput(
             identifier="project",
@@ -62,17 +69,17 @@ class QualityChecker(WPSProcess):
             identifier="output",
             title="Quality Checker Report",
             abstract="Qualtiy checker results as tar archive.",
-            formats=[{"mimeType":"application/x-tar-gz"}],
+            formats=[{"mimeType": "application/x-tar-gz"}],
             asReference=True,
-            )
+        )
 
         self.logfile = self.addComplexOutput(
             identifier="logfile",
             title="Quality Checker Logfile",
             abstract="Qualtiy checker summary logfile",
-            formats=[{"mimeType":"text/yaml"}],
+            formats=[{"mimeType": "text/yaml"}],
             asReference=True,
-            )
+        )
 
     def execute(self):
         from hummingbird import config
@@ -85,7 +92,7 @@ class QualityChecker(WPSProcess):
         utils.make_dirs(qa_home)
 
         datasets = self.getInputValues(identifier='dataset')
-        for idx,ds in enumerate(datasets):
+        for idx, ds in enumerate(datasets):
             progress = idx * 100 / len(datasets)
             self.status.set("checking %s" % ds, progress)
             qa_checker(ds, project=self.project.getValue(), qa_home=qa_home)
@@ -96,7 +103,7 @@ class QualityChecker(WPSProcess):
 
         # output tar archive
         outfile = 'output.tar.gz'
-        self.output.setValue( outfile )
+        self.output.setValue(outfile)
         tar = tarfile.open(outfile, "w:gz")
         tar.add(results_path)
         tar.close()
