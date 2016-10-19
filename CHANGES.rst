@@ -1,6 +1,12 @@
 Changes
 *******
 
+0.4.3 (2016-10-19)
+==================
+
+* updated dockerfile.
+* updated setuptools and buildout version.
+
 0.4.2 (2016-10-04)
 ==================
 
