@@ -29,7 +29,7 @@ class QualityChecker(WPSProcess):
             self,
             identifier="qa_checker",
             title="Quality Assurance Checker by DKRZ",
-            version="0.5.14",
+            version="0.5.15",
             abstract="The Quality Assurance checker QA-DKRZ checks conformance of meta-data of climate simulations\
                 given in NetCDF format with conventions and rules of climate model projects.\
                 At present, checking of CF Conventions, CMIP5, and CORDEX is supported.\
