@@ -8,14 +8,14 @@ CHANGES = open(os.path.join(here, 'CHANGES.rst')).read()
 
 reqs = [line.strip() for line in open('requirements/deploy.txt')]
 
-classifiers=[
-        'Development Status :: 3 - Alpha',
-        'Intended Audience :: Science/Research',
-        'Operating System :: MacOS :: MacOS X',
-        'Operating System :: POSIX',
-        'Programming Language :: Python',
-        'Topic :: Scientific/Engineering :: Atmospheric Science',
-        ]
+classifiers = [
+    'Development Status :: 3 - Alpha',
+    'Intended Audience :: Science/Research',
+    'Operating System :: MacOS :: MacOS X',
+    'Operating System :: POSIX',
+    'Programming Language :: Python',
+    'Topic :: Scientific/Engineering :: Atmospheric Science',
+]
 
 setup(name='hummingbird',
       version='0.4.3',
@@ -24,15 +24,14 @@ setup(name='hummingbird',
       classifiers=classifiers,
       author='Birdhouse',
       url='https://github.com/bird-house/hummingbird',
-      license = "Apache License v2.0",
+      license="Apache License v2.0",
       keywords='wps pywps hummingbird birdhouse conda cdo climate quality cfchecker',
       packages=find_packages(),
       include_package_data=True,
       zip_safe=False,
       test_suite='hummingbird',
       install_requires=reqs,
-      entry_points = {
-          'console_scripts': [
-              ]}     
-      ,
+      entry_points={
+          'console_scripts': []
+      },
       )
