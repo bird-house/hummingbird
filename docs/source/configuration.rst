@@ -13,13 +13,7 @@ If you want to run on a different hostname or port then change the default value
    hostname = localhost
    http-port = 8092
 
-After any change to your ``custom.cfg`` you **need** to run ``make install`` again and restart the ``supervisor`` service::
+After any change to your ``custom.cfg`` you **need** to run ``make update`` again and restart the ``supervisor`` service::
 
-  $ make install
+  $ make update    # or install
   $ make restart
-
-
-
-
-
-

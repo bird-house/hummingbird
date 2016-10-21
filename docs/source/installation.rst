@@ -18,22 +18,30 @@ After successful installation you need to start the services. Hummingbird is usi
 
 The depolyed WPS service is by default available on http://localhost:8092/wps?service=WPS&version=1.0.0&request=GetCapabilities.
 
-Check the log files for errors::
 
-   $ cd ~/.conda/envs/birdhouse
-   $ tail -f  var/log/supervisor/hummingbird.log
+Check the log files for errors:
+
+.. code-block:: sh
+
+   $ tail -f  ~/birdhouse/var/log/pywps/hummingbird.log
+   $ tail -f  ~/birdhouse/var/log/supervisor/hummingbird.log
+
 
 Using docker-compose
 ====================
 
-Start hummingbird with docker-compose (port 8092) on localhost:
+Start hummingbird with docker-compose (docker-compose version > 1.7):
 
 .. code-block:: sh
 
-   $ docker-compose run --service-ports -e HOSTNAME=localhost hummingbird
+   $ docker-compose up
 
+By default the WPS is available on port 8080: http://localhost:8080/wps?service=WPS&version=1.0.0&request=GetCapabilities.
 
+You can change the ports and hostname with environment variables:
 
+.. code-block:: sh
 
+  $ HOSTNAME=hummingbird HTTP_PORT=8092 SUPERVISOR_PORT=48092 docker-compose up
 
-
+Now the WPS is available on port 8092: http://hummingbird:8092/wps?service=WPS&version=1.0.0&request=GetCapabilities.
