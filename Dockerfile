@@ -5,9 +5,9 @@ MAINTAINER https://github.com/bird-house/hummingbird
 LABEL Description="hummingbird application" Vendor="Birdhouse" Version="0.4.3"
 
 # Configure hostname and ports for services
-ENV HTTP_PORT 8092
-ENV HTTPS_PORT 28092
-ENV OUTPUT_PORT 38092
+ENV HTTP_PORT 8080
+ENV HTTPS_PORT 8443
+ENV OUTPUT_PORT 8000
 ENV HOSTNAME localhost
 
 # Set current home
