@@ -29,7 +29,7 @@ HTTP_PORT ?= 8094
 OUTPUT_PORT ?= 8090
 
 # choose anaconda installer depending on your OS
-ANACONDA_URL = http://repo.continuum.io/miniconda
+ANACONDA_URL = https://repo.continuum.io/miniconda
 ifeq "$(OS_NAME)" "Linux"
 FN := Miniconda2-latest-Linux-x86_64.sh
 else ifeq "$(OS_NAME)" "Darwin"
