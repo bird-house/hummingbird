@@ -36,7 +36,7 @@ dependencies:
 - cfchecker=2.0.9
 - cdat-lite=6.0rc2
 # qa dkrz
-- qa-dkrz=0.5.15
+- qa-dkrz=0.5.16
 # compliance checker ioos
 - compliance-checker=2.3.0
 - pip:
