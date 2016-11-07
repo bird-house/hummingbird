@@ -38,7 +38,7 @@ dependencies:
 # qa dkrz
 - qa-dkrz=0.5.16
 # compliance checker ioos
-- compliance-checker=2.3.0
+- compliance-checker=2.3.1
 - pip:
   - genshi
   - sphinx-autoapi
