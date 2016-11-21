@@ -23,7 +23,7 @@ dependencies:
 - pywps=3.2.6
 - owslib
 - nginx
-- supervisor
+- supervisor=3.3.1
 - gunicorn
 - gevent
 - eventlet
