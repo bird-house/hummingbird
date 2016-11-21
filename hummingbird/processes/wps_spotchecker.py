@@ -47,17 +47,6 @@ class SpotCheckerProcess(WPSProcess):
             allowedValues=['cf']
         )
 
-        self.output_format = self.addLiteralInput(
-            identifier="format",
-            title="Output Format",
-            abstract="The format of the check reporst. Either text, json or html. Defaults to html.",
-            type=type(''),
-            default="html",
-            minOccurs=1,
-            maxOccurs=1,
-            allowedValues=["text", "json", "html"]
-        )
-
         self.output = self.addComplexOutput(
             identifier="output",
             title="Check Report",
@@ -76,7 +65,7 @@ class SpotCheckerProcess(WPSProcess):
         check_suite = CheckSuite()
         check_suite.load_all_available_checkers()
 
-        outfile = "report.{0}".format(output_format)
+        outfile = "report.html"
         self.output.setValue(outfile)
 
         with open(outfile, 'w') as fp:
@@ -86,6 +75,6 @@ class SpotCheckerProcess(WPSProcess):
                 verbose=True,
                 criteria="normal",
                 output_filename=outfile,
-                output_format=output_format)
+                output_format="html")
 
         self.status.set("compliance checker finshed.", 100)
