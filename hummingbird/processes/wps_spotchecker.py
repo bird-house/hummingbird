@@ -25,20 +25,10 @@ class SpotCheckerProcess(WPSProcess):
             storeSupported=True
         )
 
-        self.dataset = self.addComplexInput(
-            identifier="dataset",
-            title="URL to your NetCDF File",
-            abstract="You may provide a URL or upload a NetCDF file.",
-            minOccurs=1,
-            maxOccurs=1,
-            maxmegabites=1000,
-            formats=[{"mimeType": "application/x-netcdf"}],
-        )
-
         self.test = self.addLiteralInput(
             identifier="test",
             title="Test Suite",
-            abstract="Select the Checks you want to perform.\
+            abstract="Select the test you want to run.\
              Default: cf (climate forecast conventions)",
             default="cf",
             type=type(''),
@@ -47,11 +37,21 @@ class SpotCheckerProcess(WPSProcess):
             allowedValues=['cf']
         )
 
+        self.dataset = self.addComplexInput(
+            identifier="dataset",
+            title="URL to your NetCDF File",
+            abstract="You may provide a URL or upload a NetCDF file. (Max Size: 100MB)",
+            minOccurs=1,
+            maxOccurs=1,
+            maxmegabites=100,
+            formats=[{"mimeType": "application/x-netcdf"}],
+        )
+
         self.output = self.addComplexOutput(
             identifier="output",
-            title="Check Report",
-            abstract="Report of check result.",
-            formats=[{"mimeType": "text/html"}, {"mimeType": "plain/text"}],
+            title="Test Report",
+            abstract="Compliance checker test report.",
+            formats=[{"mimeType": "text/html"}],
             asReference=True,
         )
 
