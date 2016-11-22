@@ -40,17 +40,17 @@ class SpotCheckerProcess(WPSProcess):
         self.dataset = self.addComplexInput(
             identifier="dataset",
             title="URL to your NetCDF File",
-            abstract="You may provide a URL or upload a NetCDF file. (Max Size: 100MB)",
+            abstract="You may provide a URL or upload a NetCDF file. (Max Size: 250MB)",
             minOccurs=0,
             maxOccurs=1,
-            maxmegabites=100,
+            maxmegabites=250,
             formats=[{"mimeType": "application/x-netcdf"}],
         )
 
         self.dataset_opendap = self.addLiteralInput(
             identifier="dataset_opendap",
-            title="OpenDAP Data URL",
-            abstract="Or provide a remote OpenDAP Data URL.",
+            title="Or provide a  remote OpenDAP Data URL",
+            abstract="For example: http://my.opendap/thredds/dodsC/path/to/file.nc",
             type=type(''),
             minOccurs=0,
             maxOccurs=1,
@@ -64,7 +64,17 @@ class SpotCheckerProcess(WPSProcess):
             asReference=True,
         )
 
+        self.ncdump = self.addComplexOutput(
+            identifier="ncdump",
+            title="NetCDF Dump",
+            abstract="ncdump of header of checked dataset.",
+            formats=[{"mimeType": "text/plain"}],
+            asReference=True,
+        )
+
     def execute(self):
+        from hummingbird.processing import ncdump
+
         if self.getInputValue(identifier='dataset_opendap'):
             dataset = self.getInputValue(identifier='dataset_opendap')
         else:
@@ -75,16 +85,20 @@ class SpotCheckerProcess(WPSProcess):
         check_suite = CheckSuite()
         check_suite.load_all_available_checkers()
 
-        outfile = "report.html"
-        self.output.setValue(outfile)
-
-        with open(outfile, 'w') as fp:
+        with open("report.html", 'w') as fp:
+            self.status.set("running cfchecker", 20)
+            self.output.setValue(fp.name)
             return_value, errors = ComplianceChecker.run_checker(
                 dataset,
                 checker_names=checkers,
                 verbose=True,
                 criteria="normal",
-                output_filename=outfile,
+                output_filename=fp.name,
                 output_format="html")
+
+        with open("nc_dump.txt", 'w') as fp:
+            self.status.set("running ncdump", 80)
+            self.ncdump.setValue(fp.name)
+            fp.writelines(ncdump(dataset))
 
         self.status.set("compliance checker finshed.", 100)
