@@ -1,6 +1,6 @@
 
 __all__ = [
-    "wps_ncmeta",
+    "wps_ncdump",
     "wps_cdo",
     "wps_ensembles",
     "wps_cfchecker",

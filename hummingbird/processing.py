@@ -1,3 +1,4 @@
+import os
 import subprocess
 
 import logging
@@ -17,7 +18,7 @@ def ncdump(dataset):
             output = output.decode('utf-8')
         lines = output.split('\n')
         # replace the filename for safety
-        dataset_id = 'uploaded-file'
+        dataset_id = os.path.basename(dataset)  # 'uploaded-file'
         lines[0] = 'netcdf %s {' % dataset_id
         filtered_lines = '\n'.join(lines)
     except Exception:
