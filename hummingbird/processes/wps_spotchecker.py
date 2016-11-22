@@ -41,10 +41,19 @@ class SpotCheckerProcess(WPSProcess):
             identifier="dataset",
             title="URL to your NetCDF File",
             abstract="You may provide a URL or upload a NetCDF file. (Max Size: 100MB)",
-            minOccurs=1,
+            minOccurs=0,
             maxOccurs=1,
             maxmegabites=100,
             formats=[{"mimeType": "application/x-netcdf"}],
+        )
+
+        self.dataset_opendap = self.addLiteralInput(
+            identifier="dataset_opendap",
+            title="OpenDAP Data URL",
+            abstract="Or provide a remote OpenDAP Data URL.",
+            type=type(''),
+            minOccurs=0,
+            maxOccurs=1,
         )
 
         self.output = self.addComplexOutput(
@@ -56,9 +65,10 @@ class SpotCheckerProcess(WPSProcess):
         )
 
     def execute(self):
-        # TODO: iterate input files ... run parallel
-        # TODO: generate html report with links to cfchecker output ...
-        dataset = self.getInputValue(identifier='dataset')
+        if self.getInputValue(identifier='dataset_opendap'):
+            dataset = self.getInputValue(identifier='dataset_opendap')
+        else:
+            dataset = self.getInputValue(identifier='dataset')
         checkers = self.getInputValues(identifier='test')
         output_format = self.getInputValue(identifier='format')
 
