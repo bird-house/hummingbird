@@ -17,10 +17,23 @@ class SpotCheckerProcess(WPSProcess):
             identifier="spotchecker",
             title="Spot Checker",
             version="0.1.0",
-            abstract="Compliance checker for CF etc",
+            abstract="The Spot Checker is a Python tool to\
+             check local/remote datasets against a variety of\
+             compliance standards. Each compliance standard is executed\
+             by a Check Suite, which functions similar to a\
+             Python standard Unit Test.\
+             A Check Suite runs one or more checks against a dataset,\
+             returning a list of Results which are then aggregated\
+             into a summary.\
+             Available compliance standards are the Climate and Forecast conventions (CF)\
+             and project specific rules for CMIP6 and CORDEX.",
             metadata=[
+                {'title': "User Guide",
+                 'href': "http://birdhouse-hummingbird.readthedocs.io/en/latest/"},
+                {'title': "CF Conventions",
+                 'href': "http://cfconventions.org/"},
                 {'title': "IOOS Compliance Online Checker",
-                 'href': 'http://data.ioos.us/compliance/index.html'}],
+                 'href': "http://data.ioos.us/compliance/index.html"}],
             statusSupported=True,
             storeSupported=True
         )
