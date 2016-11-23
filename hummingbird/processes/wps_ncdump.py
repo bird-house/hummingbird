@@ -10,7 +10,7 @@ class NCDump(WPSProcess):
             identifier="ncdump",
             title="NCDump",
             version="4.4.1",
-            abstract="Run ncdump to retrieve netcdf header metadata",
+            abstract="Run ncdump to retrieve netcdf header metadata.",
             statusSupported=True,
             storeSupported=True)
 
@@ -18,10 +18,20 @@ class NCDump(WPSProcess):
             identifier="dataset",
             title="NetCDF File",
             abstract="URL to NetCDF File",
-            minOccurs=1,
+            minOccurs=0,
             maxOccurs=100,
-            maxmegabites=1000,
+            maxmegabites=1024,
             formats=[{"mimeType": "application/x-netcdf"}],
+        )
+
+        self.dataset_opendap = self.addLiteralInput(
+            identifier="dataset_opendap",
+            title="Remote OpenDAP Data URL",
+            abstract="Or provide a remote OpenDAP data URL,\
+             for example: http://my.opendap/thredds/dodsC/path/to/file.nc",
+            type=type(''),
+            minOccurs=0,
+            maxOccurs=100,
         )
 
         self.output = self.addComplexOutput(
@@ -35,6 +45,8 @@ class NCDump(WPSProcess):
     def execute(self):
         from hummingbird.processing import ncdump
         datasets = self.getInputValues(identifier='dataset')
+        # append opendap urls
+        datasets.extend(self.getInputValues(identifier='dataset_opendap'))
 
         count = 0
         with open("nc_dump.txt", 'w') as fp:
