@@ -36,16 +36,6 @@ class CFCheckerProcess(WPSProcess):
             storeSupported=True
         )
 
-        self.dataset = self.addComplexInput(
-            identifier="dataset",
-            title="URL to your NetCDF File",
-            abstract="You may provide a URL or upload a NetCDF file.",
-            minOccurs=1,
-            maxOccurs=1000,
-            maxmegabites=10000,
-            formats=[{"mimeType": "application/x-netcdf"}],
-        )
-
         self.test = self.addLiteralInput(
             identifier="test",
             title="Test Suite",
@@ -67,6 +57,26 @@ class CFCheckerProcess(WPSProcess):
             minOccurs=1,
             maxOccurs=1,
             allowedValues=["strict", "normal", "lenient"]
+        )
+
+        self.dataset = self.addComplexInput(
+            identifier="dataset",
+            title="URL to your NetCDF File",
+            abstract="You may provide a URL or upload a NetCDF file.",
+            minOccurs=0,
+            maxOccurs=100,
+            maxmegabites=1024,
+            formats=[{"mimeType": "application/x-netcdf"}],
+        )
+
+        self.dataset_opendap = self.addLiteralInput(
+            identifier="dataset_opendap",
+            title="Remote OpenDAP Data URL",
+            abstract="Or provide a remove OpenDAP data URL,\
+             for example: http://my.opendap/thredds/dodsC/path/to/file.nc",
+            type=type(''),
+            minOccurs=0,
+            maxOccurs=100,
         )
 
         self.output_format = self.addLiteralInput(
@@ -108,7 +118,9 @@ class CFCheckerProcess(WPSProcess):
         # TODO: iterate input files ... run parallel
         # TODO: generate html report with links to cfchecker output ...
         datasets = self.getInputValues(identifier='dataset')
-        checkers = self.getInputValues(identifier='test')
+        # append opendap urls
+        for dataset in self.getInputValues(identifier='dataset_opendap'):
+            datasets.append(dataset)
         output_format = self.getInputValue(identifier='format')
 
         count = 0
@@ -123,18 +135,16 @@ class CFCheckerProcess(WPSProcess):
 
         # output
         os.mkdir("report")
-        outfile = 'report/summary.txt'
-        self.output.setValue(outfile)
         self.output_report.setValue("report/0.{0}".format(output_format))
-        self.output_tar.setValue("report.tar")
 
-        with open(outfile, 'w') as fp:
+        with open('report/summary.txt', 'w') as fp:
+            self.output.setValue(fp.name)
             for ds in datasets:
                 logger.info("checking dataset %s", ds)
                 report_file = "report/{0}.{1}".format(count, output_format)
                 return_value, errors = ComplianceChecker.run_checker(
                     ds,
-                    checker_names=checkers,
+                    checker_names=self.getInputValues(identifier='test'),
                     verbose=True,
                     criteria=self.criteria.getValue(),
                     output_filename=report_file,
@@ -149,6 +159,7 @@ class CFCheckerProcess(WPSProcess):
                 self.status.set("checks: %d/%d"
                                 % (count, max_count), int(count * step))
         with tarfile.open("report.tar", "w") as tar:
+            self.output_tar.setValue(fp.name)
             tar.add("report")
 
         self.status.set("compliance checker finshed.", 100)
