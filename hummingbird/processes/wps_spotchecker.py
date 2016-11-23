@@ -93,7 +93,6 @@ class SpotCheckerProcess(WPSProcess):
         else:
             dataset = self.getInputValue(identifier='dataset')
         checkers = self.getInputValues(identifier='test')
-        output_format = self.getInputValue(identifier='format')
 
         check_suite = CheckSuite()
         check_suite.load_all_available_checkers()
