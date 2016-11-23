@@ -72,7 +72,7 @@ class CFCheckerProcess(WPSProcess):
         self.dataset_opendap = self.addLiteralInput(
             identifier="dataset_opendap",
             title="Remote OpenDAP Data URL",
-            abstract="Or provide a remove OpenDAP data URL,\
+            abstract="Or provide a remote OpenDAP data URL,\
              for example: http://my.opendap/thredds/dodsC/path/to/file.nc",
             type=type(''),
             minOccurs=0,
@@ -119,8 +119,7 @@ class CFCheckerProcess(WPSProcess):
         # TODO: generate html report with links to cfchecker output ...
         datasets = self.getInputValues(identifier='dataset')
         # append opendap urls
-        for dataset in self.getInputValues(identifier='dataset_opendap'):
-            datasets.append(dataset)
+        datasets.extend(self.getInputValues(identifier='dataset_opendap'))
         output_format = self.getInputValue(identifier='format')
 
         count = 0
