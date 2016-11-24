@@ -4,6 +4,7 @@ from .wps_ioos import IOOSCChecker
 from .wps_cdo_op import CDOOperation
 from .wps_cdo_sinfo import CDOInfo
 from .wps_cdo_bbox import CDOBBox
+from .wps_ensembles import Ensembles
 
 processes = [
     NCDump(),
@@ -12,4 +13,5 @@ processes = [
     CDOOperation(),
     CDOInfo(),
     CDOBBox(),
+    Ensembles(),
 ]
