@@ -158,7 +158,7 @@ class CFCheckerProcess(WPSProcess):
                 self.status.set("checks: %d/%d"
                                 % (count, max_count), int(count * step))
         with tarfile.open("report.tar", "w") as tar:
-            self.output_tar.setValue(fp.name)
+            self.output_tar.setValue(tar.name)
             tar.add("report")
 
         self.status.set("compliance checker finshed.", 100)
