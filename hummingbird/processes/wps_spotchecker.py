@@ -1,6 +1,3 @@
-import os
-import tarfile
-
 from compliance_checker.runner import ComplianceChecker, CheckSuite
 from compliance_checker import __version__ as cchecker_version
 
@@ -29,14 +26,14 @@ class SpotChecker(Process):
                          abstract='Enter a URL pointing to a NetCDF file (optional)',
                          metadata=[Metadata('Info')],
                          min_occurs=0,
-                         max_occurs=100,
+                         max_occurs=1,
                          supported_formats=[Format('application/x-netcdf')]),
             LiteralInput('dataset_opendap', 'Remote OpenDAP Data URL',
                          data_type='string',
                          abstract="Or provide a remote OpenDAP data URL,\
                           for example: http://my.opendap/thredds/dodsC/path/to/file.nc",
                          min_occurs=0,
-                         max_occurs=100),
+                         max_occurs=1),
         ]
         outputs = [
             ComplexOutput('output', 'Test Report',
