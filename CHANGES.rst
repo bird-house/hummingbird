@@ -1,10 +1,15 @@
 Changes
 *******
 
-next
+0.4.4 (2016-11-24)
 ==================
 
-* updated qa-dkrz 0.5.15.
+* updated qa-dkrz 0.5.17.
+* updated ioos compliance checker 3.0.0
+* added spotchecker process.
+* replaced ncmeta process by ncdump.
+* added opendap url parameter add ncdump, compliance-checker and spotchecker.
+* updated conda env.
 
 0.4.3 (2016-10-19)
 ==================
