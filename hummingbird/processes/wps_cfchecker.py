@@ -1,9 +1,14 @@
 import os
 from subprocess import check_output, CalledProcessError
 
-from pywps.Process import WPSProcess
+from pywps import Process
+from pywps import LiteralInput
+from pywps import ComplexInput, ComplexOutput
+from pywps import Format, FORMATS
+from pywps.app.Common import Metadata
 
 import logging
+LOGGER = logging.getLogger("PYWPS")
 
 
 def cf_check(nc_file, version):
@@ -22,10 +27,33 @@ def cf_check(nc_file, version):
     return cf_report
 
 
-class CFCheckerProcess(WPSProcess):
+class CFChecker(Process):
     def __init__(self):
-        WPSProcess.__init__(
-            self,
+        inputs = [
+            ComplexInput('dataset', 'NetCDF File',
+                         abstract='You may provide a URL or upload a NetCDF file.',
+                         metadata=[Metadata('Info')],
+                         min_occurs=0,
+                         max_occurs=100,
+                         supported_formats=[Format('application/x-netcdf')]),
+            LiteralInput('cf_version', 'Check against CF version',
+                         data_type='string',
+                         abstract="Version of CF conventions that the NetCDF file should be check against.\
+                          Use auto to auto-detect the CF version.",
+                         min_occurs=1,
+                         max_occurs=1,
+                         default='auto',
+                         allowed_values=["auto", "1.6", "1.5", "1.4", "1.3", "1.2", "1.1", "1.0"]),
+        ]
+        outputs = [
+            ComplexOutput('output', 'CF Checker Report',
+                          abstract="Summary of the CF compliance check",
+                          as_reference=True,
+                          supported_formats=[Format('text/plain')]),
+        ]
+
+        super(CFChecker, self).__init__(
+            self._handler,
             identifier="cfchecker",
             title="CF Checker by NCAS Computational Modelling Services (NCAS-CMS)",
             version="2.0.9-0",
@@ -40,57 +68,31 @@ class CFCheckerProcess(WPSProcess):
               If you have suggestions for improvement then please contact\
               Rosalyn Hatcher at NCAS-CMS (r.s.hatcher@reading.ac.uk).",
             metadata=[
-                {"title": "Homepage", "href": "https://pypi.python.org/pypi/cfchecker"},
-                {"title": "CF Conventions", "href": "http://cfconventions.org/"},
-                {"title": "Online Compliance Checker", "href": "http://cfconventions.org/compliance-checker.html"}
+                Metadata('Birdhouse', 'http://bird-house.github.io/'),
+                Metadata('User Guide', 'http://birdhouse-hummingbird.readthedocs.io/en/latest/'),
+                Metadata('CF Conventions', 'http://cfconventions.org/'),
+                Metadata('Online Compliance Checker', 'http://cfconventions.org/compliance-checker.html'),
             ],
-            statusSupported=True,
-            storeSupported=True
+            inputs=inputs,
+            outputs=outputs,
+            status_supported=True,
+            store_supported=True,
         )
 
-        self.dataset = self.addComplexInput(
-            identifier="dataset",
-            title="URL to your NetCDF File",
-            abstract="You may provide a URL or upload a NetCDF file.",
-            minOccurs=1,
-            maxOccurs=100,
-            maxmegabites=10000,
-            formats=[{"mimeType": "application/x-netcdf"}],
-        )
-
-        self.cf_version = self.addLiteralInput(
-            identifier="cf_version",
-            title="Check against CF version",
-            abstract="Version of CF conventions that the NetCDF file should be check against.\
-             Use auto to auto-detect the CF version.",
-            default="auto",
-            type=type(''),
-            minOccurs=1,
-            maxOccurs=1,
-            allowedValues=["auto", "1.6", "1.5", "1.4", "1.3", "1.2", "1.1", "1.0"]
-        )
-
-        self.output = self.addComplexOutput(
-            identifier="output",
-            title="CF Checker Report",
-            abstract="Summary of the CF compliance check",
-            formats=[{"mimeType": "text/plain"}],
-            asReference=True,
-        )
-
-    def execute(self):
+    def _handler(self, request, response):
         # TODO: iterate input files ... run parallel
         # TODO: generate html report with links to cfchecker output ...
-        outfile = 'cfchecker_output.txt'
-        self.output.setValue(outfile)
-        nc_files = self.getInputValues(identifier='dataset')
+        datasets = [dataset.file for dataset in request.inputs['dataset']]
+
         count = 0
-        max_count = len(nc_files)
+        max_count = len(datasets)
         step = 100.0 / max_count
-        for nc_file in nc_files:
-            cf_report = cf_check(nc_file, version=self.cf_version.getValue())
-            with open(outfile, 'a') as fp:
+        for dataset in datasets:
+            cf_report = cf_check(dataset, version=request.inputs['cf_version'][0].data)
+            with open('cfchecker_output.txt', 'a') as fp:
+                response.outputs['output'].file = fp.name
                 fp.write(cf_report)
                 count = count + 1
-                self.status.set("cfchecker: %d/%d" % (count, max_count), int(count * step))
-        self.status.set("cfchecker: done", 100)
+                response.update_status("cfchecker: %d/%d" % (count, max_count), int(count * step))
+        response.update_status("cfchecker done.", 100)
+        return response
