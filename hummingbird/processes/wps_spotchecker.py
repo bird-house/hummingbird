@@ -86,6 +86,7 @@ class SpotCheckerProcess(WPSProcess):
         )
 
     def execute(self):
+        # TODO: fix hummingbird import
         from hummingbird.processing import ncdump
 
         if self.getInputValue(identifier='dataset_opendap'):
