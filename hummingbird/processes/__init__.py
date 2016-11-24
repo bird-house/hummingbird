@@ -6,12 +6,14 @@ from .wps_cdo_sinfo import CDOInfo
 from .wps_cdo_bbox import CDOBBox
 from .wps_ensembles import Ensembles
 from .wps_cfchecker import CFChecker
+from .wps_hdh_cfchecker import HDHCFChecker
 
 processes = [
     NCDump(),
     SpotChecker(),
     IOOSCChecker(),
     CFChecker(),
+    HDHCFChecker(),
     CDOOperation(),
     CDOInfo(),
     CDOBBox(),
