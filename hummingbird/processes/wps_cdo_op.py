@@ -26,7 +26,11 @@ class CDOOperation(Process):
                          supported_formats=[Format('application/x-netcdf')]),
             LiteralInput('operator', 'CDO Operator',
                          data_type='string',
-                         abstract="Choose a CDO Operator",
+                         abstract="Choose a CDO Operator.\
+                          See the CDO documentation to lookup a description of the operators.",
+                         metadata=[
+                             Metadata("CDO Operators", 'https://code.zmaw.de/projects/cdo/embedded/index.html')
+                         ],
                          min_occurs=1,
                          max_occurs=1,
                          default='monmax',
@@ -54,7 +58,8 @@ class CDOOperation(Process):
             metadata=[
                 Metadata('Birdhouse', 'http://bird-house.github.io/'),
                 Metadata('User Guide', 'http://birdhouse-hummingbird.readthedocs.io/en/latest/'),
-                Metadata('CDO', 'https://code.zmaw.de/projects/cdo'),
+                Metadata('CDO Homepage', 'https://code.zmaw.de/projects/cdo'),
+                Metadata('CDO Documentation', 'https://code.zmaw.de/projects/cdo/embedded/index.html'),
             ],
             inputs=inputs,
             outputs=outputs,
