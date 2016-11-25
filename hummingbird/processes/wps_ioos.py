@@ -42,7 +42,7 @@ class IOOSCChecker(Process):
             LiteralInput('dataset_opendap', 'Remote OpenDAP Data URL',
                          data_type='string',
                          abstract="Or provide a remote OpenDAP data URL,\
-                          for example: http://my.opendap/thredds/dodsC/path/to/file.nc",
+                          for example: http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis2.dailyavgs/surface/mslp.2016.nc",  # NOPEP8
                          min_occurs=0,
                          max_occurs=100),
             LiteralInput('format', 'Output Format',
@@ -111,15 +111,11 @@ class IOOSCChecker(Process):
 
         output_format = request.inputs['format'][0].data
 
-        count = 0
         max_count = len(datasets)
         step = 100.0 / max_count
 
         check_suite = CheckSuite()
         check_suite.load_all_available_checkers()
-
-        # return_values = []
-        # had_errors = []
 
         # output
         os.mkdir("report")
@@ -129,9 +125,9 @@ class IOOSCChecker(Process):
         with open('report/summary.txt', 'w') as fp:
             response.outputs['output'].output_format = FORMATS.TEXT
             response.outputs['output'].file = fp.name
-            for ds in datasets:
+            for idx, ds in enumerate(datasets):
                 LOGGER.info("checking dataset %s", ds)
-                report_file = "report/{0}.{1}".format(count, output_format)
+                report_file = "report/{0}.{1}".format(idx, output_format)
                 return_value, errors = ComplianceChecker.run_checker(
                     ds,
                     checker_names=[checker.data for checker in request.inputs['test']],
@@ -144,9 +140,7 @@ class IOOSCChecker(Process):
                     fp.write("{0}, FAIL, {1}\n".format(ds, report_file))
                 else:
                     fp.write("{0}, PASS, {1}\n".format(ds, report_file))
-                count = count + 1
-
-                response.update_status("checks: %d/%d" % (count, max_count), int(count * step))
+                response.update_status("checks: %d/%d" % (idx, max_count), int(idx * step))
         with tarfile.open("report.tar", "w") as tar:
             # response.outputs['report_tar'].output_format = FORMATS.TEXT
             response.outputs['report_tar'].file = tar.name
