@@ -50,7 +50,8 @@ class Ensembles(Process):
             metadata=[
                 Metadata('Birdhouse', 'http://bird-house.github.io/'),
                 Metadata('User Guide', 'http://birdhouse-hummingbird.readthedocs.io/en/latest/'),
-                Metadata('CDO', 'https://code.zmaw.de/projects/cdo'),
+                Metadata('CDO Homepage', 'https://code.zmaw.de/projects/cdo'),
+                Metadata('CDO Documentation', 'https://code.zmaw.de/projects/cdo/embedded/index.html'),
             ],
             inputs=inputs,
             outputs=outputs,
