@@ -23,7 +23,7 @@ def qa_checker(filename, project, qa_home=None):
         check_output(cmd, stderr=STDOUT)
     except CalledProcessError as e:
         msg = "qa checker failed: %s" % (e.output)
-        logger.error(msg)
+        LOGGER.error(msg)
         raise Exception(msg)
 
 

@@ -123,7 +123,7 @@ class IOOSCChecker(Process):
 
         # output
         os.mkdir("report")
-        #response.outputs['report'].output_format = FORMATS.TEXT
+        # response.outputs['report'].output_format = FORMATS.TEXT
         response.outputs['report'].file = "report/0.{0}".format(output_format)
 
         with open('report/summary.txt', 'w') as fp:
@@ -148,7 +148,7 @@ class IOOSCChecker(Process):
 
                 response.update_status("checks: %d/%d" % (count, max_count), int(count * step))
         with tarfile.open("report.tar", "w") as tar:
-            #response.outputs['report_tar'].output_format = FORMATS.TEXT
+            # response.outputs['report_tar'].output_format = FORMATS.TEXT
             response.outputs['report_tar'].file = tar.name
             tar.add("report")
 

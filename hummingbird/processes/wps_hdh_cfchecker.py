@@ -26,7 +26,7 @@ def cf_check(filename, version="auto"):
     try:
         output = check_output(cmd)
     except CalledProcessError as err:
-        logger.exception("cfchecks failed!")
+        LOGGER.exception("cfchecks failed!")
         output = err.output
     return output
 
