@@ -10,7 +10,7 @@ from hummingbird.processes.wps_cdo_sinfo import CDOInfo
 @pytest.mark.online
 def test_wps_cdo_sinfo():
     client = client_for(Service(processes=[CDOInfo()]))
-    datainputs = "dataset={0}".format(TESTDATA['noaa_nc_1'])
+    datainputs = "dataset@xlink:href={0}".format(TESTDATA['noaa_nc_1'])
     resp = client.get(
         service='WPS', request='Execute', version='1.0.0',
         identifier='cdo_sinfo',

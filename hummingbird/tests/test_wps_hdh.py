@@ -10,9 +10,10 @@ from hummingbird.processes.wps_hdh_cfchecker import HDHCFChecker
 @pytest.mark.online
 def test_wps_qa_cfchecker():
     client = client_for(Service(processes=[HDHCFChecker()]))
-    datainputs = "dataset={0}".format(TESTDATA['noaa_nc_1'])
+    datainputs = "dataset@xlink:href={0};cf_version=auto".format(TESTDATA['noaa_nc_1'])
     resp = client.get(
         service='WPS', request='Execute', version='1.0.0',
         identifier='qa_cfchecker',
         datainputs=datainputs)
+    print resp.get_data()
     assert_response_success(resp)
