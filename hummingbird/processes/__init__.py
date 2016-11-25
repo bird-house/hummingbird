@@ -7,6 +7,7 @@ from .wps_cdo_bbox import CDOBBox
 from .wps_ensembles import Ensembles
 from .wps_cfchecker import CFChecker
 from .wps_hdh_cfchecker import HDHCFChecker
+from .wps_hdh_qachecker import QualityChecker
 
 processes = [
     NCDump(),
@@ -14,6 +15,7 @@ processes = [
     IOOSCChecker(),
     CFChecker(),
     HDHCFChecker(),
+    QualityChecker(),
     CDOOperation(),
     CDOInfo(),
     CDOBBox(),
