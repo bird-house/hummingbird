@@ -15,5 +15,4 @@ def test_wps_qa_cfchecker():
         service='WPS', request='Execute', version='1.0.0',
         identifier='qa_cfchecker',
         datainputs=datainputs)
-    print resp.get_data()
     assert_response_success(resp)
