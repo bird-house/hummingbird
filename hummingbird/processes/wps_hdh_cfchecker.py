@@ -89,15 +89,13 @@ class HDHCFChecker(Process):
         # TODO: generate html report with links to cfchecker output ...
         datasets = [dataset.file for dataset in request.inputs['dataset']]
 
-        count = 0
         max_count = len(datasets)
         step = 100.0 / max_count
-        for dataset in datasets:
+        for idx, dataset in enumerate(datasets):
             cf_report = cf_check(dataset, version=request.inputs['cf_version'][0].data)
             with open('cfchecker_output.txt', 'a') as fp:
                 response.outputs['output'].file = fp.name
                 fp.write(cf_report)
-                count = count + 1
-                response.update_status("cfchecker: %d/%d" % (count, max_count), int(count * step))
+                response.update_status("cfchecker: %d/%d" % (idx, max_count), int(idx * step))
         response.update_status("cfchecker done.", 100)
         return response
