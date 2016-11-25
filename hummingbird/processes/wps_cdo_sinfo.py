@@ -27,7 +27,7 @@ class CDOInfo(Process):
         ]
         outputs = [
             ComplexOutput('output', 'CDO sinfo result',
-                          abstract="CDO sinfo result",
+                          abstract='CDO sinfo result document.',
                           as_reference=True,
                           supported_formats=[Format('text/plain')]),
         ]
@@ -36,12 +36,13 @@ class CDOInfo(Process):
             self._handler,
             identifier="cdo_sinfo",
             title="CDO sinfo",
-            abstract="Apply CDO sinfo on NetCDF File.",
+            abstract="Apply CDO sinfo on NetCDF file and return document with metadata information.",
             version=cdo_version,
             metadata=[
                 Metadata('Birdhouse', 'http://bird-house.github.io/'),
                 Metadata('User Guide', 'http://birdhouse-hummingbird.readthedocs.io/en/latest/'),
-                Metadata('CDO', 'https://code.zmaw.de/projects/cdo'),
+                Metadata('CDO Homepage', 'https://code.zmaw.de/projects/cdo'),
+                Metadata('CDO Documentation', 'https://code.zmaw.de/projects/cdo/embedded/index.html'),
             ],
             inputs=inputs,
             outputs=outputs,
