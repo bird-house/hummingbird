@@ -26,10 +26,15 @@ class CDOBBox(Process):
                          supported_formats=[Format('application/x-netcdf')]),
             LiteralInput('bbox', 'Bounding Box',
                          data_type='string',
-                         abstract="Enter a bbox: 0,0,10,10",
+                         abstract="Enter a bbox: min_lon, max_lon, min_lat, max_lat.\
+                            min_lon=Western longitude,\
+                            max_lon=Eastern longitude,\
+                            min_lat=Southern or northern latitude,\
+                            max_lat=Northern or southern latitude.\
+                            For example: 0,20,40,60 ",
                          min_occurs=1,
                          max_occurs=1,
-                         default='0,0,10,10',
+                         default='0,20,40,60 ',
                          ),
         ]
         outputs = [
@@ -43,12 +48,13 @@ class CDOBBox(Process):
             self._handler,
             identifier="cdo_bbox",
             title="CDO select lon/lat box",
-            abstract="Apply CDO sellonlatbox on NetCDF File.",
+            abstract="Apply CDO sellonlatbox on a NetCDF File.",
             version=cdo_version,
             metadata=[
                 Metadata('Birdhouse', 'http://bird-house.github.io/'),
                 Metadata('User Guide', 'http://birdhouse-hummingbird.readthedocs.io/en/latest/'),
-                Metadata('CDO', 'https://code.zmaw.de/projects/cdo'),
+                Metadata('CDO Homepage', 'https://code.zmaw.de/projects/cdo'),
+                Metadata('CDO Documentation', 'https://code.zmaw.de/projects/cdo/embedded/index.html'),
             ],
             inputs=inputs,
             outputs=outputs,
