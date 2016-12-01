@@ -44,3 +44,16 @@ def cf_check(filename, version="auto"):
         LOGGER.exception("cfchecks failed!")
         output = err.output
     return output
+
+
+def qa_checker(filename, project, qa_home=None):
+    cmd = ["qa-dkrz", "-P", project]
+    if qa_home:
+        cmd.append("--work=" + qa_home)
+    cmd.append(filename)
+    try:
+        check_output(cmd, stderr=STDOUT)
+    except CalledProcessError as e:
+        msg = "qa checker failed: %s" % (e.output)
+        LOGGER.error(msg)
+        raise Exception(msg)

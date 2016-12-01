@@ -2,7 +2,6 @@ import os
 import shutil
 import tarfile
 import glob
-from subprocess import check_output, CalledProcessError, STDOUT
 
 from pywps import Process
 from pywps import LiteralInput
@@ -12,19 +11,6 @@ from pywps.app.Common import Metadata
 
 import logging
 LOGGER = logging.getLogger("PYWPS")
-
-
-def qa_checker(filename, project, qa_home=None):
-    cmd = ["qa-dkrz", "-P", project]
-    if qa_home:
-        cmd.append("--work=" + qa_home)
-    cmd.append(filename)
-    try:
-        check_output(cmd, stderr=STDOUT)
-    except CalledProcessError as e:
-        msg = "qa checker failed: %s" % (e.output)
-        LOGGER.error(msg)
-        raise Exception(msg)
 
 
 class QualityChecker(Process):
@@ -83,6 +69,7 @@ class QualityChecker(Process):
     def _handler(self, request, response):
         # from hummingbird import config
         # from hummingbird import utils
+        from hummingbird.processing import qa_checker
 
         response.update_status("starting qa checker ...", 0)
 
