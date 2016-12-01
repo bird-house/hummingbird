@@ -1,6 +1,5 @@
 import os
 import shutil
-from subprocess import check_output, CalledProcessError, STDOUT
 
 from pywps import Process
 from pywps import LiteralInput
@@ -10,25 +9,6 @@ from pywps.app.Common import Metadata
 
 import logging
 LOGGER = logging.getLogger("PYWPS")
-
-
-def cf_check(filename, version="auto"):
-    # TODO: maybe use local file path
-    if not filename.endswith(".nc"):
-        new_name = filename + ".nc"
-        from os import rename
-        rename(filename, new_name)
-        filename = new_name
-    filename = os.path.abspath(filename)
-    cmd = ["dkrz-cf-checker", filename]
-    if version != "auto":
-        cmd.extend(['-C', version])
-    try:
-        output = check_output(cmd)
-    except CalledProcessError as err:
-        LOGGER.exception("cfchecks failed!")
-        output = err.output
-    return output
 
 
 class HDHCFChecker(Process):
@@ -83,6 +63,7 @@ class HDHCFChecker(Process):
         )
 
     def _handler(self, request, response):
+        from hummingbird.processing import cf_check
         response.update_status("starting cfchecker ...", 0)
 
         # TODO: iterate input files ... run parallel

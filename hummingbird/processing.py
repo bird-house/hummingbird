@@ -1,5 +1,5 @@
 import os
-import subprocess
+from subprocess import check_output, CalledProcessError, STDOUT
 
 import logging
 logger = logging.getLogger(__name__)
@@ -13,7 +13,7 @@ def ncdump(dataset):
     '''
 
     try:
-        output = subprocess.check_output(['ncdump', '-h', dataset])
+        output = check_output(['ncdump', '-h', dataset])
         if not isinstance(output, str):
             output = output.decode('utf-8')
         lines = output.split('\n')
@@ -25,3 +25,22 @@ def ncdump(dataset):
         logger.exception("could not generate ncdump")
         return "Error generating ncdump"
     return filtered_lines
+
+
+def cf_check(filename, version="auto"):
+    # TODO: maybe use local file path
+    if not filename.endswith(".nc"):
+        new_name = filename + ".nc"
+        from os import rename
+        rename(filename, new_name)
+        filename = new_name
+    filename = os.path.abspath(filename)
+    cmd = ["dkrz-cf-checker", filename]
+    if version != "auto":
+        cmd.extend(['-C', version])
+    try:
+        output = check_output(cmd)
+    except CalledProcessError as err:
+        LOGGER.exception("cfchecks failed!")
+        output = err.output
+    return output
