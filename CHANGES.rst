@@ -1,6 +1,12 @@
 Changes
 *******
 
+0.5.0 (2016-12-01)
+==================
+
+* converted all processes to pywps-4.
+* updated qa-dkrz 0.6.0.
+
 0.4.4 (2016-11-24)
 ==================
 
