@@ -60,7 +60,7 @@ class HDHCFChecker(Process):
             self._handler,
             identifier="qa_cfchecker",
             title="CF Checker by DKRZ",
-            version="0.5.17",
+            version="0.6.0",
             abstract="The NetCDF Climate Forcast Conventions compliance checker by DKRZ.\
              This process allows you to run the compliance checker to check that the contents of a NetCDF file comply\
              with the Climate and Forecasts (CF) Metadata Convention.\
