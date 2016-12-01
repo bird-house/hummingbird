@@ -42,7 +42,7 @@ class IOOSCChecker(Process):
             LiteralInput('dataset_opendap', 'Remote OpenDAP Data URL',
                          data_type='string',
                          abstract="Or provide a remote OpenDAP data URL,\
-                          for example: http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis2.dailyavgs/surface/mslp.2016.nc",  # NOPEP8
+                          for example: http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis2.dailyavgs/surface/mslp.2016.nc",  # noqa
                          min_occurs=0,
                          max_occurs=100),
             LiteralInput('format', 'Output Format',
