@@ -2,7 +2,7 @@
 FROM birdhouse/bird-base:latest
 MAINTAINER https://github.com/bird-house/hummingbird
 
-LABEL Description="hummingbird application" Vendor="Birdhouse" Version="0.4"
+LABEL Description="hummingbird application" Vendor="Birdhouse" Version="0.5"
 
 # Configure hostname and ports for services
 ENV HTTP_PORT 8080

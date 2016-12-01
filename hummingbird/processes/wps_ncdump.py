@@ -1,58 +1,71 @@
 import os
 
-from pywps.Process import WPSProcess
+from pywps import Process
+from pywps import LiteralInput
+from pywps import ComplexInput, ComplexOutput
+from pywps import Format, FORMATS
+from pywps.app.Common import Metadata
+
+import logging
+LOGGER = logging.getLogger("PYWPS")
 
 
-class NCDump(WPSProcess):
+class NCDump(Process):
     def __init__(self):
-        WPSProcess.__init__(
-            self,
+        inputs = [
+            ComplexInput('dataset', 'NetCDF File',
+                         abstract='Enter a URL pointing to a NetCDF file (optional)',
+                         metadata=[Metadata('Info')],
+                         min_occurs=0,
+                         max_occurs=100,
+                         supported_formats=[Format('application/x-netcdf')]),
+            LiteralInput('dataset_opendap', 'Remote OpenDAP Data URL',
+                         data_type='string',
+                         abstract="Or provide a remote OpenDAP data URL,\
+                          for example: http://my.opendap/thredds/dodsC/path/to/file.nc",
+                         min_occurs=0,
+                         max_occurs=100),
+        ]
+        outputs = [
+            ComplexOutput('output', 'NetCDF Metadata',
+                          abstract='NetCDF Metadata',
+                          as_reference=True,
+                          supported_formats=[Format('text/plain')]),
+        ]
+
+        super(NCDump, self).__init__(
+            self._handler,
             identifier="ncdump",
             title="NCDump",
             version="4.4.1",
             abstract="Run ncdump to retrieve netcdf header metadata.",
-            statusSupported=True,
-            storeSupported=True)
+            metadata=[
+                Metadata('Birdhouse', 'http://bird-house.github.io/'),
+                Metadata('User Guide', 'http://birdhouse-hummingbird.readthedocs.io/en/latest/')],
+            inputs=inputs,
+            outputs=outputs,
+            status_supported=True,
+            store_supported=True)
 
-        self.dataset = self.addComplexInput(
-            identifier="dataset",
-            title="NetCDF File",
-            abstract="URL to NetCDF File",
-            minOccurs=0,
-            maxOccurs=100,
-            maxmegabites=1024,
-            formats=[{"mimeType": "application/x-netcdf"}],
-        )
-
-        self.dataset_opendap = self.addLiteralInput(
-            identifier="dataset_opendap",
-            title="Remote OpenDAP Data URL",
-            abstract="Or provide a remote OpenDAP data URL,\
-             for example: http://my.opendap/thredds/dodsC/path/to/file.nc",
-            type=type(''),
-            minOccurs=0,
-            maxOccurs=100,
-        )
-
-        self.output = self.addComplexOutput(
-            identifier="output",
-            title="NetCDF Metadata",
-            abstract="NetCDF Metadata",
-            formats=[{"mimeType": "text/plain"}],
-            asReference=True,
-        )
-
-    def execute(self):
+    def _handler(self, request, response):
         from hummingbird.processing import ncdump
-        datasets = self.getInputValues(identifier='dataset')
+
+        datasets = []
+        if 'dataset' in request.inputs:
+            for dataset in request.inputs['dataset']:
+                datasets.append(dataset.file)
         # append opendap urls
-        datasets.extend(self.getInputValues(identifier='dataset_opendap'))
+        if 'dataset_opendap' in request.inputs:
+            for dataset in request.inputs['dataset_opendap']:
+                datasets.append(dataset.data)
 
         count = 0
         with open("nc_dump.txt", 'w') as fp:
-            self.output.setValue(fp.name)
+            response.outputs['output'].output_format = FORMATS.TEXT
+            response.outputs['output'].file = fp.name
             for dataset in datasets:
-                self.status.set("running ncdump", int(count * 100.0 / len(datasets)))
+                response.update_status("running ncdump", int(count * 100.0 / len(datasets)))
                 fp.writelines(ncdump(dataset))
                 count = count + 1
-        self.status.set("compliance checker finshed.", 100)
+        response.update_status('compliance checker finshed...', 100)
+        return response

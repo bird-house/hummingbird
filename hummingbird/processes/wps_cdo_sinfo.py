@@ -1,5 +1,5 @@
 """
-Processes with cdo ensemble opertions
+Processes with cdo commands
 """
 from cdo import Cdo
 cdo_version = Cdo().version()
@@ -14,8 +14,8 @@ import logging
 LOGGER = logging.getLogger("PYWPS")
 
 
-class Ensembles(Process):
-
+class CDOInfo(Process):
+    """This process calls cdo sinfo on netcdf file"""
     def __init__(self):
         inputs = [
             ComplexInput('dataset', 'NetCDF File',
@@ -24,28 +24,19 @@ class Ensembles(Process):
                          min_occurs=1,
                          max_occurs=100,
                          supported_formats=[Format('application/x-netcdf')]),
-            LiteralInput('operator', 'Ensemble command',
-                         data_type='string',
-                         abstract="Choose a CDO Operator",
-                         min_occurs=1,
-                         max_occurs=1,
-                         default='ensmean',
-                         allowed_values=['ensmin', 'ensmax', 'enssum', 'ensmean',
-                                         'ensavg', 'ensvar', 'ensstd', 'enspctl']),
         ]
-
         outputs = [
-            ComplexOutput('output', 'NetCDF Output',
-                          abstract="CDO ensembles result.",
+            ComplexOutput('output', 'CDO sinfo result',
+                          abstract='CDO sinfo result document.',
                           as_reference=True,
-                          supported_formats=[Format('application/x-netcdf')]),
+                          supported_formats=[Format('text/plain')]),
         ]
 
-        super(Ensembles, self).__init__(
+        super(CDOInfo, self).__init__(
             self._handler,
-            identifier="ensembles",
-            title="CDO Ensembles Operations",
-            abstract="Calling cdo to calculate ensembles operations.",
+            identifier="cdo_sinfo",
+            title="CDO sinfo",
+            abstract="Apply CDO sinfo on NetCDF file and return document with metadata information.",
             version=cdo_version,
             metadata=[
                 Metadata('Birdhouse', 'http://bird-house.github.io/'),
@@ -61,14 +52,16 @@ class Ensembles(Process):
 
     def _handler(self, request, response):
         datasets = [dataset.file for dataset in request.inputs['dataset']]
-        operator = request.inputs['operator'][0].data
 
         cdo = Cdo()
-        cdo_op = getattr(cdo, operator)
 
-        outfile = 'out.nc'
-        cdo_op(input=datasets, output=outfile)
-
-        response.outputs['output'].file = outfile
-        response.update_status("cdo ensembles done", 100)
+        outfile = 'out.txt'
+        with open(outfile, 'w') as fp:
+            response.outputs['output'].file = outfile
+            for ds in datasets:
+                sinfo = cdo.sinfo(input=[ds], output=outfile)
+                for line in sinfo:
+                    fp.write(line + '\n')
+                fp.write('\n\n')
+        response.update_status("cdo sinfo done", 100)
         return response

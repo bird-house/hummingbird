@@ -1,5 +1,5 @@
 """
-Processes with cdo ensemble opertions
+Processes with cdo commands
 """
 from cdo import Cdo
 cdo_version = Cdo().version()
@@ -14,8 +14,8 @@ import logging
 LOGGER = logging.getLogger("PYWPS")
 
 
-class Ensembles(Process):
-
+class CDOBBox(Process):
+    """This process calls cdo sellonlatbox on netcdf file"""
     def __init__(self):
         inputs = [
             ComplexInput('dataset', 'NetCDF File',
@@ -24,28 +24,31 @@ class Ensembles(Process):
                          min_occurs=1,
                          max_occurs=100,
                          supported_formats=[Format('application/x-netcdf')]),
-            LiteralInput('operator', 'Ensemble command',
+            LiteralInput('bbox', 'Bounding Box',
                          data_type='string',
-                         abstract="Choose a CDO Operator",
+                         abstract="Enter a bbox: min_lon, max_lon, min_lat, max_lat.\
+                            min_lon=Western longitude,\
+                            max_lon=Eastern longitude,\
+                            min_lat=Southern or northern latitude,\
+                            max_lat=Northern or southern latitude.\
+                            For example: 0,20,40,60 ",
                          min_occurs=1,
                          max_occurs=1,
-                         default='ensmean',
-                         allowed_values=['ensmin', 'ensmax', 'enssum', 'ensmean',
-                                         'ensavg', 'ensvar', 'ensstd', 'enspctl']),
+                         default='0,20,40,60 ',
+                         ),
         ]
-
         outputs = [
             ComplexOutput('output', 'NetCDF Output',
-                          abstract="CDO ensembles result.",
+                          abstract="CDO sellonlatbox result.",
                           as_reference=True,
                           supported_formats=[Format('application/x-netcdf')]),
         ]
 
-        super(Ensembles, self).__init__(
+        super(CDOBBox, self).__init__(
             self._handler,
-            identifier="ensembles",
-            title="CDO Ensembles Operations",
-            abstract="Calling cdo to calculate ensembles operations.",
+            identifier="cdo_bbox",
+            title="CDO select lon/lat box",
+            abstract="Apply CDO sellonlatbox on a NetCDF File.",
             version=cdo_version,
             metadata=[
                 Metadata('Birdhouse', 'http://bird-house.github.io/'),
@@ -61,14 +64,13 @@ class Ensembles(Process):
 
     def _handler(self, request, response):
         datasets = [dataset.file for dataset in request.inputs['dataset']]
-        operator = request.inputs['operator'][0].data
+        bbox = request.inputs['bbox'][0].data
 
         cdo = Cdo()
-        cdo_op = getattr(cdo, operator)
 
         outfile = 'out.nc'
-        cdo_op(input=datasets, output=outfile)
+        cdo.sellonlatbox(bbox, input=datasets[0], output=outfile)
 
         response.outputs['output'].file = outfile
-        response.update_status("cdo ensembles done", 100)
+        response.update_status("cdo bbox done", 100)
         return response

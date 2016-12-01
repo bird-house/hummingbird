@@ -1,56 +1,20 @@
-import os
-import pywps
-import lxml
+from pywps.tests import WpsClient, WpsTestResponse
 
-NAMESPACES = {
-    'xlink': "http://www.w3.org/1999/xlink",
-    'wps': "http://www.opengis.net/wps/1.0.0",
-    'ows': "http://www.opengis.net/ows/1.1",
-    'gml': "http://www.opengis.net/gml",
-    'xsi': "http://www.w3.org/2001/XMLSchema-instance"
+TESTDATA = {
+    'noaa_dap_1': "http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis2.dailyavgs/surface/mslp.2016.nc",  # NOPEP8
+    'noaa_nc_1': "http://www.esrl.noaa.gov/psd/thredds/fileServer/Datasets/ncep.reanalysis.dailyavgs/surface/slp.1955.nc",  # NOPEP8
+    'noaa_catalog_1': "http://www.esrl.noaa.gov/psd/thredds/catalog/Datasets/ncep.reanalysis.dailyavgs/surface/catalog.xml?dataset=Datasets/ncep.reanalysis.dailyavgs/surface/air.sig995.1948.nc"  # NOPEP8
 }
 
-SERVICE = "http://localhost:8092/wps"
 
-TESTDATA = { 
-    'noaa_nc_1': "http://www.esrl.noaa.gov/psd/thredds/fileServer/Datasets/ncep.reanalysis.dailyavgs/surface/slp.1955.nc",
-    'noaa_catalog_1': "http://www.esrl.noaa.gov/psd/thredds/catalog/Datasets/ncep.reanalysis.dailyavgs/surface/catalog.xml?dataset=Datasets/ncep.reanalysis.dailyavgs/surface/air.sig995.1948.nc"
-    }
-    
-class WpsTestClient(object):
-    def __init__(self):
-        pywps_path = os.path.dirname(pywps.__file__)
-        #home_path = os.path.abspath(os.path.join(pywps_path, '..', '..', '..', '..'))
-        home_path = os.path.abspath(os.path.join(os.environ['HOME'], 'birdhouse'))
-        os.environ['PYWPS_CFG'] = os.path.join(home_path, 'etc', 'pywps', 'hummingbird.cfg')
-        os.environ['REQUEST_METHOD'] = pywps.METHOD_GET
-        os.environ['PATH'] = "{0}:{1}".format(os.path.join(home_path, 'bin'), os.environ['PATH'])
-        self.wps = pywps.Pywps(os.environ["REQUEST_METHOD"], os.environ.get("PYWPS_CFG"))
-   
+class WpsTestClient(WpsClient):
+
     def get(self, *args, **kwargs):
-        query = ""
-        for key,value in kwargs.iteritems():
+        query = "?"
+        for key, value in kwargs.iteritems():
             query += "{0}={1}&".format(key, value)
-        inputs = self.wps.parseRequest(query)
-        self.wps.performRequest(inputs)
-        return WpsTestResponse(self.wps.response)
-
-class WpsTestResponse(object):
-
-    def __init__(self, data):
-        self.data = data
-        self.xml = lxml.etree.fromstring(data)
-
-    def xpath(self, path):
-        return self.xml.xpath(path, namespaces=NAMESPACES)
-
-    def xpath_text(self, path):
-        return ' '.join(e.text for e in self.xpath(path))
+        return super(WpsTestClient, self).get(query)
 
 
-def assert_response_success(resp):
-    success = resp.xpath('/wps:ExecuteResponse/wps:Status/wps:ProcessSucceeded')
-    assert len(success) == 1
-    
-
-
+def client_for(service):
+    return WpsTestClient(service, WpsTestResponse)
