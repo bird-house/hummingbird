@@ -27,7 +27,7 @@ def ncdump(dataset):
     return filtered_lines
 
 
-def cf_check(filename, version="auto"):
+def hdh_cf_check(filename, version="auto"):
     # TODO: maybe use local file path
     if not filename.endswith(".nc"):
         new_name = filename + ".nc"
@@ -46,7 +46,7 @@ def cf_check(filename, version="auto"):
     return output
 
 
-def qa_checker(filename, project, qa_home=None):
+def hdh_qa_checker(filename, project, qa_home=None):
     cmd = ["qa-dkrz", "-P", project]
     if qa_home:
         cmd.append("--work=" + qa_home)

@@ -69,7 +69,7 @@ class QualityChecker(Process):
     def _handler(self, request, response):
         # from hummingbird import config
         # from hummingbird import utils
-        from hummingbird.processing import qa_checker
+        from hummingbird.processing import hdh_qa_checker
 
         response.update_status("starting qa checker ...", 0)
 
@@ -83,7 +83,7 @@ class QualityChecker(Process):
         for idx, ds in enumerate(datasets):
             progress = idx * 100 / len(datasets)
             response.update_status("checking %s" % ds, progress)
-            qa_checker(ds, project=request.inputs['project'][0].data, qa_home=qa_home)
+            hdh_qa_checker(ds, project=request.inputs['project'][0].data, qa_home=qa_home)
 
         results_path = os.path.join("QA_Results", "check_logs")
         if not os.path.isdir(results_path):

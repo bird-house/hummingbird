@@ -63,7 +63,7 @@ class HDHCFChecker(Process):
         )
 
     def _handler(self, request, response):
-        from hummingbird.processing import cf_check
+        from hummingbird.processing import hdh_cf_check
         response.update_status("starting cfchecker ...", 0)
 
         # TODO: iterate input files ... run parallel
@@ -73,7 +73,7 @@ class HDHCFChecker(Process):
         max_count = len(datasets)
         step = 100.0 / max_count
         for idx, dataset in enumerate(datasets):
-            cf_report = cf_check(dataset, version=request.inputs['cf_version'][0].data)
+            cf_report = hdh_cf_check(dataset, version=request.inputs['cf_version'][0].data)
             with open('cfchecker_output.txt', 'a') as fp:
                 response.outputs['output'].file = fp.name
                 fp.write(cf_report)
