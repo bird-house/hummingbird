@@ -1,4 +1,5 @@
 import os
+import glob
 from subprocess import check_output, CalledProcessError, STDOUT
 
 from .utils import fix_filename, make_dirs
@@ -63,3 +64,19 @@ def hdh_qa_checker(filename, project, qa_home=None):
         msg = "qa checker failed: %s" % (e.output)
         logger.error(msg)
         raise Exception(msg)
+
+    results_path = os.path.join("QA_Results", "check_logs")
+    if not os.path.isdir(results_path):
+        raise Exception("QA results are missing.")
+
+    # output logfile
+    logs = glob.glob(os.path.join(results_path, "*.log"))
+    if not logs:
+        logs = glob.glob(os.path.join(results_path, ".*.log"))
+    if logs:
+        # use .txt extension
+        logfile = logs[0][:-4] + '.txt'
+        os.link(logs[0], logfile)
+    else:
+        raise Exception("could not find log file.")
+    return logfile, results_path

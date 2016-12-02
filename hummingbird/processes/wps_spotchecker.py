@@ -1,6 +1,3 @@
-import os
-import glob
-
 from compliance_checker.runner import ComplianceChecker, CheckSuite
 from compliance_checker import __version__ as cchecker_version
 
@@ -111,22 +108,8 @@ class SpotChecker(Process):
         else:
             response.update_status("qa checker ...", 20)
             from hummingbird.processing import hdh_qa_checker
-
-            hdh_qa_checker(dataset, project=request.inputs['test'][0].data)
-            results_path = os.path.join("QA_Results", "check_logs")
-            if not os.path.isdir(results_path):
-                raise Exception("QA results are missing.")
-            # output logfile
-            logs = glob.glob(os.path.join(results_path, "*.log"))
-            if not logs:
-                logs = glob.glob(os.path.join(results_path, ".*.log"))
-            if logs:
-                # use .txt extension
-                filename = logs[0][:-4] + '.txt'
-                os.link(logs[0], filename)
-                response.outputs['output'].file = filename
-            else:
-                raise Exception("could not find log file.")
+            logfile, _ = hdh_qa_checker(dataset, project=request.inputs['test'][0].data)
+            response.outputs['output'].file = logfile
 
         response.update_status('compliance checker finshed...', 100)
         return response

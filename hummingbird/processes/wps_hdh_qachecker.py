@@ -72,31 +72,17 @@ class QualityChecker(Process):
         response.update_status("starting qa checker ...", 0)
 
         datasets = [dataset.file for dataset in request.inputs['dataset']]
+        logfile = results_path = None
         for idx, ds in enumerate(datasets):
             progress = idx * 100 / len(datasets)
             response.update_status("checking %s" % ds, progress)
-            hdh_qa_checker(ds, project=request.inputs['project'][0].data)
-
-        results_path = os.path.join("QA_Results", "check_logs")
-        if not os.path.isdir(results_path):
-            raise Exception("QA results are missing.")
-
-        # output tar archive
-        with tarfile.open('output.tar.gz', "w:gz") as tar:
-            response.outputs['output'].file = tar.name
-            tar.add(results_path)
-
-        # output logfile
-        logs = glob.glob(os.path.join(results_path, "*.log"))
-        if not logs:
-            logs = glob.glob(os.path.join(results_path, ".*.log"))
-        if logs:
-            # use .txt extension
-            filename = logs[0][:-4] + '.txt'
-            os.link(logs[0], filename)
-            response.outputs['logfile'].file = filename
-        else:
-            raise Exception("could not find log file.")
+            logfile, results_path = hdh_qa_checker(ds, project=request.inputs['project'][0].data)
+        if logfile and results_path:
+            # output tar archive
+            with tarfile.open('output.tar.gz', "w:gz") as tar:
+                response.outputs['output'].file = tar.name
+                tar.add(results_path)
+            response.outputs['logfile'].file = logfile
 
         response.update_status("qa checker done.", 100)
         return response
