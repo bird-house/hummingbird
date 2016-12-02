@@ -41,7 +41,7 @@ def hdh_cf_check(filename, version="auto"):
     try:
         output = check_output(cmd)
     except CalledProcessError as err:
-        LOGGER.exception("cfchecks failed!")
+        logger.exception("cfchecks failed!")
         output = err.output
     return output
 
@@ -55,5 +55,5 @@ def hdh_qa_checker(filename, project, qa_home=None):
         check_output(cmd, stderr=STDOUT)
     except CalledProcessError as e:
         msg = "qa checker failed: %s" % (e.output)
-        LOGGER.error(msg)
+        logger.error(msg)
         raise Exception(msg)
