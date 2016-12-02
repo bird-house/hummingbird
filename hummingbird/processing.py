@@ -1,13 +1,15 @@
 import os
 from subprocess import check_output, CalledProcessError, STDOUT
 
+from .utils import fix_filename
+
 import logging
 logger = logging.getLogger(__name__)
 
 
 def ncdump(dataset):
     '''
-    Returns the CDL of the dataset
+    Returns the metadata of the dataset
 
     Code taken from https://github.com/ioos/compliance-checker-web
     '''
@@ -29,12 +31,7 @@ def ncdump(dataset):
 
 def hdh_cf_check(filename, version="auto"):
     # TODO: maybe use local file path
-    if not filename.endswith(".nc"):
-        new_name = filename + ".nc"
-        from os import rename
-        rename(filename, new_name)
-        filename = new_name
-    filename = os.path.abspath(filename)
+    filename = os.path.abspath(fix_filename(filename))
     cmd = ["dkrz-cf-checker", filename]
     if version != "auto":
         cmd.extend(['-C', version])
@@ -47,6 +44,8 @@ def hdh_cf_check(filename, version="auto"):
 
 
 def hdh_qa_checker(filename, project, qa_home=None):
+    # TODO: maybe use local file path
+    filename = os.path.abspath(fix_filename(filename))
     cmd = ["qa-dkrz", "-P", project]
     if qa_home:
         cmd.append("--work=" + qa_home)
