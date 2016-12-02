@@ -11,7 +11,7 @@ from pywps import Format, FORMATS
 from pywps.app.Common import Metadata
 
 import logging
-LOGGER = logging.getLogger("PYWPS")
+logger = logging.getLogger("PYWPS")
 
 
 class SpotChecker(Process):
@@ -77,8 +77,6 @@ class SpotChecker(Process):
         )
 
     def _handler(self, request, response):
-        from hummingbird.processing import ncdump
-
         if 'dataset_opendap' in request.inputs:
             dataset = request.inputs['dataset_opendap'][0].data
         elif 'dataset' in request.inputs:
@@ -87,12 +85,20 @@ class SpotChecker(Process):
             raise Exception("missing dataset to check.")
         checker = request.inputs['test'][0].data
 
+        with open("nc_dump.txt", 'w') as fp:
+            from hummingbird.processing import ncdump
+            response.update_status("running ncdump", 80)
+            # response.outputs['ncdump'].output_format = FORMATS.TEXT
+            response.outputs['ncdump'].file = fp.name
+            fp.writelines(ncdump(dataset))
+            response.update_status('ncdump done.', 10)
+
         if 'CF' in checker:
             check_suite = CheckSuite()
             check_suite.load_all_available_checkers()
 
             with open("report.html", 'w') as fp:
-                response.update_status("running cfchecker", 20)
+                response.update_status("cfchecker ...", 20)
                 # response.outputs['output'].output_format = FORMATS.TEXT
                 response.outputs['output'].file = fp.name
                 return_value, errors = ComplianceChecker.run_checker(
@@ -103,6 +109,7 @@ class SpotChecker(Process):
                     output_filename=fp.name,
                     output_format="html")
         else:
+            response.update_status("qa checker ...", 20)
             from hummingbird.processing import hdh_qa_checker
             qa_home = os.path.abspath("./qa_dkrz")
             os.makedirs(qa_home)
@@ -122,10 +129,5 @@ class SpotChecker(Process):
             else:
                 raise Exception("could not find log file.")
 
-        with open("nc_dump.txt", 'w') as fp:
-            response.update_status("running ncdump", 80)
-            # response.outputs['ncdump'].output_format = FORMATS.TEXT
-            response.outputs['ncdump'].file = fp.name
-            fp.writelines(ncdump(dataset))
         response.update_status('compliance checker finshed...', 100)
         return response
