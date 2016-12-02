@@ -52,7 +52,7 @@ def hdh_qa_checker(filename, project, qa_home=None):
     # create qa_home
     # qa_home = os.path.join(config.cache_path(), "qa_dkrz")
     if not qa_home:
-        qa_home = os.path.abspath("./qa_dkrz")
+        qa_home = os.path.abspath("./work")
     make_dirs(qa_home)
 
     cmd = ["qa-dkrz", "-P", project]
