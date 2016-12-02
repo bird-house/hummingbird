@@ -1,3 +1,6 @@
+import os
+import glob
+
 from compliance_checker.runner import ComplianceChecker, CheckSuite
 from compliance_checker import __version__ as cchecker_version
 
@@ -17,11 +20,11 @@ class SpotChecker(Process):
             LiteralInput('test', 'Test Suite',
                          data_type='string',
                          abstract="Select the test you want to run.\
-                          Default: cf (climate forecast conventions)",
+                          Default: CF-1.6 (climate forecast conventions)",
                          min_occurs=1,
                          max_occurs=1,
-                         default='cf',
-                         allowed_values=['cf']),
+                         default='CF-1.6',
+                         allowed_values=['CF-1.6', 'CORDEX', 'CMIP5']),
             ComplexInput('dataset', 'NetCDF File',
                          abstract='Enter a URL pointing to a NetCDF file (optional)',
                          metadata=[Metadata('Info')],
@@ -39,7 +42,7 @@ class SpotChecker(Process):
             ComplexOutput('output', 'Test Report',
                           abstract='Compliance checker test report.',
                           as_reference=True,
-                          supported_formats=[Format('text/plain')]),
+                          supported_formats=[Format('text/plain'), Format('text/html')]),
             ComplexOutput('ncdump', 'ncdump of metadata',
                           abstract='ncdump of header of checked dataset.',
                           as_reference=True,
@@ -82,26 +85,46 @@ class SpotChecker(Process):
             dataset = request.inputs['dataset'][0].file
         else:
             raise Exception("missing dataset to check.")
-        checkers = [checker.data for checker in request.inputs['test']]
+        checker = request.inputs['test'][0].data
 
-        check_suite = CheckSuite()
-        check_suite.load_all_available_checkers()
+        if 'CF' in checker:
+            check_suite = CheckSuite()
+            check_suite.load_all_available_checkers()
 
-        with open("report.html", 'w') as fp:
-            response.update_status("running cfchecker", 20)
-            response.outputs['output'].output_format = FORMATS.TEXT
-            response.outputs['output'].file = fp.name
-            return_value, errors = ComplianceChecker.run_checker(
-                dataset,
-                checker_names=checkers,
-                verbose=True,
-                criteria="normal",
-                output_filename=fp.name,
-                output_format="html")
+            with open("report.html", 'w') as fp:
+                response.update_status("running cfchecker", 20)
+                # response.outputs['output'].output_format = FORMATS.TEXT
+                response.outputs['output'].file = fp.name
+                return_value, errors = ComplianceChecker.run_checker(
+                    dataset,
+                    checker_names=['cf'],
+                    verbose=True,
+                    criteria="normal",
+                    output_filename=fp.name,
+                    output_format="html")
+        else:
+            from hummingbird.processing import hdh_qa_checker
+            qa_home = os.path.abspath("./qa_dkrz")
+            os.makedirs(qa_home)
+            hdh_qa_checker(dataset, project=request.inputs['test'][0].data, qa_home=qa_home)
+            results_path = os.path.join("QA_Results", "check_logs")
+            if not os.path.isdir(results_path):
+                raise Exception("QA results are missing.")
+            # output logfile
+            logs = glob.glob(os.path.join(results_path, "*.log"))
+            if not logs:
+                logs = glob.glob(os.path.join(results_path, ".*.log"))
+            if logs:
+                # use .txt extension
+                filename = logs[0][:-4] + '.txt'
+                os.link(logs[0], filename)
+                response.outputs['output'].file = filename
+            else:
+                raise Exception("could not find log file.")
 
         with open("nc_dump.txt", 'w') as fp:
             response.update_status("running ncdump", 80)
-            response.outputs['ncdump'].output_format = FORMATS.TEXT
+            # response.outputs['ncdump'].output_format = FORMATS.TEXT
             response.outputs['ncdump'].file = fp.name
             fp.writelines(ncdump(dataset))
         response.update_status('compliance checker finshed...', 100)
