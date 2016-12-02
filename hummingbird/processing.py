@@ -1,6 +1,7 @@
 import os
 import glob
-from subprocess import check_output, CalledProcessError, STDOUT
+import subprocess
+from subprocess import check_output, CalledProcessError
 
 from .utils import fix_filename, make_dirs
 
@@ -37,7 +38,7 @@ def hdh_cf_check(filename, version="auto"):
     if version != "auto":
         cmd.extend(['-C', version])
     try:
-        output = check_output(cmd)
+        output = check_output(cmd, stderr=subprocess.STDOUT)
     except CalledProcessError as err:
         logger.exception("cfchecks failed!")
         return "Error: cfchecks failed: {0}. Output: {0.output}".format(err)
@@ -59,7 +60,7 @@ def hdh_qa_checker(filename, project, qa_home=None):
         cmd.append("--work=" + qa_home)
     cmd.append(filename)
     try:
-        check_output(cmd, stderr=STDOUT)
+        check_output(cmd, stderr=subprocess.STDOUT)
     except CalledProcessError as e:
         msg = "qa checker failed: %s" % (e.output)
         logger.error(msg)
