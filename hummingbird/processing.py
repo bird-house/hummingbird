@@ -1,7 +1,7 @@
 import os
 from subprocess import check_output, CalledProcessError, STDOUT
 
-from .utils import fix_filename
+from .utils import fix_filename, make_dirs
 
 import logging
 logger = logging.getLogger("PYWPS")
@@ -46,6 +46,13 @@ def hdh_cf_check(filename, version="auto"):
 def hdh_qa_checker(filename, project, qa_home=None):
     # TODO: maybe use local file path
     filename = os.path.abspath(fix_filename(filename))
+
+    # create qa_home
+    # qa_home = os.path.join(config.cache_path(), "qa_dkrz")
+    if not qa_home:
+        qa_home = os.path.abspath("./qa_dkrz")
+    make_dirs(qa_home)
+
     cmd = ["qa-dkrz", "-P", project]
     if qa_home:
         cmd.append("--work=" + qa_home)

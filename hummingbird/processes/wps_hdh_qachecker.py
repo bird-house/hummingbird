@@ -71,16 +71,11 @@ class QualityChecker(Process):
 
         response.update_status("starting qa checker ...", 0)
 
-        # create qa_home
-        # qa_home = os.path.join(config.cache_path(), "qa_dkrz")
-        qa_home = os.path.abspath("./qa_dkrz")
-        os.makedirs(qa_home)
-
         datasets = [dataset.file for dataset in request.inputs['dataset']]
         for idx, ds in enumerate(datasets):
             progress = idx * 100 / len(datasets)
             response.update_status("checking %s" % ds, progress)
-            hdh_qa_checker(ds, project=request.inputs['project'][0].data, qa_home=qa_home)
+            hdh_qa_checker(ds, project=request.inputs['project'][0].data)
 
         results_path = os.path.join("QA_Results", "check_logs")
         if not os.path.isdir(results_path):

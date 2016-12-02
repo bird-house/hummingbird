@@ -111,9 +111,8 @@ class SpotChecker(Process):
         else:
             response.update_status("qa checker ...", 20)
             from hummingbird.processing import hdh_qa_checker
-            qa_home = os.path.abspath("./qa_dkrz")
-            os.makedirs(qa_home)
-            hdh_qa_checker(dataset, project=request.inputs['test'][0].data, qa_home=qa_home)
+
+            hdh_qa_checker(dataset, project=request.inputs['test'][0].data)
             results_path = os.path.join("QA_Results", "check_logs")
             if not os.path.isdir(results_path):
                 raise Exception("QA results are missing.")
