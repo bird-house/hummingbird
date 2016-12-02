@@ -4,7 +4,7 @@ from subprocess import check_output, CalledProcessError, STDOUT
 from .utils import fix_filename
 
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("PYWPS")
 
 
 def ncdump(dataset):
