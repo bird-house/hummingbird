@@ -61,9 +61,9 @@ def hdh_qa_checker(filename, project, qa_home=None):
     cmd.append(filename)
     try:
         check_output(cmd, stderr=subprocess.STDOUT)
-    except CalledProcessError as e:
-        msg = "qa checker failed: %s" % (e.output)
-        logger.error(msg)
+    except CalledProcessError as err:
+        logger.exception("qa checker failed!")
+        msg = "qa checker failed: {0}. Output: {0.output}".format(err)
         raise Exception(msg)
 
     results_path = os.path.join("QA_Results", "check_logs")
