@@ -26,7 +26,7 @@ def ncdump(dataset):
         filtered_lines = '\n'.join(lines)
     except Exception:
         logger.exception("could not generate ncdump")
-        return "Error generating ncdump"
+        return "Error: generating ncdump failed"
     return filtered_lines
 
 
@@ -40,7 +40,7 @@ def hdh_cf_check(filename, version="auto"):
         output = check_output(cmd)
     except CalledProcessError as err:
         logger.exception("cfchecks failed!")
-        output = err.output
+        return "Error: cfchecks failed: {0}. Output: {0.output}".format(err)
     return output
 
 
