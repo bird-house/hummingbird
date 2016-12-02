@@ -1,6 +1,11 @@
 Changes
 *******
 
+0.5.1 (2016-12-xx)
+==================
+
+* added CORDEX and CMIP5 tests to spotchecker.
+
 0.5.0 (2016-12-01)
 ==================
 
