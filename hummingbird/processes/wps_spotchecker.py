@@ -74,13 +74,15 @@ class SpotChecker(Process):
         )
 
     def _handler(self, request, response):
+        checker = request.inputs['test'][0].data
         if 'dataset_opendap' in request.inputs:
+            if checker in ['CORDEX', 'CMIP5']:
+                raise NotImplementedError("OpenDAP is not supported by DKRZ Quality Checker.")
             dataset = request.inputs['dataset_opendap'][0].data
         elif 'dataset' in request.inputs:
             dataset = request.inputs['dataset'][0].file
         else:
             raise Exception("missing dataset to check.")
-        checker = request.inputs['test'][0].data
 
         with open("nc_dump.txt", 'w') as fp:
             from hummingbird.processing import ncdump
