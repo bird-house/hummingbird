@@ -67,8 +67,6 @@ class QualityChecker(Process):
         )
 
     def _handler(self, request, response):
-        # from hummingbird import config
-        # from hummingbird import utils
         from hummingbird.processing import hdh_qa_checker
 
         response.update_status("starting qa checker ...", 0)
@@ -76,7 +74,6 @@ class QualityChecker(Process):
         # create qa_home
         # qa_home = os.path.join(config.cache_path(), "qa_dkrz")
         qa_home = os.path.abspath("./qa_dkrz")
-        # utils.make_dirs(qa_home)
         os.makedirs(qa_home)
 
         datasets = [dataset.file for dataset in request.inputs['dataset']]
