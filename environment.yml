@@ -37,6 +37,7 @@ dependencies:
 - cdat-lite=6.0rc2
 # qa dkrz
 - qa-dkrz=0.6.0
+- wget=1.18
 # compliance checker ioos
 - compliance-checker=3.0.0
 - pip:
