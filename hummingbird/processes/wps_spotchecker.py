@@ -86,7 +86,6 @@ class SpotChecker(Process):
 
         with open("nc_dump.txt", 'w') as fp:
             from hummingbird.processing import ncdump
-            response.update_status("running ncdump", 80)
             # response.outputs['ncdump'].output_format = FORMATS.TEXT
             response.outputs['ncdump'].file = fp.name
             fp.writelines(ncdump(dataset))
