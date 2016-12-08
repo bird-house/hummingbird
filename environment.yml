@@ -20,7 +20,7 @@ dependencies:
 - sphinx
 - sphinx_rtd_theme
 # wps
-- pywps=4.0.0_rc3
+- pywps=4.0.0
 - owslib
 - nginx=1.10.1
 - supervisor=3.3.1
