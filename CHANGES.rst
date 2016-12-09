@@ -5,6 +5,7 @@ Changes
 ==================
 
 * added CORDEX and CMIP5 tests to spotchecker.
+* updated pywps recipe 0.8.2.
 
 0.5.0 (2016-12-01)
 ==================
