@@ -26,9 +26,9 @@ def ncdump(dataset):
         lines[0] = 'netcdf %s {' % dataset_id
         # decode to ascii
         filtered_lines = [str(line) + '\n' for line in lines]
-    except Exception:
+    except CalledProcessError as err:
         logger.exception("could not generate ncdump")
-        return "Error: generating ncdump failed"
+        return "Error: generating ncdump failed. Output: {0.output}".format(err)
     return filtered_lines
 
 
