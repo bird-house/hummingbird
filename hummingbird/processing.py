@@ -24,7 +24,8 @@ def ncdump(dataset):
         # replace the filename for safety
         dataset_id = os.path.basename(dataset)  # 'uploaded-file'
         lines[0] = 'netcdf %s {' % dataset_id
-        filtered_lines = '\n'.join(lines)
+        # decode to ascii
+        filtered_lines = [str(line) + '\n' for line in lines]
     except Exception:
         logger.exception("could not generate ncdump")
         return "Error: generating ncdump failed"
