@@ -2,6 +2,8 @@ import os
 
 from setuptools import setup, find_packages
 
+import hummingbird
+
 here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.rst')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.rst')).read()
@@ -18,7 +20,7 @@ classifiers = [
 ]
 
 setup(name='hummingbird',
-      version='0.5.1',
+      version=hummingbird.__version__,
       description='WPS processes for general tools used in the climate science community like cdo',
       long_description=README + '\n\n' + CHANGES,
       classifiers=classifiers,
