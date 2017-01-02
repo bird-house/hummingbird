@@ -1,12 +1,13 @@
 Changes
 *******
 
-0.5.1 (2016-12-xx)
+0.5.1 (2016-12-23)
 ==================
 
 * added CORDEX and CMIP5 tests to spotchecker.
 * updated pywps recipe 0.8.2.
 * fixed wps caps test.
+* updated qa-dkrz 0.6.1.
 
 0.5.0 (2016-12-01)
 ==================
