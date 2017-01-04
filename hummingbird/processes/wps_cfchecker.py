@@ -38,8 +38,8 @@ class CFChecker(Process):
                          supported_formats=[Format('application/x-netcdf')]),
             LiteralInput('cf_version', 'Check against CF version',
                          data_type='string',
-                         abstract="Version of CF conventions that the NetCDF file should be check against.\
-                          Use auto to auto-detect the CF version.",
+                         abstract="Version of CF conventions that the NetCDF file should be check against."
+                                  " Use auto to auto-detect the CF version.",
                          min_occurs=1,
                          max_occurs=1,
                          default='auto',
@@ -57,16 +57,17 @@ class CFChecker(Process):
             identifier="cfchecker",
             title="CF Checker by NCAS Computational Modelling Services (NCAS-CMS)",
             version="2.0.9-0",
-            abstract="The NetCDF Climate Forcast Conventions compliance checker.\
-              This process allows you to run the compliance checker to check that the contents of a NetCDF file comply\
-              with the Climate and Forecasts (CF) Metadata Convention.\
-              The CF-checker was developed at the Hadley Centre for Climate Prediction and Research,\
-              UK Met Office by Rosalyn Hatcher.\
-              This work was supported by PRISM (PRogramme for Integrated Earth System Modelling).\
-              Development and maintenance for the CF-checker has now been taken over by the\
-              NCAS Computational Modelling Services (NCAS-CMS).\
-              If you have suggestions for improvement then please contact\
-              Rosalyn Hatcher at NCAS-CMS (r.s.hatcher@reading.ac.uk).",
+            abstract="The NetCDF Climate Forcast Conventions compliance checker."
+                     " This process allows you to run the compliance checker"
+                     " to check that the contents of a NetCDF file comply"
+                     " with the Climate and Forecasts (CF) Metadata Convention."
+                     " The CF-checker was developed at the Hadley Centre for Climate Prediction and Research,"
+                     " UK Met Office by Rosalyn Hatcher."
+                     " This work was supported by PRISM (PRogramme for Integrated Earth System Modelling)."
+                     " Development and maintenance for the CF-checker has now been taken over by the"
+                     " NCAS Computational Modelling Services (NCAS-CMS)."
+                     " If you have suggestions for improvement then please contact"
+                     " Rosalyn Hatcher at NCAS-CMS (r.s.hatcher@reading.ac.uk).",
             metadata=[
                 Metadata('Birdhouse', 'http://bird-house.github.io/'),
                 Metadata('User Guide', 'http://birdhouse-hummingbird.readthedocs.io/en/latest/'),

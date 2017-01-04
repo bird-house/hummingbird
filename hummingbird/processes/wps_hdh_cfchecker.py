@@ -22,8 +22,8 @@ class HDHCFChecker(Process):
                          supported_formats=[Format('application/x-netcdf')]),
             LiteralInput('cf_version', 'Check against CF version',
                          data_type='string',
-                         abstract="Version of CF conventions that the NetCDF file should be check against.\
-                          Use auto to auto-detect the CF version.",
+                         abstract="Version of CF conventions that the NetCDF file should be check against."
+                                  " Use auto to auto-detect the CF version.",
                          min_occurs=1,
                          max_occurs=1,
                          default='auto',
@@ -41,13 +41,14 @@ class HDHCFChecker(Process):
             identifier="qa_cfchecker",
             title="CF Checker by DKRZ",
             version="0.6.2",
-            abstract="The NetCDF Climate Forcast Conventions compliance checker by DKRZ.\
-             This process allows you to run the compliance checker to check that the contents of a NetCDF file comply\
-             with the Climate and Forecasts (CF) Metadata Convention.\
-             The CF Conformance checker applies to conventions 1.4 -1.7draft.\
-             Development and maintenance for the CF-checker is done by the German Climate Computing Centre (DKRZ).\
-             If you have suggestions for improvement then please contact\
-             Heinz-Dieter Hollweg at DKRZ (hollweg@dkrz.de).",
+            abstract="The NetCDF Climate Forcast Conventions compliance checker by DKRZ."
+                     " This process allows you to run the compliance checker to check that"
+                     " the contents of a NetCDF file comply with the Climate and Forecasts (CF) Metadata Convention."
+                     " The CF Conformance checker applies to conventions 1.4 -1.7draft."
+                     " Development and maintenance for the CF-checker is done by the"
+                     " German Climate Computing Centre (DKRZ)."
+                     " If you have suggestions for improvement then please contact"
+                     " Heinz-Dieter Hollweg at DKRZ (hollweg@dkrz.de).",
             metadata=[
                 Metadata('Birdhouse', 'http://bird-house.github.io/'),
                 Metadata('User Guide', 'http://birdhouse-hummingbird.readthedocs.io/en/latest/'),

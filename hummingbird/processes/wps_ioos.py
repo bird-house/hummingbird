@@ -19,16 +19,16 @@ class IOOSCChecker(Process):
         inputs = [
             LiteralInput('test', 'Test Suite',
                          data_type='string',
-                         abstract="Select the test you want to run.\
-                          Default: cf (climate forecast conventions)",
+                         abstract="Select the test you want to run."
+                                  " Default: cf (climate forecast conventions)",
                          min_occurs=1,
                          max_occurs=1,
                          default='cf',
                          allowed_values=['cf', 'ioos']),
             LiteralInput('criteria', 'Criteria',
                          data_type='string',
-                         abstract="Define the criteria for the checks.  Either Strict, Normal or Lenient.\
-                           Defaults to Normal.",
+                         abstract="Define the criteria for the checks.  Either Strict, Normal or Lenient."
+                                  " Defaults to Normal.",
                          min_occurs=1,
                          max_occurs=1,
                          default='normal',
@@ -41,8 +41,9 @@ class IOOSCChecker(Process):
                          supported_formats=[Format('application/x-netcdf')]),
             LiteralInput('dataset_opendap', 'Remote OpenDAP Data URL',
                          data_type='string',
-                         abstract="Or provide a remote OpenDAP data URL,\
-                          for example: http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis2.dailyavgs/surface/mslp.2016.nc",  # noqa
+                         abstract="Or provide a remote OpenDAP data URL,"
+                                  " for example:"
+                                  " http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis2.dailyavgs/surface/mslp.2016.nc",  # noqa
                          min_occurs=0,
                          max_occurs=100),
             LiteralInput('format', 'Output Format',
@@ -74,15 +75,15 @@ class IOOSCChecker(Process):
             identifier="ioos_cchecker",
             title="IOOS Compliance Checker",
             version=cchecker_version,
-            abstract="The IOOS Compliance Checker is a Python tool to\
-             check local/remote datasets against a variety of\
-             compliance standards. Each compliance standard is executed\
-             by a Check Suite, which functions similar to a\
-             Python standard Unit Test.\
-             A Check Suite runs one or more checks against a dataset,\
-             returning a list of Results which are then aggregated\
-             into a summary. Development and maintenance for the compliance\
-             checker is done by the Integrated Ocean Observing System (IOOS).",
+            abstract="The IOOS Compliance Checker is a Python tool to"
+                     " check local/remote datasets against a variety of"
+                     " compliance standards. Each compliance standard is executed"
+                     " by a Check Suite, which functions similar to a"
+                     " Python standard Unit Test."
+                     " A Check Suite runs one or more checks against a dataset,"
+                     " returning a list of Results which are then aggregated"
+                     " into a summary. Development and maintenance for the compliance"
+                     " checker is done by the Integrated Ocean Observing System (IOOS).",
             metadata=[
                 Metadata('Birdhouse', 'http://bird-house.github.io/'),
                 Metadata('User Guide', 'http://birdhouse-hummingbird.readthedocs.io/en/latest/'),

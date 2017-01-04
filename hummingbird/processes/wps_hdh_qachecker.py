@@ -46,12 +46,13 @@ class QualityChecker(Process):
             identifier="qa_checker",
             title="Quality Assurance Checker by DKRZ",
             version="0.6.2",
-            abstract="The Quality Assurance checker QA-DKRZ checks conformance of meta-data of climate simulations\
-                given in NetCDF format with conventions and rules of climate model projects.\
-                At present, checking of CF Conventions, CMIP5, and CORDEX is supported.\
-                Development and maintenance for the QA checker is done by the German Climate Computing Centre (DKRZ).\
-                If you have suggestions for improvement then please contact\
-                Heinz-Dieter Hollweg at DKRZ (hollweg@dkrz.de).",
+            abstract="The Quality Assurance checker QA-DKRZ checks conformance of meta-data of climate simulations"
+                     " given in NetCDF format with conventions and rules of climate model projects."
+                     " At present, checking of CF Conventions, CMIP5, and CORDEX is supported."
+                     " Development and maintenance for the QA checker is done by the"
+                     " German Climate Computing Centre (DKRZ)."
+                     " If you have suggestions for improvement then please contact"
+                     " Heinz-Dieter Hollweg at DKRZ (hollweg@dkrz.de).",
             metadata=[
                 Metadata('Birdhouse', 'http://bird-house.github.io/'),
                 Metadata('User Guide', 'http://birdhouse-hummingbird.readthedocs.io/en/latest/'),
