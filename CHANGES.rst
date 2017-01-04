@@ -7,6 +7,7 @@ Changes
 * update qa-dkrz 0.6.2.
 * using __version__ constant.
 * fixed install on ubuntu 16.04: update conda environment (lxml, icu, libxslt).
+* update cdo=1.7.2.
 
 0.5.1 (2016-12-23)
 ==================
