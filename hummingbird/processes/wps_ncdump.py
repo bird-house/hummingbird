@@ -21,8 +21,8 @@ class NCDump(Process):
                          supported_formats=[Format('application/x-netcdf')]),
             LiteralInput('dataset_opendap', 'Remote OpenDAP Data URL',
                          data_type='string',
-                         abstract="Or provide a remote OpenDAP data URL,\
-                          for example: http://my.opendap/thredds/dodsC/path/to/file.nc",
+                         abstract="Or provide a remote OpenDAP data URL,"
+                                  " for example: http://my.opendap/thredds/dodsC/path/to/file.nc",
                          min_occurs=0,
                          max_occurs=100),
         ]
