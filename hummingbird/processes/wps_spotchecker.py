@@ -16,8 +16,8 @@ class SpotChecker(Process):
         inputs = [
             LiteralInput('test', 'Test Suite',
                          data_type='string',
-                         abstract="Select the test you want to run.\
-                          Default: CF-1.6 (climate forecast conventions)",
+                         abstract="Select the test you want to run."
+                                  " Default: CF-1.6 (climate forecast conventions)",
                          min_occurs=1,
                          max_occurs=1,
                          default='CF-1.6',
@@ -30,8 +30,8 @@ class SpotChecker(Process):
                          supported_formats=[Format('application/x-netcdf')]),
             LiteralInput('dataset_opendap', 'Remote OpenDAP Data URL',
                          data_type='string',
-                         abstract="Or provide a remote OpenDAP data URL,\
-                          for example: http://my.opendap/thredds/dodsC/path/to/file.nc",
+                         abstract="Or provide a remote OpenDAP data URL,"
+                                  " for example: http://my.opendap/thredds/dodsC/path/to/file.nc",
                          min_occurs=0,
                          max_occurs=1),
         ]
@@ -51,16 +51,16 @@ class SpotChecker(Process):
             identifier="spotchecker",
             title="Spot Checker",
             version="0.2.0",
-            abstract="The Spot Checker is a Python tool to\
-             check local/remote datasets against a variety of\
-             compliance standards. Each compliance standard is executed\
-             by a Check Suite, which functions similar to a\
-             Python standard Unit Test.\
-             A Check Suite runs one or more checks against a dataset,\
-             returning a list of Results which are then aggregated\
-             into a summary.\
-             Available compliance standards are the Climate and Forecast conventions (CF)\
-             and project specific rules for CMIP6 and CORDEX.",
+            abstract="The Spot Checker is a Python tool to"
+                     " check local/remote datasets against a variety of"
+                     " compliance standards. Each compliance standard is executed"
+                     " by a Check Suite, which functions similar to a"
+                     " Python standard Unit Test."
+                     " A Check Suite runs one or more checks against a dataset,"
+                     " returning a list of Results which are then aggregated"
+                     " into a summary."
+                     " Available compliance standards are the Climate and Forecast conventions (CF)"
+                     " and project specific rules for CMIP6 and CORDEX.",
             metadata=[
                 Metadata('Birdhouse', 'http://bird-house.github.io/'),
                 Metadata('User Guide', 'http://birdhouse-hummingbird.readthedocs.io/en/latest/'),
