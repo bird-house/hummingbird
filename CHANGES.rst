@@ -6,6 +6,7 @@ Changes
 
 * update qa-dkrz 0.6.2.
 * using __version__ constant.
+* fixed install on ubuntu 16.04: update conda environment (lxml, icu, libxslt).
 
 0.5.1 (2016-12-23)
 ==================
