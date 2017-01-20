@@ -4,6 +4,7 @@ Changes
 0.5.3 (2017-01-xx)
 ==================
 
+* update qa-dkrz 0.6.3.
 * fixed multiline abstracts.
 
 0.5.2 (2017-01-04)
