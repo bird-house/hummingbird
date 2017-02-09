@@ -9,7 +9,7 @@ dependencies:
 - cryptography
 - pyyaml
 - curl
-- icu=56
+- icu=58.1
 # buildout
 - mako
 # tests
