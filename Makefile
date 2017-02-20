@@ -1,4 +1,4 @@
-VERSION := 0.3.7
+VERSION := 0.3.8
 RELEASE := master
 
 # Include custom config if it is available
@@ -229,7 +229,7 @@ srcclean:
 distclean: backup clean
 	@echo "Cleaning distribution ..."
 	@git diff --quiet HEAD || echo "There are uncommited changes! Not doing 'git clean' ..."
-	@-git clean -dfx --exclude=*.bak
+	@-git clean -dfx -e *.bak -e custom.cfg
 
 .PHONY: passwd
 passwd: custom.cfg
