@@ -21,9 +21,16 @@ class CDOInfo(Process):
             ComplexInput('dataset', 'NetCDF File',
                          abstract='You may provide a URL or upload a NetCDF file.',
                          metadata=[Metadata('Info')],
-                         min_occurs=1,
+                         min_occurs=0,
                          max_occurs=100,
                          supported_formats=[Format('application/x-netcdf')]),
+            LiteralInput('dataset_opendap', 'Remote OpenDAP Data URL',
+                         data_type='string',
+                         abstract="Or provide a remote OpenDAP data URL,"
+                                  " for example:"
+                                  " http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis2.dailyavgs/surface/mslp.2016.nc",  # noqa
+                         min_occurs=0,
+                         max_occurs=100),
         ]
         outputs = [
             ComplexOutput('output', 'CDO sinfo result',
@@ -51,7 +58,14 @@ class CDOInfo(Process):
         )
 
     def _handler(self, request, response):
-        datasets = [dataset.file for dataset in request.inputs['dataset']]
+        datasets = []
+        if 'dataset' in request.inputs:
+            for dataset in request.inputs['dataset']:
+                datasets.append(dataset.file)
+        # append opendap urls
+        if 'dataset_opendap' in request.inputs:
+            for dataset in request.inputs['dataset_opendap']:
+                datasets.append(dataset.data)
 
         cdo = Cdo()
 
