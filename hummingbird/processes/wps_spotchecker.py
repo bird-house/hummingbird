@@ -32,6 +32,10 @@ class SpotChecker(Process):
                          data_type='string',
                          abstract="Or provide a remote OpenDAP data URL,"
                                   " for example: http://my.opendap/thredds/dodsC/path/to/file.nc",
+                         metadata=[
+                             Metadata(
+                                 'application/x-ogc-dods',
+                                 'https://www.iana.org/assignments/media-types/media-types.xhtml')],
                          min_occurs=0,
                          max_occurs=1),
         ]
