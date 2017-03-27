@@ -93,7 +93,7 @@ class CDOOperation(Process):
         cdo = Cdo()
         cdo_op = getattr(cdo, operator)
 
-        outfile = 'out.nc'
+        outfile = 'cdo_{}.nc'.format(operator)
         cdo_op(input=datasets, output=outfile)
 
         response.outputs['output'].file = outfile
