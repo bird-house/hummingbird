@@ -21,17 +21,28 @@ class CDOBBox(Process):
             ComplexInput('dataset', 'NetCDF File',
                          abstract='You may provide a URL or upload a NetCDF file.',
                          metadata=[Metadata('Info')],
-                         min_occurs=1,
+                         min_occurs=0,
                          max_occurs=100,
                          supported_formats=[Format('application/x-netcdf')]),
+            LiteralInput('dataset_opendap', 'Remote OpenDAP Data URL',
+                         data_type='string',
+                         abstract="Or provide a remote OpenDAP data URL,"
+                                  " for example:"
+                                  " http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis2.dailyavgs/surface/mslp.2016.nc",  # noqa
+                         metadata=[
+                            Metadata(
+                                'application/x-ogc-dods',
+                                'https://www.iana.org/assignments/media-types/media-types.xhtml')],
+                         min_occurs=0,
+                         max_occurs=100),
             LiteralInput('bbox', 'Bounding Box',
                          data_type='string',
-                         abstract="Enter a bbox: min_lon, max_lon, min_lat, max_lat.\
-                            min_lon=Western longitude,\
-                            max_lon=Eastern longitude,\
-                            min_lat=Southern or northern latitude,\
-                            max_lat=Northern or southern latitude.\
-                            For example: 0,20,40,60 ",
+                         abstract="Enter a bbox: min_lon, max_lon, min_lat, max_lat."
+                            " min_lon=Western longitude,"
+                            " max_lon=Eastern longitude,"
+                            " min_lat=Southern or northern latitude,"
+                            " max_lat=Northern or southern latitude."
+                            " For example: 0,20,40,60",
                          min_occurs=1,
                          max_occurs=1,
                          default='0,20,40,60 ',
@@ -63,7 +74,15 @@ class CDOBBox(Process):
         )
 
     def _handler(self, request, response):
-        datasets = [dataset.file for dataset in request.inputs['dataset']]
+        datasets = []
+        # append file urls
+        if 'dataset' in request.inputs:
+            for dataset in request.inputs['dataset']:
+                datasets.append(dataset.file)
+        # append opendap urls
+        if 'dataset_opendap' in request.inputs:
+            for dataset in request.inputs['dataset_opendap']:
+                datasets.append(dataset.data)
         bbox = request.inputs['bbox'][0].data
 
         cdo = Cdo()
