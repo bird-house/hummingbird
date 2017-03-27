@@ -74,7 +74,7 @@ class CDOInfo(Process):
 
         cdo = Cdo()
 
-        outfile = 'out.txt'
+        outfile = 'cdo_sinfo.txt'
         with open(outfile, 'w') as fp:
             response.outputs['output'].file = outfile
             for ds in datasets:
