@@ -8,7 +8,7 @@ from pywps import Format, FORMATS
 from pywps.app.Common import Metadata
 
 import logging
-logger = logging.getLogger("PYWPS")
+LOGGER = logging.getLogger("PYWPS")
 
 
 class SpotChecker(Process):
