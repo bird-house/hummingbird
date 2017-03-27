@@ -63,6 +63,7 @@ class CDOInfo(Process):
 
     def _handler(self, request, response):
         datasets = []
+        # append file urls
         if 'dataset' in request.inputs:
             for dataset in request.inputs['dataset']:
                 datasets.append(dataset.file)
