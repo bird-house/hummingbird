@@ -1,10 +1,11 @@
 Changes
 *******
 
-0.5.x (2017-02-xx)
+0.5.4 (2017-03-27)
 ==================
 
 * update compliance-checker 3.0.1
+* added opendap input parameter and using metadata to indicate opendap mime-type.
 
 
 0.5.3 (2017-01-27)
