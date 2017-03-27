@@ -6,6 +6,8 @@ from pywps import ComplexInput, ComplexOutput
 from pywps import Format, FORMATS
 from pywps.app.Common import Metadata
 
+from hummingbird.processing import ncdump
+
 import logging
 LOGGER = logging.getLogger("PYWPS")
 
@@ -23,6 +25,10 @@ class NCDump(Process):
                          data_type='string',
                          abstract="Or provide a remote OpenDAP data URL,"
                                   " for example: http://my.opendap/thredds/dodsC/path/to/file.nc",
+                         metadata=[
+                             Metadata(
+                                 'application/x-ogc-dods',
+                                 'https://www.iana.org/assignments/media-types/media-types.xhtml')],
                          min_occurs=0,
                          max_occurs=100),
         ]
@@ -48,9 +54,8 @@ class NCDump(Process):
             store_supported=True)
 
     def _handler(self, request, response):
-        from hummingbird.processing import ncdump
-
         datasets = []
+        # append file url
         if 'dataset' in request.inputs:
             for dataset in request.inputs['dataset']:
                 datasets.append(dataset.file)
