@@ -87,7 +87,7 @@ class CDOBBox(Process):
 
         cdo = Cdo()
 
-        outfile = 'out.nc'
+        outfile = 'cdo_bbox.nc'
         cdo.sellonlatbox(bbox, input=datasets[0], output=outfile)
 
         response.outputs['output'].file = outfile
