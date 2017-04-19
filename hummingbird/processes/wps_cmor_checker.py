@@ -1,7 +1,7 @@
 import os
 import tarfile
 
-from hummingbird.processing import cmor_checker
+from hummingbird.processing import cmor_checker, cmor_tables
 
 from pywps import Process
 from pywps import LiteralInput
@@ -27,7 +27,7 @@ class CMORChecker(Process):
                          min_occurs=1,
                          max_occurs=1,
                          default='CMIP6_Amon',
-                         allowed_values=['CMIP6_Amon']),
+                         allowed_values=cmor_tables()),
             ComplexInput('dataset', 'NetCDF File',
                          abstract='You may provide a URL or upload a NetCDF file.',
                          metadata=[Metadata('Info')],

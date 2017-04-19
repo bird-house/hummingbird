@@ -33,6 +33,7 @@ def ncdump(dataset):
 
 
 def cmor_tables_path():
+    os.environ['UVCDAT_ANONYMOUS_LOG'] = 'no'
     import cmor
     tables_path = os.path.abspath(
         os.path.join(cmor.__file__, '..', '..', '..', '..', '..', 'share', 'cmip6-cmor-tables', 'Tables'))
@@ -42,6 +43,7 @@ def cmor_tables_path():
 def cmor_tables():
     tables = glob.glob(os.path.join(cmor_tables_path(), 'CMIP6_*.json'))
     table_names = [os.path.basename(table)[0:-5] for table in tables]
+    table_names.sort()
     return table_names
 
 
