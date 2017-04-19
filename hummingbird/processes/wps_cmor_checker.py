@@ -31,20 +31,20 @@ class CMORChecker(Process):
             ComplexInput('dataset', 'NetCDF File',
                          abstract='You may provide a URL or upload a NetCDF file.',
                          metadata=[Metadata('Info')],
-                         min_occurs=0,
+                         min_occurs=1,
                          max_occurs=100,
                          supported_formats=[Format('application/x-netcdf')]),
-            LiteralInput('dataset_opendap', 'Remote OpenDAP Data URL',
-                         data_type='string',
-                         abstract="Or provide a remote OpenDAP data URL,"
-                                  " for example:"
-                                  " http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis2.dailyavgs/surface/mslp.2016.nc",  # noqa
-                         metadata=[
-                            Metadata(
-                                'application/x-ogc-dods',
-                                'https://www.iana.org/assignments/media-types/media-types.xhtml')],
-                         min_occurs=0,
-                         max_occurs=100),
+            # LiteralInput('dataset_opendap', 'Remote OpenDAP Data URL',
+            #              data_type='string',
+            #              abstract="Or provide a remote OpenDAP data URL,"
+            #                       " for example:"
+            #                       " http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis2.dailyavgs/surface/mslp.2016.nc",  # noqa
+            #              metadata=[
+            #                 Metadata(
+            #                     'application/x-ogc-dods',
+            #                     'https://www.iana.org/assignments/media-types/media-types.xhtml')],
+            #              min_occurs=0,
+            #              max_occurs=100),
         ]
 
         outputs = [
