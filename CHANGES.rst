@@ -4,8 +4,9 @@ Changes
 current
 =======
 
-* update compliance-checker 3.0.2
+* updated compliance-checker 3.0.2
 * added cmor checker process.
+* updated cdo 1.8.1
 
 0.5.4 (2017-03-27)
 ==================
