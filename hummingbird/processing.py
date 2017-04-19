@@ -45,6 +45,40 @@ def cmor_tables():
     return table_names
 
 
+def cmor_dump_output(dataset, status, output, output_filename):
+    import string
+    if not isinstance(output, str):
+        output = output.decode('utf-8')
+    # show filename
+    dataset_id = os.path.basename(dataset)  # 'uploaded-file'
+    converted_lines = []
+    converted_lines.append('## Checking NetCDF file {}\n\n'.format(dataset_id))
+    if status is True:
+        converted_lines.append("Dateset *passed* CMIP6 cmor checks:\n")
+    else:
+        converted_lines.append("Dateset *failed* CMIP6 cmor checks:\n")
+    # decode to ascii
+    for line in output.split('\n'):
+        line = line.translate(None, '!')
+        if chr(27) in line:
+            continue
+        if "In function:" in line:
+            continue
+        if "called from:" in line:
+            continue
+        line = line.strip()
+        if not line:  # skip empty lines
+            continue
+        # remove non printable chars
+        line = ''.join([x for x in line if x in string.printable])
+        # error list option
+        if line.startswith("Error:"):
+            line = "\n* " + line
+        converted_lines.append(str(line) + '\n')
+    with open(output_filename, 'w') as fp:
+        fp.writelines(converted_lines)
+
+
 def cmor_checker(dataset, cmip6_table, variable=None, output_filename=None):
     output_filename = output_filename or 'out.txt'
     try:
@@ -57,12 +91,10 @@ def cmor_checker(dataset, cmip6_table, variable=None, output_filename=None):
         logger.debug("run command: %s", cmd)
         os.environ['UVCDAT_ANONYMOUS_LOG'] = 'no'
         output = check_output(cmd, stderr=subprocess.STDOUT)
-        with open(output_filename, 'w') as fp:
-            fp.write(output)
+        cmor_dump_output(dataset, True, output, output_filename)
     except CalledProcessError as err:
         logger.warn("CMOR checker failed on dataset: %s", os.path.basename(dataset))
-        with open(output_filename, 'w') as fp:
-            fp.write(err.output)
+        cmor_dump_output(dataset, False, err.output, output_filename)
         return False
     return True
 
