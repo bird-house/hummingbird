@@ -20,6 +20,7 @@ def test_wps_caps():
         'cdo_operation',
         'cdo_sinfo',
         'cfchecker',
+        'cmor_checker',
         'ensembles',
         'ncdump',
         'qa_cfchecker',
