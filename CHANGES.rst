@@ -5,6 +5,7 @@ current
 =======
 
 * update compliance-checker 3.0.2
+* added cmor checker process.
 
 0.5.4 (2017-03-27)
 ==================
