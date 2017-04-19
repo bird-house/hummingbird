@@ -47,7 +47,7 @@ dependencies:
 - compliance-checker=3.0.2
 # cmor
 - cmor=3.2.2
-- cmip6-cmor-tables=3.2.1
+- cmip6-cmor-tables=3.2.2
 - libnetcdf=4.4.1
 - pip:
   - genshi
