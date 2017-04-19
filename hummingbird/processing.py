@@ -6,7 +6,7 @@ from subprocess import check_output, CalledProcessError
 from .utils import fix_filename, make_dirs
 
 import logging
-logger = logging.getLogger("PYWPS")
+LOGGER = logging.getLogger("PYWPS")
 
 
 def ncdump(dataset):
@@ -27,9 +27,78 @@ def ncdump(dataset):
         # decode to ascii
         filtered_lines = [str(line) + '\n' for line in lines]
     except CalledProcessError as err:
-        logger.exception("could not generate ncdump")
+        LOGGER.exception("could not generate ncdump")
         return "Error: generating ncdump failed. Output: {0.output}".format(err)
     return filtered_lines
+
+
+def cmor_tables_path():
+    os.environ['UVCDAT_ANONYMOUS_LOG'] = 'no'
+    import cmor
+    tables_path = os.path.abspath(
+        os.path.join(cmor.__file__, '..', '..', '..', '..', '..', 'share', 'cmip6-cmor-tables', 'Tables'))
+    return tables_path
+
+
+def cmor_tables():
+    tables = glob.glob(os.path.join(cmor_tables_path(), 'CMIP6_*.json'))
+    table_names = [os.path.basename(table)[0:-5] for table in tables]
+    table_names.sort()
+    return table_names
+
+
+def cmor_dump_output(dataset, status, output, output_filename):
+    import string
+    if not isinstance(output, str):
+        output = output.decode('utf-8')
+    # show filename
+    dataset_id = os.path.basename(dataset)  # 'uploaded-file'
+    converted_lines = []
+    converted_lines.append('## Checking NetCDF file {}\n\n'.format(dataset_id))
+    if status is True:
+        converted_lines.append("Dateset *passed* CMIP6 cmor checks:\n")
+    else:
+        converted_lines.append("Dateset *failed* CMIP6 cmor checks:\n")
+    # decode to ascii
+    for line in output.split('\n'):
+        line = line.translate(None, '!')
+        if chr(27) in line:
+            continue
+        if "In function:" in line:
+            continue
+        if "called from:" in line:
+            continue
+        line = line.strip()
+        if not line:  # skip empty lines
+            continue
+        # remove non printable chars
+        line = ''.join([x for x in line if x in string.printable])
+        # error list option
+        if line.startswith("Error:"):
+            line = "\n* " + line
+        converted_lines.append(str(line) + '\n')
+    with open(output_filename, 'w') as fp:
+        fp.writelines(converted_lines)
+
+
+def cmor_checker(dataset, cmip6_table, variable=None, output_filename=None):
+    output_filename = output_filename or 'out.txt'
+    try:
+        cmd = ['PrePARE.py']
+        if variable:
+            cmd.extend(['--variable', variable])
+        table_path = os.path.join(cmor_tables_path(), cmip6_table + '.json')
+        cmd.append(table_path)
+        cmd.append(dataset)
+        LOGGER.debug("run command: %s", cmd)
+        os.environ['UVCDAT_ANONYMOUS_LOG'] = 'no'
+        output = check_output(cmd, stderr=subprocess.STDOUT)
+        cmor_dump_output(dataset, True, output, output_filename)
+    except CalledProcessError as err:
+        LOGGER.warn("CMOR checker failed on dataset: %s", os.path.basename(dataset))
+        cmor_dump_output(dataset, False, err.output, output_filename)
+        return False
+    return True
 
 
 def hdh_cf_check(filename, version="auto"):
@@ -41,7 +110,7 @@ def hdh_cf_check(filename, version="auto"):
     try:
         output = check_output(cmd, stderr=subprocess.STDOUT)
     except CalledProcessError as err:
-        logger.exception("cfchecks failed!")
+        LOGGER.exception("cfchecks failed!")
         return "Error: cfchecks failed: {0}. Output: {0.output}".format(err)
     return output
 
@@ -63,7 +132,7 @@ def hdh_qa_checker(filename, project, qa_home=None):
     try:
         check_output(cmd, stderr=subprocess.STDOUT)
     except CalledProcessError as err:
-        logger.exception("qa checker failed!")
+        LOGGER.exception("qa checker failed!")
         msg = "qa checker failed: {0}. Output: {0.output}".format(err)
         raise Exception(msg)
 

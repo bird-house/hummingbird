@@ -1,6 +1,8 @@
 from compliance_checker.runner import ComplianceChecker, CheckSuite
 from compliance_checker import __version__ as cchecker_version
 
+from hummingbird.processing import ncdump, cmor_checker
+
 from pywps import Process
 from pywps import LiteralInput
 from pywps import ComplexInput, ComplexOutput
@@ -21,7 +23,7 @@ class SpotChecker(Process):
                          min_occurs=1,
                          max_occurs=1,
                          default='CF-1.6',
-                         allowed_values=['CF-1.6', 'CORDEX', 'CMIP5']),
+                         allowed_values=['CF-1.6', 'CORDEX', 'CMIP5', 'CMIP6']),
             ComplexInput('dataset', 'NetCDF File',
                          abstract='Enter a URL pointing to a NetCDF file (optional)',
                          metadata=[Metadata('Info')],
@@ -54,19 +56,11 @@ class SpotChecker(Process):
             self._handler,
             identifier="spotchecker",
             title="Spot Checker",
-            version="0.2.0",
-            abstract="The Spot Checker is a Python tool to"
-                     " check local/remote datasets against a variety of"
-                     " compliance standards. Each compliance standard is executed"
-                     " by a Check Suite, which functions similar to a"
-                     " Python standard Unit Test."
-                     " A Check Suite runs one or more checks against a dataset,"
-                     " returning a list of Results which are then aggregated"
-                     " into a summary."
+            version="0.3.0",
+            abstract="Spot Checker checks datasets (NetCDF, OpenDAP) against a variety of compliance standards."
                      " Available compliance standards are the Climate and Forecast conventions (CF)"
                      " and project specific rules for CMIP6 and CORDEX.",
             metadata=[
-                Metadata('Birdhouse', 'http://bird-house.github.io/'),
                 Metadata('User Guide', 'http://birdhouse-hummingbird.readthedocs.io/en/latest/'),
                 Metadata('CF Conventions', 'http://cfconventions.org/'),
                 Metadata('IOOS Compliance Online Checker', 'http://data.ioos.us/compliance/index.html'),
@@ -89,24 +83,16 @@ class SpotChecker(Process):
             raise Exception("missing dataset to check.")
 
         with open("nc_dump.txt", 'w') as fp:
-            from hummingbird.processing import ncdump
-            # response.outputs['ncdump'].output_format = FORMATS.TEXT
             response.outputs['ncdump'].file = fp.name
             fp.writelines(ncdump(dataset))
             response.update_status('ncdump done.', 10)
 
         if 'CF' in checker:
-            # patch check_suite
-            from hummingbird.patch import patch_compliance_checker
-            patch_compliance_checker()
-            # patch end
-
             check_suite = CheckSuite()
             check_suite.load_all_available_checkers()
 
             with open("report.html", 'w') as fp:
                 response.update_status("cfchecker ...", 20)
-                # response.outputs['output'].output_format = FORMATS.TEXT
                 response.outputs['output'].file = fp.name
                 return_value, errors = ComplianceChecker.run_checker(
                     dataset,
@@ -115,11 +101,16 @@ class SpotChecker(Process):
                     criteria="normal",
                     output_filename=fp.name,
                     output_format="html")
+        elif 'CMIP6' in checker:
+            with open("cmip6-cmor.txt", 'w') as fp:
+                response.outputs['output'].file = fp.name
+                response.update_status("cmip6 checker ...", 20)
+                cmor_checker(dataset, cmip6_table='CMIP6_CV', output_filename=fp.name)
         else:
             response.update_status("qa checker ...", 20)
             from hummingbird.processing import hdh_qa_checker
             logfile, _ = hdh_qa_checker(dataset, project=request.inputs['test'][0].data)
             response.outputs['output'].file = logfile
 
-        response.update_status('compliance checker finshed...', 100)
+        response.update_status('spotchecker done.', 100)
         return response

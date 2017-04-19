@@ -8,12 +8,14 @@ from .wps_ensembles import Ensembles
 from .wps_cfchecker import CFChecker
 from .wps_hdh_cfchecker import HDHCFChecker
 from .wps_hdh_qachecker import QualityChecker
+from .wps_cmor_checker import CMORChecker
 
 processes = [
     NCDump(),
     SpotChecker(),
     CChecker(),
     CFChecker(),
+    CMORChecker(),
     HDHCFChecker(),
     QualityChecker(),
     CDOOperation(),

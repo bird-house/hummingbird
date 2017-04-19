@@ -3,6 +3,8 @@ channels:
 - birdhouse
 - conda-forge
 - defaults
+- pcmdi
+- uvcdat
 dependencies:
 - python=2.7
 - pyopenssl
@@ -31,8 +33,8 @@ dependencies:
 - lxml=3.7
 - libxslt=1.1.29
 # cdo
-- cdo=1.7.2
-#- python-cdo=1.3.0
+- python-cdo
+- cdo=1.8.1
 - proj4=4.9.3  # fix cdo and qa-dkrz deps
 #- jpeg=9b # fix cdo and qa-dkrz deps
 # cf checker
@@ -43,7 +45,10 @@ dependencies:
 - wget=2.2
 # compliance checker ioos
 - compliance-checker=3.0.2
+# cmor
+- cmor=3.2.2
+- cmip6-cmor-tables=3.2.2
+- libnetcdf=4.4.1
 - pip:
   - genshi
   - sphinx-autoapi
-  - cdo==1.3.2
