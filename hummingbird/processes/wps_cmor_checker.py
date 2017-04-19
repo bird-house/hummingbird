@@ -100,23 +100,23 @@ class CMORChecker(Process):
 
         # output
         os.mkdir("report")
-        response.outputs['report'].file = "report/0.txt"
-
         with open('report/summary.txt', 'w') as fp:
             response.outputs['output'].file = fp.name
             for idx, ds in enumerate(datasets):
-                LOGGER.info("checking dataset %s", ds)
-                report_file = "report/{0}.txt".format(idx)
+                dataset_id = os.path.basename(ds)
+                LOGGER.info("checking dataset %s", dataset_id)
+                report_file = "report/{0}.txt".format(dataset_id)
+                response.outputs['report'].file = report_file
                 return_value = cmor_checker(
                     ds,
                     variable=variable,
                     cmip6_table=request.inputs['cmip6_table'][0].data,
                     output_filename=report_file)
                 if return_value is False:
-                    LOGGER.info("dataset check %s with errors.", ds)
-                    fp.write("{0}, FAIL, {1}\n".format(ds, report_file))
+                    LOGGER.info("dataset check %s with errors.", dataset_id)
+                    fp.write("{0}, FAIL\n".format(dataset_id))
                 else:
-                    fp.write("{0}, PASS, {1}\n".format(ds, report_file))
+                    fp.write("{0}, PASS\n".format(dataset_id))
                 response.update_status("checks: %d/%d" % (idx, max_count), int(idx * step))
         with tarfile.open("report.tar", "w") as tar:
             response.outputs['report_tar'].file = tar.name
