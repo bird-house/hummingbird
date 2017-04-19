@@ -42,7 +42,7 @@ dependencies:
 - qa-dkrz=0.6.3
 - wget=2.2
 # compliance checker ioos
-- compliance-checker=3.0.1
+- compliance-checker=3.0.2
 - pip:
   - genshi
   - sphinx-autoapi
