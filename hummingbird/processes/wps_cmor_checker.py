@@ -26,7 +26,7 @@ class CMORChecker(Process):
                          abstract="CMIP6 CMOR table name, ex: CMIP6_Amon.",
                          min_occurs=1,
                          max_occurs=1,
-                         default='CMIP6_Amon',
+                         default='CMIP6_CV',
                          allowed_values=cmor_tables()),
             ComplexInput('dataset', 'NetCDF File',
                          abstract='You may provide a URL or upload a NetCDF file.',
