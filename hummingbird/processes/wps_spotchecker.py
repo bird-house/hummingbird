@@ -1,7 +1,7 @@
 from compliance_checker.runner import ComplianceChecker, CheckSuite
 from compliance_checker import __version__ as cchecker_version
 
-from hummingbird.processing import ncdump
+from hummingbird.processing import ncdump, cmor_checker
 
 from pywps import Process
 from pywps import LiteralInput
@@ -93,7 +93,6 @@ class SpotChecker(Process):
 
             with open("report.html", 'w') as fp:
                 response.update_status("cfchecker ...", 20)
-                # response.outputs['output'].output_format = FORMATS.TEXT
                 response.outputs['output'].file = fp.name
                 return_value, errors = ComplianceChecker.run_checker(
                     dataset,
@@ -103,7 +102,10 @@ class SpotChecker(Process):
                     output_filename=fp.name,
                     output_format="html")
         elif 'CMIP6' in checker:
-            pass
+            with open("cmip6-cmor.txt", 'w') as fp:
+                response.outputs['output'].file = fp.name
+                response.update_status("cmip6 checker ...", 20)
+                cmor_checker(dataset, cmip6_table='CMIP6_CV', output_filename=fp.name)
         else:
             response.update_status("qa checker ...", 20)
             from hummingbird.processing import hdh_qa_checker
