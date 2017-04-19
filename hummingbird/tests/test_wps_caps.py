@@ -15,12 +15,12 @@ def test_wps_caps():
                             '/wps:Process'
                             '/ows:Identifier')
     assert sorted(names.split()) == [
+        'cchecker',
         'cdo_bbox',
         'cdo_operation',
         'cdo_sinfo',
         'cfchecker',
         'ensembles',
-        'ioos_cchecker',
         'ncdump',
         'qa_cfchecker',
         'qa_checker',
