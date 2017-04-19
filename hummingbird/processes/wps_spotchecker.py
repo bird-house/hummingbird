@@ -56,7 +56,7 @@ class SpotChecker(Process):
             self._handler,
             identifier="spotchecker",
             title="Spot Checker",
-            version="0.2.0",
+            version="0.3.0",
             abstract="Spot Checker checks datasets (NetCDF, OpenDAP) against a variety of compliance standards."
                      " Available compliance standards are the Climate and Forecast conventions (CF)"
                      " and project specific rules for CMIP6 and CORDEX.",
