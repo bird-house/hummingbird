@@ -6,7 +6,7 @@ from subprocess import check_output, CalledProcessError
 from .utils import fix_filename, make_dirs
 
 import logging
-logger = logging.getLogger("PYWPS")
+LOGGER = logging.getLogger("PYWPS")
 
 
 def ncdump(dataset):
@@ -27,7 +27,7 @@ def ncdump(dataset):
         # decode to ascii
         filtered_lines = [str(line) + '\n' for line in lines]
     except CalledProcessError as err:
-        logger.exception("could not generate ncdump")
+        LOGGER.exception("could not generate ncdump")
         return "Error: generating ncdump failed. Output: {0.output}".format(err)
     return filtered_lines
 
@@ -88,12 +88,12 @@ def cmor_checker(dataset, cmip6_table, variable=None, output_filename=None):
         table_path = os.path.join(cmor_tables_path(), cmip6_table + '.json')
         cmd.append(table_path)
         cmd.append(dataset)
-        logger.debug("run command: %s", cmd)
+        LOGGER.debug("run command: %s", cmd)
         os.environ['UVCDAT_ANONYMOUS_LOG'] = 'no'
         output = check_output(cmd, stderr=subprocess.STDOUT)
         cmor_dump_output(dataset, True, output, output_filename)
     except CalledProcessError as err:
-        logger.warn("CMOR checker failed on dataset: %s", os.path.basename(dataset))
+        LOGGER.warn("CMOR checker failed on dataset: %s", os.path.basename(dataset))
         cmor_dump_output(dataset, False, err.output, output_filename)
         return False
     return True
@@ -108,7 +108,7 @@ def hdh_cf_check(filename, version="auto"):
     try:
         output = check_output(cmd, stderr=subprocess.STDOUT)
     except CalledProcessError as err:
-        logger.exception("cfchecks failed!")
+        LOGGER.exception("cfchecks failed!")
         return "Error: cfchecks failed: {0}. Output: {0.output}".format(err)
     return output
 
@@ -130,7 +130,7 @@ def hdh_qa_checker(filename, project, qa_home=None):
     try:
         check_output(cmd, stderr=subprocess.STDOUT)
     except CalledProcessError as err:
-        logger.exception("qa checker failed!")
+        LOGGER.exception("qa checker failed!")
         msg = "qa checker failed: {0}. Output: {0.output}".format(err)
         raise Exception(msg)
 
