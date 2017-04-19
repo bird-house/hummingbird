@@ -1,6 +1,8 @@
 import os
 import tarfile
 
+from hummingbird.processing import cmor_checker
+
 from pywps import Process
 from pywps import LiteralInput
 from pywps import ComplexInput, ComplexOutput
@@ -9,12 +11,6 @@ from pywps.app.Common import Metadata
 
 import logging
 LOGGER = logging.getLogger("PYWPS")
-
-
-def cmor_checker(dataset, cmip6_table, variable=None, output_filename=None):
-    with open(output_filename, 'w') as fp:
-        fp.write('nix')
-    return False
 
 
 class CMORChecker(Process):

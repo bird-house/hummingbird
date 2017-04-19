@@ -32,6 +32,41 @@ def ncdump(dataset):
     return filtered_lines
 
 
+def cmor_tables_path():
+    import cmor
+    tables_path = os.path.abspath(
+        os.path.join(cmor.__file__, '..', '..', '..', '..', '..', 'share', 'cmip6-cmor-tables', 'Tables'))
+    return tables_path
+
+
+def cmor_tables():
+    tables = glob.glob(os.path.join(cmor_tables_path(), 'CMIP6_*.json'))
+    table_names = [os.path.basename(table)[0:-5] for table in tables]
+    return table_names
+
+
+def cmor_checker(dataset, cmip6_table, variable=None, output_filename=None):
+    output_filename = output_filename or 'out.txt'
+    try:
+        cmd = ['PrePARE.py']
+        if variable:
+            cmd.extend(['--variable', variable])
+        table_path = os.path.join(cmor_tables_path(), cmip6_table + '.json')
+        cmd.append(table_path)
+        cmd.append(dataset)
+        logger.debug("run command: %s", cmd)
+        os.environ['UVCDAT_ANONYMOUS_LOG'] = 'no'
+        output = check_output(cmd, stderr=subprocess.STDOUT)
+        with open(output_filename, 'w') as fp:
+            fp.write(output)
+    except CalledProcessError as err:
+        logger.warn("CMOR checker failed on dataset: %s", os.path.basename(dataset))
+        with open(output_filename, 'w') as fp:
+            fp.write(err.output)
+        return False
+    return True
+
+
 def hdh_cf_check(filename, version="auto"):
     # TODO: maybe use local file path
     filename = os.path.abspath(fix_filename(filename))
