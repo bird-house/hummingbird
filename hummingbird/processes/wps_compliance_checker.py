@@ -14,7 +14,7 @@ import logging
 LOGGER = logging.getLogger("PYWPS")
 
 
-class IOOSCChecker(Process):
+class CChecker(Process):
     def __init__(self):
         inputs = [
             LiteralInput('test', 'Test Suite',
@@ -74,9 +74,9 @@ class IOOSCChecker(Process):
                           supported_formats=[Format('application/x-tar')]),
         ]
 
-        super(IOOSCChecker, self).__init__(
+        super(CChecker, self).__init__(
             self._handler,
-            identifier="ioos_cchecker",
+            identifier="cchecker",
             title="IOOS Compliance Checker",
             version=cchecker_version,
             abstract="The IOOS Compliance Checker is a Python tool to"

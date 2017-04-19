@@ -1,6 +1,6 @@
 from .wps_ncdump import NCDump
 from .wps_spotchecker import SpotChecker
-from .wps_ioos import IOOSCChecker
+from .wps_compliance_checker import CChecker
 from .wps_cdo_op import CDOOperation
 from .wps_cdo_sinfo import CDOInfo
 from .wps_cdo_bbox import CDOBBox
@@ -12,7 +12,7 @@ from .wps_hdh_qachecker import QualityChecker
 processes = [
     NCDump(),
     SpotChecker(),
-    IOOSCChecker(),
+    CChecker(),
     CFChecker(),
     HDHCFChecker(),
     QualityChecker(),
