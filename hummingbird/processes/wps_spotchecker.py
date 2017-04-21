@@ -60,7 +60,7 @@ class SpotChecker(Process):
                      " Available compliance standards are the Climate and Forecast conventions (CF)"
                      " and project specific rules for CMIP6 and CORDEX.",
             metadata=[
-                Metadata('User Guide', 'http://birdhouse-hummingbird.readthedocs.io/en/latest/'),
+                Metadata('User Guide', 'http://birdhouse-hummingbird.readthedocs.io/en/latest/processes.html#spotchecker'),  # noqa
                 Metadata('CF Conventions', 'http://cfconventions.org/'),
                 Metadata('IOOS Compliance Online Checker', 'http://data.ioos.us/compliance/index.html'),
             ],

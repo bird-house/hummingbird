@@ -17,6 +17,7 @@ def test_wps_caps():
     assert sorted(names.split()) == [
         'cchecker',
         'cdo_bbox',
+        'cdo_indices',
         'cdo_operation',
         'cdo_sinfo',
         'cfchecker',
