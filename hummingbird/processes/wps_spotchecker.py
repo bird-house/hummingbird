@@ -16,24 +16,23 @@ LOGGER = logging.getLogger("PYWPS")
 class SpotChecker(Process):
     def __init__(self):
         inputs = [
-            LiteralInput('test', 'Test Suite',
+            LiteralInput('test', 'Select the test you want to run.',
                          data_type='string',
-                         abstract="Select the test you want to run."
-                                  " Default: CF-1.6 (climate forecast conventions)",
+                         abstract="CF-1.6=Climate and Forecast Conventions (CF)",
                          min_occurs=1,
                          max_occurs=1,
                          default='CF-1.6',
                          allowed_values=['CF-1.6', 'CORDEX', 'CMIP5', 'CMIP6']),
-            ComplexInput('dataset', 'NetCDF File',
-                         abstract='Enter a URL pointing to a NetCDF file (optional)',
+            ComplexInput('dataset', 'Upload your NetCDF file here',
+                         abstract='or enter a URL pointing to a NetCDF file.',
                          metadata=[Metadata('Info')],
                          min_occurs=0,
                          max_occurs=1,
                          supported_formats=[Format('application/x-netcdf')]),
-            LiteralInput('dataset_opendap', 'Remote OpenDAP Data URL',
+            LiteralInput('dataset_opendap', 'Or provide a remote OpenDAP data URL',
                          data_type='string',
-                         abstract="Or provide a remote OpenDAP data URL,"
-                                  " for example: http://my.opendap/thredds/dodsC/path/to/file.nc",
+                         abstract="Example: "
+                                  "http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis.dailyavgs/surface/slp.2017.nc",  # noqa
                          metadata=[
                              Metadata(
                                  'application/x-ogc-dods',

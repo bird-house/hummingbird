@@ -21,13 +21,13 @@ class CMORChecker(Process):
                          abstract="Specify geophysical variable name. (Optional)",
                          min_occurs=0,
                          max_occurs=1),
-            LiteralInput('cmip6_table', 'CMIP6 Table',
-                         data_type='string',
-                         abstract="CMIP6 CMOR table name, ex: CMIP6_Amon.",
-                         min_occurs=1,
-                         max_occurs=1,
-                         default='CMIP6_CV',
-                         allowed_values=cmor_tables()),
+            # LiteralInput('cmip6_table', 'CMIP6 Table',
+            #              data_type='string',
+            #              abstract="CMIP6 CMOR table name, ex: CMIP6_CV.",
+            #              min_occurs=1,
+            #              max_occurs=1,
+            #              default='CMIP6_CV',
+            #              allowed_values=cmor_tables()),
             ComplexInput('dataset', 'NetCDF File',
                          abstract='You may provide a URL or upload a NetCDF file.',
                          metadata=[Metadata('Info')],
@@ -110,7 +110,7 @@ class CMORChecker(Process):
                 return_value = cmor_checker(
                     ds,
                     variable=variable,
-                    cmip6_table=request.inputs['cmip6_table'][0].data,
+                    cmip6_table="CMIP6_CV",
                     output_filename=report_file)
                 if return_value is False:
                     LOGGER.info("dataset check %s with errors.", dataset_id)
