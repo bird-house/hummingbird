@@ -23,6 +23,12 @@ The XML response of the WPS service is the following document:
 
 .. _cfchecker:
 
+SpotChecker
+===========
+
+Spot Checker checks a single dataset (NetCDF or OpenDAP) against a variety of compliance standards.
+Available compliance standards are the Climate and Forecast conventions (CF) and project specific rules for CMIP6 and CORDEX.
+
 CFChecker
 =========
 
@@ -49,14 +55,14 @@ The XML response of the WPS service is the following document:
 The WPS Parameters are:
 
 *resource*
-     Is the input parameter to provide one or more URLs (``http://``, ``file://``) to NetCDF files. 
+     Is the input parameter to provide one or more URLs (``http://``, ``file://``) to NetCDF files.
      It is a WPS `ComplexData <http://geopython.github.io/pywps/doc/build/html/process/puts.html#complexvalue-input-and-output>`_ type with MIME-type ``application/x-netcdf``.
 
 *cf_version*
      Is an optional input parameter to provide the CF version to check against. It is a WPS `LiteralData <http://geopython.github.io/pywps/doc/build/html/process/puts.html#literalvalue-input-and-output>`_ type with a set of allowed values (1.1, 1.2, ..., auto).
 
 *output*
-     Is the output parameter to provide the report of the CF check as text document. 
+     Is the output parameter to provide the report of the CF check as text document.
      It is a WPS ComplexData type with MIME-type ``text/plain``.
 
 WPS process execution
@@ -77,15 +83,3 @@ CDO
 ===
 
 to be continued ...
-
-
-
-
-
-
-
-
-
-
-
-
