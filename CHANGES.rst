@@ -8,6 +8,7 @@ current
 * updated cdo 1.8.1
 * added cmor checker process.
 * added cdo indices process.
+* updated pywps recipe 0.8.8.
 
 0.5.4 (2017-03-27)
 ==================
