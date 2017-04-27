@@ -79,14 +79,15 @@ class CChecker(Process):
             identifier="cchecker",
             title="IOOS Compliance Checker",
             version=cchecker_version,
-            abstract="The IOOS Compliance Checker is a Python tool to"
-                     " check local/remote datasets against a variety of"
-                     " compliance standards. Each compliance standard is executed"
+            abstract="Runs the IOOS Compliance Checker tool to"
+                     " check datasets against compliance standards."
+                     " Each compliance standard is executed"
                      " by a Check Suite, which functions similar to a"
                      " Python standard Unit Test."
                      " A Check Suite runs one or more checks against a dataset,"
                      " returning a list of Results which are then aggregated"
-                     " into a summary. Development and maintenance for the compliance"
+                     " into a summary."
+                     " Development and maintenance for the compliance"
                      " checker is done by the Integrated Ocean Observing System (IOOS).",
             metadata=[
                 Metadata('Birdhouse', 'http://bird-house.github.io/'),

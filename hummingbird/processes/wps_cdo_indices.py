@@ -96,7 +96,8 @@ class CDOClimateIndices(Process):
             self._handler,
             identifier="cdo_indices",
             title="CDO Climate Indices",
-            abstract="Calls the Climate Data Operators (CDO) tool with a single dataset (NetCDF, OpenDAP) provided"
+            abstract="Calculates climate indices like summer days using CDO."
+                     " Calls the Climate Data Operators (CDO) tool with a single dataset (NetCDF, OpenDAP) provided"
                      " and uses the chosen operator to calculate climate indices written to a NetCDF file.",
             version=cdo_version,
             metadata=[

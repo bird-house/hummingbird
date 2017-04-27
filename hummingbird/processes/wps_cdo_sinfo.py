@@ -47,7 +47,9 @@ class CDOInfo(Process):
             self._handler,
             identifier="cdo_sinfo",
             title="CDO sinfo",
-            abstract="Apply CDO sinfo on NetCDF file and return document with metadata information.",
+            abstract="Runs CDO to retrieve NetCDF metadata information."
+                     " Calls the sinfo operator of CDO (Climate Data Operator) on a NetCDF file"
+                     " and returns a document with metadata information.",
             version=cdo_version,
             metadata=[
                 Metadata('Birdhouse', 'http://bird-house.github.io/'),
