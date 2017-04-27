@@ -64,7 +64,7 @@ class CDOOperation(Process):
             self._handler,
             identifier="cdo_operation",
             title="CDO Operation",
-            abstract="Apply CDO Operation like monmax on NetCDF File.",
+            abstract="Calls CDO operations like monmax on a NetCDF file.",
             version=cdo_version,
             metadata=[
                 Metadata('Birdhouse', 'http://bird-house.github.io/'),

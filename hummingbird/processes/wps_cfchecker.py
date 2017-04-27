@@ -57,7 +57,7 @@ class CFChecker(Process):
             identifier="cfchecker",
             title="CF Checker by NCAS Computational Modelling Services (NCAS-CMS)",
             version="2.0.9-0",
-            abstract="The NetCDF Climate Forcast Conventions compliance checker."
+            abstract="The NetCDF Climate Forcast Conventions compliance checker by CEDA."
                      " This process allows you to run the compliance checker"
                      " to check that the contents of a NetCDF file comply"
                      " with the Climate and Forecasts (CF) Metadata Convention."

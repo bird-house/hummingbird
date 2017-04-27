@@ -28,7 +28,7 @@ class CMORChecker(Process):
             #              max_occurs=1,
             #              default='CMIP6_CV',
             #              allowed_values=cmor_tables()),
-            ComplexInput('dataset', 'NetCDF File',
+            ComplexInput('dataset', 'Dataset',
                          abstract='You may provide a URL or upload a NetCDF file.',
                          metadata=[Metadata('Info')],
                          min_occurs=1,
@@ -67,8 +67,9 @@ class CMORChecker(Process):
             identifier="cmor_checker",
             title="CMIP6 CMOR Checker",
             version="3.2.2",
-            abstract="CMIP6 CMOR checker will verify that all attributes in the input file are present"
-                     " and conform to CMIP6 for publication into ESGF.",
+            abstract='Calls the CMIP6 cmor checker to verify CMIP6 compliance.'
+                     'CMIP6 CMOR checker will verify that all attributes in the input file are present'
+                     ' and conform to CMIP6 for publication into ESGF.',
             metadata=[
                 Metadata('CMOR Checker on GitHub', 'https://github.com/PCMDI/cmor'),
                 Metadata('User Guide', 'https://cmor.llnl.gov/mydoc_cmip6_validator/'),

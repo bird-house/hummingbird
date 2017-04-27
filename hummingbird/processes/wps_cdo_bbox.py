@@ -59,7 +59,9 @@ class CDOBBox(Process):
             self._handler,
             identifier="cdo_bbox",
             title="CDO select lon/lat box",
-            abstract="Apply CDO sellonlatbox on a NetCDF File.",
+            abstract='Runs CDO to clip a bounding-box from a NetCDF file.'
+                     ' Calls the CDO (Climate Data Operators) sellonlatbox operator'
+                     ' with a bounding-box and returns the resulting NetCDF file.',
             version=cdo_version,
             metadata=[
                 Metadata('Birdhouse', 'http://bird-house.github.io/'),
