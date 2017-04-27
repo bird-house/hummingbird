@@ -14,11 +14,11 @@ import logging
 LOGGER = logging.getLogger("PYWPS")
 
 
-class Ensembles(Process):
+class CDOEnsembles(Process):
 
     def __init__(self):
         inputs = [
-            ComplexInput('dataset', 'NetCDF File',
+            ComplexInput('dataset', 'Dataset',
                          abstract='You may provide a URL or upload a NetCDF file.',
                          metadata=[Metadata('Info')],
                          min_occurs=0,
@@ -52,7 +52,7 @@ class Ensembles(Process):
                           supported_formats=[Format('application/x-netcdf')]),
         ]
 
-        super(Ensembles, self).__init__(
+        super(CDOEnsembles, self).__init__(
             self._handler,
             identifier="ensembles",
             title="CDO Ensembles Operations",

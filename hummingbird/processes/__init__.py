@@ -5,7 +5,7 @@ from .wps_cdo_op import CDOOperation
 from .wps_cdo_sinfo import CDOInfo
 from .wps_cdo_bbox import CDOBBox
 from .wps_cdo_indices import CDOClimateIndices
-from .wps_ensembles import Ensembles
+from .wps_cdo_ensembles import CDOEnsembles
 from .wps_cfchecker import CFChecker
 from .wps_hdh_cfchecker import HDHCFChecker
 from .wps_hdh_qachecker import QualityChecker
@@ -23,5 +23,5 @@ processes = [
     CDOInfo(),
     CDOBBox(),
     CDOClimateIndices(),
-    Ensembles(),
+    CDOEnsembles(),
 ]
