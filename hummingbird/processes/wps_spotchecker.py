@@ -81,11 +81,6 @@ class SpotChecker(Process):
             dataset = request.inputs['dataset_opendap'][0].data
         elif 'dataset' in request.inputs:
             dataset = request.inputs['dataset'][0].file
-            # TODO: quick fix for swift temp urls
-            if '?' in dataset:
-                new_name = dataset.split('?', 1)[0]
-                os.rename(dataset, new_name)
-                dataset = new_name
         else:
             raise Exception("missing dataset to check.")
 
