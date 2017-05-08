@@ -1,8 +1,8 @@
 Changes
 *******
 
-current
-=======
+0.5.5 (2017-05-08)
+==================
 
 * updated compliance-checker 3.0.3.
 * pinned pygeoif=0.6 for compliance checker.
