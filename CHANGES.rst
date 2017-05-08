@@ -5,10 +5,10 @@ current
 =======
 
 * updated compliance-checker 3.0.3.
+* pinned pygeoif=0.6 for compliance checker.
 * updated cdo 1.8.1
 * added cmor checker process.
 * added cdo indices process.
-* added multiple outputs process.
 * updated pywps recipe 0.8.8.
 * update conda recipe 0.3.6.
 
