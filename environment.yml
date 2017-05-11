@@ -38,8 +38,8 @@ dependencies:
 - proj4=4.9.3  # fix cdo and qa-dkrz deps
 #- jpeg=9b # fix cdo and qa-dkrz deps
 # cf checker
-- cfchecker=2.0.9
-- cdat-lite=6.0rc2
+- netcdf4
+- numpy
 # qa dkrz
 - qa-dkrz=0.6.3
 - wget=2.2
@@ -51,5 +51,7 @@ dependencies:
 - cmip6-cmor-tables=3.2.3
 - libnetcdf=4.4.1
 - pip:
+  - cfchecker==3.0.4
+  - cfunits==1.5
   - genshi
   - sphinx-autoapi
