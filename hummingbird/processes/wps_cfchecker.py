@@ -22,7 +22,7 @@ def cf_check(nc_file, version):
     try:
         cf_report = check_output(cmd)
     except CalledProcessError as err:
-        logging.exception("cfchecks failed!")
+        LOGGER.exception("cfchecks failed!")
         cf_report = err.output
     return cf_report
 
@@ -56,7 +56,7 @@ class CFChecker(Process):
             self._handler,
             identifier="cfchecker",
             title="CF Checker by NCAS Computational Modelling Services (NCAS-CMS)",
-            version="2.0.9-0",
+            version="3.0.4",
             abstract="The NetCDF Climate Forcast Conventions compliance checker by CEDA."
                      " This process allows you to run the compliance checker"
                      " to check that the contents of a NetCDF file comply"
@@ -69,8 +69,8 @@ class CFChecker(Process):
                      " If you have suggestions for improvement then please contact"
                      " Rosalyn Hatcher at NCAS-CMS (r.s.hatcher@reading.ac.uk).",
             metadata=[
-                Metadata('Birdhouse', 'http://bird-house.github.io/'),
                 Metadata('User Guide', 'http://birdhouse-hummingbird.readthedocs.io/en/latest/'),
+                Metadata('Readme on PyPI', 'https://pypi.python.org/pypi/cfchecker/3.0.4'),
                 Metadata('CF Conventions', 'http://cfconventions.org/'),
                 Metadata('Online Compliance Checker', 'http://cfconventions.org/compliance-checker.html'),
             ],
