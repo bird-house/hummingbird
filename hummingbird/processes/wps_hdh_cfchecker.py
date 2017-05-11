@@ -18,7 +18,7 @@ class HDHCFChecker(Process):
                          abstract='You may provide a URL or upload a NetCDF file.',
                          metadata=[Metadata('Info')],
                          min_occurs=1,
-                         max_occurs=100,
+                         max_occurs=1024,
                          supported_formats=[Format('application/x-netcdf')]),
             LiteralInput('cf_version', 'Check against CF version',
                          data_type='string',
