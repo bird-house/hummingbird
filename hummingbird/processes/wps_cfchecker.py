@@ -12,8 +12,8 @@ LOGGER = logging.getLogger("PYWPS")
 
 
 def cf_check(nc_file, version):
-    # TODO: maybe use local file path
     # TODO: avoid downloading of cf table for each check (see pypi page)
+    LOGGER.debug("checking %s", os.path.basename(nc_file))
     if not nc_file.endswith(".nc"):
         new_name = nc_file + ".nc"
         os.rename(nc_file, new_name)
@@ -22,7 +22,7 @@ def cf_check(nc_file, version):
     try:
         cf_report = check_output(cmd)
     except CalledProcessError as err:
-        LOGGER.exception("cfchecks failed!")
+        LOGGER.warn("cfchecks failed!")
         cf_report = err.output
     return cf_report
 
@@ -30,7 +30,7 @@ def cf_check(nc_file, version):
 class CFChecker(Process):
     def __init__(self):
         inputs = [
-            ComplexInput('dataset', 'NetCDF File',
+            ComplexInput('dataset', 'Dataset',
                          abstract='You may provide a URL or upload a NetCDF file.',
                          metadata=[Metadata('Info')],
                          min_occurs=0,
