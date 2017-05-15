@@ -30,12 +30,6 @@ def cf_check(nc_file, version):
 class CFChecker(Process):
     def __init__(self):
         inputs = [
-            ComplexInput('dataset', 'Dataset',
-                         abstract='You may provide a URL or upload a NetCDF file.',
-                         metadata=[Metadata('Info')],
-                         min_occurs=0,
-                         max_occurs=1024,
-                         supported_formats=[Format('application/x-netcdf')]),
             LiteralInput('cf_version', 'Check against CF version',
                          data_type='string',
                          abstract="Version of CF conventions that the NetCDF file should be check against."
@@ -44,6 +38,23 @@ class CFChecker(Process):
                          max_occurs=1,
                          default='auto',
                          allowed_values=["auto", "1.6", "1.5", "1.4", "1.3", "1.2", "1.1", "1.0"]),
+            ComplexInput('dataset', 'Dataset',
+                         abstract='You may provide a URL or upload a NetCDF file.',
+                         metadata=[Metadata('Info')],
+                         min_occurs=0,
+                         max_occurs=1024,
+                         supported_formats=[Format('application/x-netcdf')]),
+            LiteralInput('dataset_opendap', 'Remote OpenDAP Data URL',
+                         data_type='string',
+                         abstract="Or provide a remote OpenDAP data URL,"
+                                  " for example:"
+                                  " http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis2.dailyavgs/surface/mslp.2016.nc",  # noqa
+                         metadata=[
+                            Metadata(
+                                'application/x-ogc-dods',
+                                'https://www.iana.org/assignments/media-types/media-types.xhtml')],
+                         min_occurs=0,
+                         max_occurs=1024),
         ]
         outputs = [
             ComplexOutput('output', 'CF Checker Report',
@@ -83,7 +94,14 @@ class CFChecker(Process):
     def _handler(self, request, response):
         # TODO: iterate input files ... run parallel
         # TODO: generate html report with links to cfchecker output ...
-        datasets = [dataset.file for dataset in request.inputs['dataset']]
+        datasets = []
+        if 'dataset' in request.inputs:
+            for dataset in request.inputs['dataset']:
+                datasets.append(dataset.file)
+        # append opendap urls
+        if 'dataset_opendap' in request.inputs:
+            for dataset in request.inputs['dataset_opendap']:
+                datasets.append(dataset.data)
 
         count = 0
         max_count = len(datasets)
