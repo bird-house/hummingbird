@@ -5,6 +5,7 @@ current
 =======
 
 * updated ceda cfchecker 3.0.4.
+* added opendap input parameter to cfchecker.
 
 0.5.5 (2017-05-08)
 ==================
