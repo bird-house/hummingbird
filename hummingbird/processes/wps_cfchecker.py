@@ -110,7 +110,7 @@ class CFChecker(Process):
             cf_report = cf_check(dataset, version=request.inputs['cf_version'][0].data)
             with open('cfchecker_output.txt', 'a') as fp:
                 response.outputs['output'].file = fp.name
-                fp.write(cf_report)
+                fp.write(cf_report + "\n\n")
                 count = count + 1
                 response.update_status("cfchecker: %d/%d" % (count, max_count), int(count * step))
         response.update_status("cfchecker done.", 100)
