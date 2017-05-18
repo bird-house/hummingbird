@@ -3,7 +3,7 @@ from pywps.app.Service import Service
 
 from hummingbird.processes import processes
 
-__version__ = "0.5.5"
+__version__ = "0.5.6"
 
 
 def application(environ, start_response):
