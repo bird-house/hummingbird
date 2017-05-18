@@ -1,11 +1,13 @@
 Changes
 *******
 
-current
-=======
+0.5.6 (2017-05-18)
+==================
 
 * updated ceda cfchecker 3.0.4.
 * added opendap input parameter to cfchecker.
+* added wsgi application.
+* update pywps recipe 0.9.0.
 
 0.5.5 (2017-05-08)
 ==================
