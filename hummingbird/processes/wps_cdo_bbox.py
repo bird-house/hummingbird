@@ -2,6 +2,8 @@
 Processes with cdo commands
 """
 import os
+import tarfile
+import tempfile
 
 from cdo import Cdo
 cdo_version = Cdo().version()
@@ -20,7 +22,7 @@ class CDOBBox(Process):
     """This process calls cdo sellonlatbox on netcdf file"""
     def __init__(self):
         inputs = [
-            ComplexInput('dataset', 'NetCDF File',
+            ComplexInput('dataset', 'Dataset',
                          abstract='You may provide a URL or upload a NetCDF file.',
                          metadata=[Metadata('Info')],
                          min_occurs=0,
@@ -51,10 +53,15 @@ class CDOBBox(Process):
                          ),
         ]
         outputs = [
-            ComplexOutput('output', 'NetCDF Output',
+            ComplexOutput('output', 'Output',
                           abstract="CDO sellonlatbox result.",
                           as_reference=True,
                           supported_formats=[Format('application/x-netcdf')]),
+            ComplexOutput('output_all', 'All Subsets',
+                          abstract="Tar archive containing the netCDF files",
+                          as_reference=True,
+                          supported_formats=[Format('application/x-tar')]
+                          ),
         ]
 
         super(CDOBBox, self).__init__(
@@ -91,13 +98,21 @@ class CDOBBox(Process):
         bbox = request.inputs['bbox'][0].data
 
         cdo = Cdo()
+        tar = tarfile.open("cdo_bbox.tar", "w")
 
         try:
-            outfile = "{0}_bbox.nc".format(os.path.basename(datasets[0]).split('.nc')[0])
-        except Exception as e:
-            outfile = "cdo_bbox.nc"
-        cdo.sellonlatbox(bbox, input=datasets[0], output=outfile)
+            for ds in datasets:
+                try:
+                    outfile = "{0}_bbox.nc".format(os.path.basename(ds).split('.nc')[0])
+                except Exception as e:
+                    LOGGER.warn("Could not generate output name: %s", e)
+                    _, outfile = tempfile.mkstemp(suffix=".nc", prefix="cdo_bbox", dir=".")
+                cdo.sellonlatbox(bbox, input=ds, output=outfile)
+                tar.add(outfile)
+        finally:
+            tar.close()
 
         response.outputs['output'].file = outfile
+        response.outputs['output_all'].file = tar.name
         response.update_status("cdo bbox done", 100)
         return response
