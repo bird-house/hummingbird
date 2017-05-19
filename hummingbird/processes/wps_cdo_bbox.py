@@ -68,6 +68,7 @@ class CDOBBox(Process):
                 Metadata('User Guide', 'http://birdhouse-hummingbird.readthedocs.io/en/latest/'),
                 Metadata('CDO Homepage', 'https://code.zmaw.de/projects/cdo'),
                 Metadata('CDO Documentation', 'https://code.zmaw.de/projects/cdo/embedded/index.html'),
+                Metadata('Bounding Box Finder', 'http://boundingbox.klokantech.com/'),
             ],
             inputs=inputs,
             outputs=outputs,
