@@ -1,6 +1,8 @@
 """
 Processes with cdo commands
 """
+import os
+
 from cdo import Cdo
 cdo_version = Cdo().version()
 
@@ -90,7 +92,10 @@ class CDOBBox(Process):
 
         cdo = Cdo()
 
-        outfile = 'cdo_bbox.nc'
+        try:
+            outfile = "{0}_bbox.nc".format(os.path.basename(datasets[0]).split('.nc')[0])
+        except Exception as e:
+            outfile = "cdo_bbox.nc"
         cdo.sellonlatbox(bbox, input=datasets[0], output=outfile)
 
         response.outputs['output'].file = outfile
