@@ -40,6 +40,7 @@ dependencies:
 # cf checker
 - netcdf4
 - numpy
+- cfunits
 # qa dkrz
 - qa-dkrz=0.6.3
 - wget=2.2
@@ -52,6 +53,5 @@ dependencies:
 - libnetcdf=4.4.1
 - pip:
   - cfchecker==3.0.4
-  - cfunits==1.5
   - genshi
   - sphinx-autoapi
