@@ -1,5 +1,3 @@
-import os
-
 from pywps import Process
 from pywps import LiteralInput
 from pywps import ComplexInput, ComplexOutput

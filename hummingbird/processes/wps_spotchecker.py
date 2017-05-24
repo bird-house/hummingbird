@@ -1,5 +1,3 @@
-import os
-
 from compliance_checker.runner import ComplianceChecker, CheckSuite
 from compliance_checker import __version__ as cchecker_version
 
@@ -8,7 +6,7 @@ from hummingbird.processing import ncdump, cmor_checker
 from pywps import Process
 from pywps import LiteralInput
 from pywps import ComplexInput, ComplexOutput
-from pywps import Format, FORMATS
+from pywps import Format
 from pywps.app.Common import Metadata
 
 import logging

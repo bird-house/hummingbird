@@ -1,7 +1,4 @@
-import os
-import shutil
 import tarfile
-import glob
 
 from pywps import Process
 from pywps import LiteralInput
