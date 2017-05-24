@@ -1,6 +1,13 @@
 Changes
 *******
 
+current
+=======
+
+* updated compliance checker 3.0.4.
+* cleaned up code.
+* allow multiple input files for cdo_bbox and cdo_indices.
+
 0.5.6 (2017-05-18)
 ==================
 
