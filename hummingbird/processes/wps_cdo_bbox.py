@@ -73,9 +73,7 @@ class CDOBBox(Process):
                      ' with a bounding-box and returns the resulting NetCDF file.',
             version=cdo_version,
             metadata=[
-                Metadata('Birdhouse', 'http://bird-house.github.io/'),
                 Metadata('User Guide', 'http://birdhouse-hummingbird.readthedocs.io/en/latest/'),
-                Metadata('CDO Homepage', 'https://code.zmaw.de/projects/cdo'),
                 Metadata('CDO Documentation', 'https://code.zmaw.de/projects/cdo/embedded/index.html'),
                 Metadata('Bounding Box Finder', 'http://boundingbox.klokantech.com/'),
             ],
@@ -99,16 +97,20 @@ class CDOBBox(Process):
         bbox = request.inputs['bbox'][0].data
 
         cdo = Cdo()
-        tar = tarfile.open("cdo_bbox.tar", "w")
 
         try:
-            for ds in datasets:
+            tar = tarfile.open("cdo_bbox.tar", "w")
+            num_ds = len(datasets)
+            for idx, ds in enumerate(datasets):
                 try:
                     outfile = "{0}_bbox.nc".format(os.path.basename(ds).split('.nc')[0])
                 except Exception as e:
                     LOGGER.warn("Could not generate output name: %s", e)
                     _, outfile = tempfile.mkstemp(suffix=".nc", prefix="cdo_bbox", dir=".")
-                response.update_status("calculating cdo bbox on {0}...".format(os.path.basename(ds)), 33)
+                msg = "calculating cdo bbox on {0}...".format(os.path.basename(ds))
+                progress = int(idx * 100.0 / num_ds) + 1
+                LOGGER.debug('index = %s, max = %s, progress = %s', idx, num_ds, progress)
+                response.update_status(msg, progress)
                 cdo.sellonlatbox(bbox, input=ds, output=outfile)
                 tar.add(outfile)
         finally:
