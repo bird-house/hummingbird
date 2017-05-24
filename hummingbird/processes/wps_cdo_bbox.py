@@ -5,14 +5,14 @@ import os
 import tarfile
 import tempfile
 
-from cdo import Cdo
-cdo_version = Cdo().version()
-
 from pywps import Process
 from pywps import LiteralInput
 from pywps import ComplexInput, ComplexOutput
 from pywps import Format, FORMATS
 from pywps.app.Common import Metadata
+
+from cdo import Cdo
+cdo_version = Cdo().version()
 
 import logging
 LOGGER = logging.getLogger("PYWPS")
@@ -86,6 +86,7 @@ class CDOBBox(Process):
         )
 
     def _handler(self, request, response):
+        response.update_status("starting cdo bbox ...", 0)
         datasets = []
         # append file urls
         if 'dataset' in request.inputs:
@@ -107,6 +108,7 @@ class CDOBBox(Process):
                 except Exception as e:
                     LOGGER.warn("Could not generate output name: %s", e)
                     _, outfile = tempfile.mkstemp(suffix=".nc", prefix="cdo_bbox", dir=".")
+                response.update_status("calculating cdo bbox on {0}...".format(os.path.basename(ds)), 33)
                 cdo.sellonlatbox(bbox, input=ds, output=outfile)
                 tar.add(outfile)
         finally:
