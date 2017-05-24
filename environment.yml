@@ -45,8 +45,8 @@ dependencies:
 - qa-dkrz=0.6.3
 - wget=2.2
 # compliance checker ioos
-- compliance-checker=3.0.3
-- pygeoif=0.6
+- compliance-checker=3.0.4
+#- pygeoif=0.6
 # cmor
 - cmor=3.2.2
 - cmip6-cmor-tables=3.2.3
