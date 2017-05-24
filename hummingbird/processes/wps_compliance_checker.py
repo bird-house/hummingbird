@@ -33,7 +33,7 @@ class CChecker(Process):
                          max_occurs=1,
                          default='normal',
                          allowed_values=['strict', 'normal', 'lenient']),
-            ComplexInput('dataset', 'NetCDF File',
+            ComplexInput('dataset', 'Dataset',
                          abstract='You may provide a URL or upload a NetCDF file.',
                          metadata=[Metadata('Info')],
                          min_occurs=0,
