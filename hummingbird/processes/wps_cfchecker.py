@@ -66,7 +66,7 @@ class CFChecker(Process):
         super(CFChecker, self).__init__(
             self._handler,
             identifier="cfchecker",
-            title="CF Checker by NCAS Computational Modelling Services (NCAS-CMS)",
+            title="CF Checker by CEDA",
             version="3.0.5",
             abstract="The NetCDF Climate Forcast Conventions compliance checker by CEDA."
                      " This process allows you to run the compliance checker"
