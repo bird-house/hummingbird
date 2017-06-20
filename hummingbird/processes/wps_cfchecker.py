@@ -67,7 +67,7 @@ class CFChecker(Process):
             self._handler,
             identifier="cfchecker",
             title="CF Checker by NCAS Computational Modelling Services (NCAS-CMS)",
-            version="3.0.4",
+            version="3.0.5",
             abstract="The NetCDF Climate Forcast Conventions compliance checker by CEDA."
                      " This process allows you to run the compliance checker"
                      " to check that the contents of a NetCDF file comply"
