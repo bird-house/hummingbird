@@ -81,7 +81,7 @@ class CFChecker(Process):
                      " Rosalyn Hatcher at NCAS-CMS (r.s.hatcher@reading.ac.uk).",
             metadata=[
                 Metadata('User Guide', 'http://birdhouse-hummingbird.readthedocs.io/en/latest/'),
-                Metadata('Readme on PyPI', 'https://pypi.python.org/pypi/cfchecker/3.0.4'),
+                Metadata('Readme on PyPI', 'https://pypi.python.org/pypi/cfchecker/'),
                 Metadata('CF Conventions', 'http://cfconventions.org/'),
                 Metadata('Online Compliance Checker', 'http://cfconventions.org/compliance-checker.html'),
             ],
