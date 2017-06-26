@@ -43,7 +43,7 @@ dependencies:
 - cfunits
 # qa dkrz
 - qa-dkrz=0.6.3
-- wget=2.2
+- wget
 # compliance checker ioos
 - compliance-checker=3.0.4
 #- pygeoif=0.6
