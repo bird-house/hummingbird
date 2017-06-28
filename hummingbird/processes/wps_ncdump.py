@@ -13,9 +13,8 @@ LOGGER = logging.getLogger("PYWPS")
 class NCDump(Process):
     def __init__(self):
         inputs = [
-            ComplexInput('dataset', 'NetCDF File',
+            ComplexInput('dataset', 'Dataset',
                          abstract='Enter a URL pointing to a NetCDF file (optional)',
-                         metadata=[Metadata('Info')],
                          min_occurs=0,
                          max_occurs=100,
                          supported_formats=[Format('application/x-netcdf')]),
