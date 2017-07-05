@@ -3,6 +3,7 @@ from .wps_spotchecker import SpotChecker
 from .wps_compliance_checker import CChecker
 from .wps_cdo_op import CDOOperation
 from .wps_cdo_sinfo import CDOInfo
+from .wps_cdo_copy import CDOCopy
 from .wps_cdo_bbox import CDOBBox
 from .wps_cdo_indices import CDOClimateIndices
 from .wps_cdo_ensembles import CDOEnsembles
@@ -19,8 +20,9 @@ processes = [
     CMORChecker(),
     HDHCFChecker(),
     QualityChecker(),
-    CDOOperation(),
     CDOInfo(),
+    CDOOperation(),
+    CDOCopy(),
     CDOBBox(),
     CDOClimateIndices(),
     CDOEnsembles(),
