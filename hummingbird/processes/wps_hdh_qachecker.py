@@ -15,7 +15,6 @@ class QualityChecker(Process):
         inputs = [
             ComplexInput('dataset', 'NetCDF File',
                          abstract='You may provide a URL or upload a NetCDF file.',
-                         metadata=[Metadata('Info')],
                          min_occurs=1,
                          max_occurs=1024,
                          supported_formats=[Format('application/x-netcdf')]),
@@ -24,7 +23,7 @@ class QualityChecker(Process):
                          abstract="Climate model data project to be checked: CORDEX or CMIP5",
                          min_occurs=1,
                          max_occurs=1,
-                         default='auto',
+                         default='CORDEX',
                          allowed_values=['CORDEX', 'CMIP5']),
         ]
         outputs = [
