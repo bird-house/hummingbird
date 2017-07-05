@@ -14,6 +14,8 @@ from pywps.app.Common import Metadata
 from cdo import Cdo
 cdo_version = Cdo().version()
 
+from hummingbird.utils import output_file
+
 import logging
 LOGGER = logging.getLogger("PYWPS")
 
@@ -138,11 +140,7 @@ class CDOClimateIndices(Process):
             tar = tarfile.open("cdo_{0}.tar".format(operator), "w")
             num_ds = len(datasets)
             for idx, ds in enumerate(datasets):
-                try:
-                    outfile = "{0}_{1}.nc".format(os.path.basename(ds).split('.nc')[0], operator)
-                except Exception as e:
-                    LOGGER.warn("Could not generate output name: %s", e)
-                    _, outfile = tempfile.mkstemp(suffix=".nc", prefix="cdo_indices", dir=".")
+                outfile = output_file(ds, addition=operator)
                 msg = "calculating cdo indice {0} on {1} ...".format(operator, os.path.basename(ds))
                 progress = int(idx * 100.0 / num_ds) + 1
                 LOGGER.debug('index = %s, max = %s, progress = %s', idx, num_ds, progress)
