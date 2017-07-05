@@ -17,7 +17,11 @@ def fix_filename(filename):
     return filename
 
 
-def output_file(filename, addition=None, extension=None):
+def output_filename(filename, addition=None, extension=None):
+    """
+    build an appropriate output filename based on filename, addition
+    and extension.
+    """
     extension = extension or 'nc'
     addition = addition or ''
     try:
