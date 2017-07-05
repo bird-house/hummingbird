@@ -1,4 +1,5 @@
 import os
+import tempfile
 
 import logging
 LOGGER = logging.getLogger("PYWPS")
