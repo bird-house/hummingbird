@@ -9,6 +9,7 @@ current
 * allow multiple input files for cdo_bbox and cdo_indices.
 * updated cdo 1.8.2
 * updated cfchecker 3.0.5
+* added cdo_copy process.
 
 0.5.6 (2017-05-18)
 ==================
