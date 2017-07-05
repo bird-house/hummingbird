@@ -10,7 +10,7 @@ from pywps import ComplexInput, ComplexOutput
 from pywps import Format
 from pywps.app.Common import Metadata
 
-from hummingbird.utils import output_file
+from hummingbird.utils import output_filename
 
 import logging
 LOGGER = logging.getLogger("PYWPS")
@@ -76,7 +76,7 @@ class CDOCopy(Process):
         cdo = Cdo()
         cdo_op = getattr(cdo, 'copy')
 
-        outfile = output_file(datasets[0], addition='copy')
+        outfile = output_filename(datasets[0], addition='copy')
         cdo_op(input=datasets, output=outfile)
 
         response.outputs['output'].file = outfile
