@@ -18,9 +18,8 @@ class CDOInfo(Process):
     """This process calls cdo sinfo on netcdf file"""
     def __init__(self):
         inputs = [
-            ComplexInput('dataset', 'NetCDF File',
+            ComplexInput('dataset', 'Dataset',
                          abstract='You may provide a URL or upload a NetCDF file.',
-                         metadata=[Metadata('Info')],
                          min_occurs=0,
                          max_occurs=100,
                          supported_formats=[Format('application/x-netcdf')]),
@@ -52,9 +51,7 @@ class CDOInfo(Process):
                      " and returns a document with metadata information.",
             version=cdo_version,
             metadata=[
-                Metadata('Birdhouse', 'http://bird-house.github.io/'),
                 Metadata('User Guide', 'http://birdhouse-hummingbird.readthedocs.io/en/latest/'),
-                Metadata('CDO Homepage', 'https://code.zmaw.de/projects/cdo'),
                 Metadata('CDO Documentation', 'https://code.zmaw.de/projects/cdo/embedded/index.html'),
             ],
             inputs=inputs,
