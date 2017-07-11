@@ -11,6 +11,7 @@ from .wps_cfchecker import CFChecker
 from .wps_hdh_cfchecker import HDHCFChecker
 from .wps_hdh_qachecker import QualityChecker
 from .wps_cmor_checker import CMORChecker
+from .wps_cdo_inter_pywps4 import CDOinter_MPI
 
 processes = [
     NCDump(),
@@ -26,4 +27,5 @@ processes = [
     CDOBBox(),
     CDOClimateIndices(),
     CDOEnsembles(),
+    CDOinter_MPI(),
 ]
