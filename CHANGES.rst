@@ -10,6 +10,7 @@ current
 * updated cdo 1.8.2
 * updated cfchecker 3.0.5
 * added cdo_copy process.
+* update cmor checker 3.2.5
 
 0.5.6 (2017-05-18)
 ==================
