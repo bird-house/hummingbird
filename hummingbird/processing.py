@@ -81,13 +81,13 @@ def cmor_dump_output(dataset, status, output, output_filename):
         fp.writelines(converted_lines)
 
 
-def cmor_checker(dataset, cmip6_table='CMIP6_CV', variable=None, output_filename=None):
+def cmor_checker(dataset, table='CMIP6_CV', variable=None, output_filename=None):
     output_filename = output_filename or 'out.txt'
     try:
         cmd = ['PrePARE']
         if variable:
             cmd.extend(['--variable', variable])
-        table_path = os.path.join(cmor_tables_path(), cmip6_table + '.json')
+        table_path = os.path.join(cmor_tables_path(), table + '.json')
         cmd.append(table_path)
         cmd.append(dataset)
         LOGGER.debug("run command: %s", cmd)

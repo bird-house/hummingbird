@@ -105,7 +105,7 @@ class SpotChecker(Process):
             with open("cmip6-cmor.txt", 'w') as fp:
                 response.outputs['output'].file = fp.name
                 response.update_status("cmip6 checker ...", 20)
-                cmor_checker(dataset, cmip6_table='CMIP6_CV', output_filename=fp.name)
+                cmor_checker(dataset, output_filename=fp.name)
         else:
             response.update_status("qa checker ...", 20)
             from hummingbird.processing import hdh_qa_checker
