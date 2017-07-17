@@ -48,8 +48,8 @@ dependencies:
 - compliance-checker=3.0.4
 #- pygeoif=0.6
 # cmor
-- cmor=3.2.2
-- cmip6-cmor-tables=3.2.4
+- cmor=3.2.5
+- cmip6-cmor-tables=3.2.5
 - libnetcdf=4.4.1
 - pip:
   - cfchecker==3.0.5
