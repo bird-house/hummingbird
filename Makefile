@@ -246,12 +246,12 @@ passwd: custom.cfg
 .PHONY: test
 test:
 	@echo "Running tests (skip slow and online tests) ..."
-	$(CONDA_ENV_PATH)/bin/py.test -v -m 'not slow and not online'
+	bash -c "source $(ANACONDA_HOME)/bin/activate $(CONDA_ENV); bin/py.test -v -m 'not slow and not online'"
 
 .PHONY: testall
 testall:
 	@echo "Running all tests (including slow and online tests) ..."
-	$(CONDA_ENV_PATH)/bin/py.test -v
+	bash -c "source $(ANACONDA_HOME)/bin/activate $(CONDA_ENV); bin/py.test -v"
 
 .PHONY: pep8
 pep8:
