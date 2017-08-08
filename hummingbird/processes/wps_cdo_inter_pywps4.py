@@ -17,9 +17,10 @@ LOGGER = logging.getLogger("PYWPS")
 
 
 def cdo_wrap(tmargs):
-    cdo=Cdo()
+    cdo = Cdo()
     cdo_op = getattr(cdo, tmargs[3])
-    return cdo_op(tmargs[0],input=tmargs[1],output=tmargs[2]) 
+    return cdo_op(tmargs[0], input=tmargs[1], output=tmargs[2])
+
 
 class CDOinter_MPI(Process):
 
@@ -31,34 +32,35 @@ class CDOinter_MPI(Process):
                          min_occurs=1,
                          max_occurs=100,
                          supported_formats=[Format('application/x-netcdf')]),
-            LiteralInput('operator','CDO Operator',
+            LiteralInput('operator', 'CDO Operator',
                          data_type='string',
                          abstract="Choose a CDO Operator",
                          default='remapbil',
                          min_occurs=0,
                          max_occurs=1,
-                         allowed_values=['remapbil','remapbic','remapdis','remapnn','remapcon','remapcon2','remaplaf']),
-            LiteralInput('regr','Grid',
+                         allowed_values=['remapbil', 'remapbic', 'remapdis',
+                                         'remapnn', 'remapcon', 'remapcon2', 'remaplaf']),
+            LiteralInput('regr', 'Grid',
                          data_type='string',
                          abstract="Select an grid",
                          default='r360x180',
                          min_occurs=0,
                          max_occurs=1,
-                         allowed_values=['r64x32', 'r32x16', 'r1024x512', 'r360x180','r480x241','custom']),
-            LiteralInput('longitude','longitude',
+                         allowed_values=['r64x32', 'r32x16', 'r1024x512', 'r360x180', 'r480x241', 'custom']),
+            LiteralInput('longitude', 'longitude',
                          data_type='string',
                          abstract="New nx Longitude",
                          default=None,
                          min_occurs=0,
                          max_occurs=1),
-            LiteralInput('latitude','Latitude',
-                         data_type='string',    
+            LiteralInput('latitude', 'Latitude',
+                         data_type='string',
                          abstract="New ny Latitude",
                          default=None,
                          min_occurs=0,
                          max_occurs=1),
-            LiteralInput('multi','Serial or MP',
-                         data_type='string',    
+            LiteralInput('multi', 'Serial or MP',
+                         data_type='string',
                          abstract="Use Serial or Multiprocessing/Multithreads",
                          default='Serial',
                          min_occurs=0,
@@ -67,7 +69,7 @@ class CDOinter_MPI(Process):
         ]
 
         outputs = [
-            ComplexOutput('tarout','Result files',
+            ComplexOutput('tarout', 'Result files',
                           abstract="Tar archive containing the netCDF result files",
                           as_reference=True,
                           supported_formats=[Format('application/x-tar')]),
@@ -96,41 +98,41 @@ class CDOinter_MPI(Process):
         import os
         import tempfile
 
-        nc_files=[]
+        nc_files = []
         for dataset in request.inputs['netcdf_file']:
             nc_files.append(dataset.file)
 
         (fp_tarf, tarf) = tempfile.mkstemp(dir=".", suffix='.tar')
         tar = tarfile.open(tarf, "w")
-        
-        operator = request.inputs['operator'][0].data
-        response.update_status("starting cdo %s operator"%(operator), 10)
 
-        gri=request.inputs['regr'][0].data #here also should be checked default values!
-        
+        operator = request.inputs['operator'][0].data
+        response.update_status("starting cdo %s operator" % (operator), 10)
+
+        gri = request.inputs['regr'][0].data   # here also should be checked default values!
+
         if (gri == 'custom'):
             try:
-                gri='r'+str(request.inputs['longitude'][0].data)+'x'+str(request.inputs['latitude'][0].data)
+                gri = 'r' + str(request.inputs['longitude'][0].data) + 'x' + str(request.inputs['latitude'][0].data)
                 LOGGER.debug('Using custom grid GRI = %s' % (gri))
             except:
-                gri=str(request.inputs['regr'][0].default) #Should be checked (!)
+                gri = str(request.inputs['regr'][0].default)   # Should be checked (!)
                 LOGGER.debug('Custom grid is not well specified, using default GRI = %s' % (gri))
- 
+
         LOGGER.debug('GRI = %s' % (gri))
 
         try:
-            Multi=str(request.inputs['multi'][0].data)
+            Multi = str(request.inputs['multi'][0].data)
         except:
-            Multi=str(request.inputs['multi'][0].default)
+            Multi = str(request.inputs['multi'][0].default)
 
         try:
-            imp.find_module('multiprocessing') 
+            imp.find_module('multiprocessing')
         except ImportError:
-            Multi='Serial'
+            Multi = 'Serial'
 
         LOGGER.debug('Used calc type: = %s' % (Multi))
 
-        #------------------------- For Multi Proc
+        #  ------------------------- For Multi Proc
 
         if ('Serial' not in Multi):
 
@@ -141,42 +143,42 @@ class CDOinter_MPI(Process):
                 from multiprocessing.dummy import Pool as ThreadPool
                 pool = ThreadPool()
 
-            outfiles=[]
-            new_arc_names=[]
-            grids=[gri]*len(nc_files)
-            operators=[operator]*len(nc_files)
+            outfiles = []
+            new_arc_names = []
+            grids = [gri] * len(nc_files)
+            operators = [operator] * len(nc_files)
 
             for nc_file in nc_files:
-                (fp_ncf,outfile) = tempfile.mkstemp(dir=".",suffix='.nc')
+                (fp_ncf, outfile) = tempfile.mkstemp(dir=".", suffix='.nc')
                 LOGGER.debug('Input NetCDF file = %s' % (nc_file))
                 outfiles.append(outfile)
 
-                new_arc_name=os.path.basename(nc_file.split(".nc")[0]+"_"+operator+"_"+gri+".nc")
+                new_arc_name = os.path.basename(nc_file.split(".nc")[0] + "_" + operator + "_" + gri + ".nc")
                 LOGGER.debug('NEW NAME for Output NetCDF file = %s' % (new_arc_name))
                 new_arc_names.append(new_arc_name)
 
-            args=zip(grids,nc_files,outfiles,operators)
-            res=pool.map(cdo_wrap, args)
-
+            args = zip(grids, nc_files, outfiles, operators)
+            # res = pool.map(cdo_wrap, args)
+            pool.map(cdo_wrap, args)
             pool.close()
             pool.join()
 
-            for i,outfn in enumerate(outfiles):
-                tar.add(outfn, arcname = new_arc_names[i])
+            for i, outfn in enumerate(outfiles):
+                tar.add(outfn, arcname=new_arc_names[i])
 
-        else: #------------------ if Serial
+        else:   # ------------------ if Serial
             cdo = Cdo()
             cdo_op = getattr(cdo, operator)
 
             for nc_file in nc_files:
-                (fp_ncf,outfile) = tempfile.mkstemp(dir=".",suffix='.nc')
+                (fp_ncf, outfile) = tempfile.mkstemp(dir=".", suffix='.nc')
                 LOGGER.debug('Input NetCDF file = %s' % (nc_file))
-                cdo_op(gri,input=nc_file, output=outfile)
+                cdo_op(gri, input=nc_file, output=outfile)
 
-                new_arc_name=os.path.basename(nc_file.split(".nc")[0]+"_"+operator+"_"+gri+".nc")
+                new_arc_name = os.path.basename(nc_file.split(".nc")[0] + "_" + operator + "_" + gri + ".nc")
 
                 LOGGER.debug('NEW NAME for Output NetCDF file = %s' % (new_arc_name))
-                tar.add(outfile, arcname = new_arc_name)
+                tar.add(outfile, arcname=new_arc_name)
 
         tar.close()
 
