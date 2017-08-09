@@ -16,6 +16,7 @@ def test_wps_caps():
         'cdo_bbox',
         'cdo_copy',
         'cdo_indices',
+        'cdo_inter_mpi',
         'cdo_operation',
         'cdo_sinfo',
         'cfchecker',
