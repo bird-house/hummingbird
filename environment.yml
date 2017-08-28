@@ -7,6 +7,7 @@ channels:
 - uvcdat
 dependencies:
 - python=2.7
+- setuptools=27.2
 - pyopenssl
 - cryptography
 - pyyaml
@@ -17,7 +18,7 @@ dependencies:
 # tests
 - pytest
 # pep8
-- flake8
+- flake8=3.3
 - pycodestyle
 # ipython
 - ipython
