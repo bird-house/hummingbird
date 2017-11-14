@@ -4,13 +4,14 @@ Changes
 current
 =======
 
-* updated compliance checker 3.0.4.
+* updated compliance checker 3.1.1.
 * cleaned up code.
 * allow multiple input files for cdo_bbox and cdo_indices.
-* updated cdo 1.8.2
+* updated cdo 1.8.3
 * updated cfchecker 3.0.5
 * added cdo_copy process.
-* update cmor checker 3.2.5
+* update cmor checker 3.2.8
+* display version number in service title
 
 0.5.6 (2017-05-18)
 ==================
