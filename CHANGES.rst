@@ -7,7 +7,7 @@ current
 * updated compliance checker 3.1.1.
 * cleaned up code.
 * allow multiple input files for cdo_bbox and cdo_indices.
-* updated cdo 1.8.3
+* updated cdo 1.9.0
 * updated cfchecker 3.0.5
 * added cdo_copy process.
 * update cmor checker 3.2.8
@@ -86,7 +86,7 @@ current
 0.4.2 (2016-10-04)
 ==================
 
-* update ioos compliance-checker 2.3.0. 
+* update ioos compliance-checker 2.3.0.
 * added output_format option to compliance-checker.
 
 0.4.1 (2016-09-26)
@@ -168,5 +168,3 @@ current
 ==================
 
 Initial Paris Release
-
-
