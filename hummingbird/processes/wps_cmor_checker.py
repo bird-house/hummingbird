@@ -59,7 +59,7 @@ class CMORChecker(Process):
             self._handler,
             identifier="cmor_checker",
             title="CMIP6 CMOR Checker",
-            version="3.2.5",
+            version="3.2.8",
             abstract='Calls the CMIP6 cmor checker to verify CMIP6 compliance.'
                      'CMIP6 CMOR checker will verify that all attributes in the input file are present'
                      ' and conform to CMIP6 for publication into ESGF.',

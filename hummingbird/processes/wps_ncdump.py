@@ -40,7 +40,7 @@ class NCDump(Process):
             self._handler,
             identifier="ncdump",
             title="NCDump",
-            version="4.4.1",
+            version="4.4.1.1",
             abstract="Run ncdump to retrieve NetCDF header metadata.",
             metadata=[
                 Metadata('Birdhouse', 'http://bird-house.github.io/'),
