@@ -11,7 +11,8 @@ current
 * updated cfchecker 3.0.5
 * added cdo_copy process.
 * update cmor checker 3.2.8
-* display version number in service title
+* display version number in service title.
+* using compliance checker patch for ESGF OpenDAP access.
 
 0.5.6 (2017-05-18)
 ==================
