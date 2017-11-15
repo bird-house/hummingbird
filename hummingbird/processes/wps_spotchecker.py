@@ -88,6 +88,10 @@ class SpotChecker(Process):
             response.update_status('ncdump done.', 10)
 
         if 'CF' in checker:
+            # patch check_suite
+            from hummingbird.patch import patch_compliance_checker
+            patch_compliance_checker()
+            # patch end
             check_suite = CheckSuite()
             check_suite.load_all_available_checkers()
 
