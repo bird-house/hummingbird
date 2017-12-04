@@ -7,7 +7,7 @@ channels:
 - uvcdat
 dependencies:
 - python=2.7
-- setuptools=27.2
+- setuptools=36.5.0
 - pyopenssl
 - cryptography
 - pyyaml
@@ -38,7 +38,8 @@ dependencies:
 - lxml=3.7
 - libxslt=1.1.29
 # cdo
-- python-cdo=1.3.3
+- python-cdo=1.3.4
+- xarray
 - cdo=1.9.0=0
 - hdf5=1.8.18=2
 - libnetcdf=4.4.1.1
