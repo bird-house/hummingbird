@@ -8,6 +8,7 @@ current
 * cleaned up code.
 * allow multiple input files for cdo_bbox and cdo_indices.
 * updated cdo 1.9.0
+* updated python-cdo 1.3.4
 * updated cfchecker 3.0.5
 * added cdo_copy process.
 * update cmor checker 3.2.8
