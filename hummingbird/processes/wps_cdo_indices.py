@@ -11,10 +11,8 @@ from pywps import ComplexInput, ComplexOutput
 from pywps import Format
 from pywps.app.Common import Metadata
 
-from cdo import Cdo
-cdo_version = Cdo().version()
-
 from hummingbird.utils import output_filename
+from hummingbird.processing import cdo_version, get_cdo
 
 import logging
 LOGGER = logging.getLogger("PYWPS")
@@ -133,7 +131,7 @@ class CDOClimateIndices(Process):
                 datasets.append(dataset.data)
         operator = request.inputs['operator'][0].data
         # init cdo
-        cdo = Cdo()
+        cdo = get_cdo()
         cdo_op = getattr(cdo, operator)
 
         try:

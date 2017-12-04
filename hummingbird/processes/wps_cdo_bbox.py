@@ -11,8 +11,7 @@ from pywps import ComplexInput, ComplexOutput
 from pywps import Format
 from pywps.app.Common import Metadata
 
-from cdo import Cdo
-cdo_version = Cdo().version()
+from hummingbird.processing import cdo_version, get_cdo
 
 import logging
 LOGGER = logging.getLogger("PYWPS")
@@ -96,7 +95,7 @@ class CDOBBox(Process):
                 datasets.append(dataset.data)
         bbox = request.inputs['bbox'][0].data
 
-        cdo = Cdo()
+        cdo = get_cdo()
 
         try:
             tar = tarfile.open("cdo_bbox.tar", "w")

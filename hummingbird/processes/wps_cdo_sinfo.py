@@ -7,7 +7,6 @@ from pywps import ComplexInput, ComplexOutput
 from pywps import Format
 from pywps.app.Common import Metadata
 
-
 from hummingbird.processing import cdo_version, get_cdo
 
 import logging
