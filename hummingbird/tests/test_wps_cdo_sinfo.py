@@ -6,7 +6,7 @@ from .common import TESTDATA, client_for
 from hummingbird.processes.wps_cdo_sinfo import CDOInfo
 
 
-@pytest.mark.skip(reason="no way of currently testing this")
+# @pytest.mark.skip(reason="no way of currently testing this")
 @pytest.mark.online
 def test_wps_cdo_sinfo():
     client = client_for(Service(processes=[CDOInfo()]))
