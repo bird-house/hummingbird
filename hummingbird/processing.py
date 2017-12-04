@@ -2,11 +2,17 @@ import os
 import glob
 import subprocess
 from subprocess import check_output, CalledProcessError
+from cdo import Cdo
+cdo_version = Cdo().version()
 
 from .utils import fix_filename, make_dirs
 
 import logging
 LOGGER = logging.getLogger("PYWPS")
+
+
+def get_cdo():
+    return Cdo(env=os.environ)
 
 
 def ncdump(dataset):
