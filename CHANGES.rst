@@ -14,6 +14,7 @@ current
 * update cmor checker 3.2.8
 * display version number in service title.
 * using compliance checker patch for ESGF OpenDAP access.
+* using pytest skikif.
 
 0.5.6 (2017-05-18)
 ==================
