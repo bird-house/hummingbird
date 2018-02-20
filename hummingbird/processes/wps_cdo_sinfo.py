@@ -1,14 +1,13 @@
 """
 Processes with cdo commands
 """
-from cdo import Cdo
-cdo_version = Cdo().version()
-
 from pywps import Process
 from pywps import LiteralInput
 from pywps import ComplexInput, ComplexOutput
 from pywps import Format
 from pywps.app.Common import Metadata
+
+from hummingbird.processing import cdo_version, get_cdo
 
 import logging
 LOGGER = logging.getLogger("PYWPS")
@@ -71,7 +70,7 @@ class CDOInfo(Process):
             for dataset in request.inputs['dataset_opendap']:
                 datasets.append(dataset.data)
 
-        cdo = Cdo()
+        cdo = get_cdo()
 
         outfile = 'cdo_sinfo.txt'
         with open(outfile, 'w') as fp:

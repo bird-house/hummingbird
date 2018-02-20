@@ -4,12 +4,17 @@ Changes
 current
 =======
 
-* updated compliance checker 3.0.4.
+* updated compliance checker 3.1.1.
 * cleaned up code.
 * allow multiple input files for cdo_bbox and cdo_indices.
-* updated cdo 1.8.2
+* updated cdo 1.9.0
+* updated python-cdo 1.3.4
 * updated cfchecker 3.0.5
 * added cdo_copy process.
+* update cmor checker 3.2.8
+* display version number in service title.
+* using compliance checker patch for ESGF OpenDAP access.
+* using pytest skikif.
 
 0.5.6 (2017-05-18)
 ==================
@@ -84,7 +89,7 @@ current
 0.4.2 (2016-10-04)
 ==================
 
-* update ioos compliance-checker 2.3.0. 
+* update ioos compliance-checker 2.3.0.
 * added output_format option to compliance-checker.
 
 0.4.1 (2016-09-26)
@@ -166,5 +171,3 @@ current
 ==================
 
 Initial Paris Release
-
-

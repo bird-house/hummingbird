@@ -1,9 +1,6 @@
 """
 Processes with cdo commands
 """
-from cdo import Cdo
-cdo_version = Cdo().version()
-
 import imp
 
 from pywps import Process
@@ -12,12 +9,14 @@ from pywps import ComplexInput, ComplexOutput
 from pywps import Format, FORMATS
 from pywps.app.Common import Metadata
 
+from hummingbird.processing import cdo_version, get_cdo
+
 import logging
 LOGGER = logging.getLogger("PYWPS")
 
 
 def cdo_wrap(tmargs):
-    cdo = Cdo()
+    cdo = get_cdo()
     cdo_op = getattr(cdo, tmargs[3])
     return cdo_op(tmargs[0], input=tmargs[1], output=tmargs[2])
 
@@ -114,7 +113,7 @@ class CDOinter_MPI(Process):
             try:
                 gri = 'r' + str(request.inputs['longitude'][0].data) + 'x' + str(request.inputs['latitude'][0].data)
                 LOGGER.debug('Using custom grid GRI = %s' % (gri))
-            except:
+            except Exception:
                 gri = str(request.inputs['regr'][0].default)   # Should be checked (!)
                 LOGGER.debug('Custom grid is not well specified, using default GRI = %s' % (gri))
 
@@ -122,7 +121,7 @@ class CDOinter_MPI(Process):
 
         try:
             Multi = str(request.inputs['multi'][0].data)
-        except:
+        except Exception:
             Multi = str(request.inputs['multi'][0].default)
 
         try:
@@ -167,7 +166,7 @@ class CDOinter_MPI(Process):
                 tar.add(outfn, arcname=new_arc_names[i])
 
         else:   # ------------------ if Serial
-            cdo = Cdo()
+            cdo = get_cdo()
             cdo_op = getattr(cdo, operator)
 
             for nc_file in nc_files:

@@ -120,6 +120,11 @@ class CChecker(Process):
         max_count = len(datasets)
         step = 100.0 / max_count
 
+        # patch check_suite
+        from hummingbird.patch import patch_compliance_checker
+        patch_compliance_checker()
+        # patch end
+
         check_suite = CheckSuite()
         check_suite.load_all_available_checkers()
 

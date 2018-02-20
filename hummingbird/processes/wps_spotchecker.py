@@ -88,6 +88,10 @@ class SpotChecker(Process):
             response.update_status('ncdump done.', 10)
 
         if 'CF' in checker:
+            # patch check_suite
+            from hummingbird.patch import patch_compliance_checker
+            patch_compliance_checker()
+            # patch end
             check_suite = CheckSuite()
             check_suite.load_all_available_checkers()
 
@@ -105,7 +109,7 @@ class SpotChecker(Process):
             with open("cmip6-cmor.txt", 'w') as fp:
                 response.outputs['output'].file = fp.name
                 response.update_status("cmip6 checker ...", 20)
-                cmor_checker(dataset, cmip6_table='CMIP6_CV', output_filename=fp.name)
+                cmor_checker(dataset, output_filename=fp.name)
         else:
             response.update_status("qa checker ...", 20)
             from hummingbird.processing import hdh_qa_checker

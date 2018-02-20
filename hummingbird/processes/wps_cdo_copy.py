@@ -1,9 +1,6 @@
 """
 Processes with cdo commands
 """
-from cdo import Cdo
-cdo_version = Cdo().version()
-
 from pywps import Process
 from pywps import LiteralInput
 from pywps import ComplexInput, ComplexOutput
@@ -11,6 +8,7 @@ from pywps import Format
 from pywps.app.Common import Metadata
 
 from hummingbird.utils import output_filename
+from hummingbird.processing import cdo_version, get_cdo
 
 import logging
 LOGGER = logging.getLogger("PYWPS")
@@ -73,7 +71,7 @@ class CDOCopy(Process):
             for dataset in request.inputs['dataset_opendap']:
                 datasets.append(dataset.data)
 
-        cdo = Cdo()
+        cdo = get_cdo()
         cdo_op = getattr(cdo, 'copy')
 
         outfile = output_filename(datasets[0], addition='copy')
