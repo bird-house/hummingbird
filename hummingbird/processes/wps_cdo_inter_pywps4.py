@@ -72,6 +72,10 @@ class CDOinter_MPI(Process):
                           abstract="Tar archive containing the netCDF result files",
                           as_reference=True,
                           supported_formats=[Format('application/x-tar')]),
+            ComplexOutput('output', 'Output',
+                          abstract="One regrided file.",
+                          as_reference=True,
+                          supported_formats=[Format('application/x-netcdf')]),
         ]
 
         super(CDOinter_MPI, self).__init__(
@@ -180,7 +184,7 @@ class CDOinter_MPI(Process):
                 tar.add(outfile, arcname=new_arc_name)
 
         tar.close()
-
+        response.outputs['output'].file = outfile
         response.outputs['tarout'].file = tarf
         response.update_status("cdo remapping done", 100)
         return response
