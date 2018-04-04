@@ -1,8 +1,8 @@
 Changes
 *******
 
-current
-=======
+0.5.7 (2018-04-04)
+==================
 
 * updated compliance checker 3.1.1.
 * cleaned up code.
@@ -15,6 +15,7 @@ current
 * display version number in service title.
 * using compliance checker patch for ESGF OpenDAP access.
 * using pytest skikif.
+* added process cdo_inter_mpi for CDO Remapping of NetCDF File(s) with multiprocessing.
 
 0.5.6 (2017-05-18)
 ==================
