@@ -1,11 +1,7 @@
 language: python
-branches:
-  only:
-    - master
-    - develop
 python:
   - "2.7"
-sudo: false 
+sudo: false
 install:
   - make install
   - make start
@@ -16,7 +12,3 @@ script:
   - make pep8
 #after_success:
 # - coveralls
-matrix:
-  - allow_failures:
-    - python: 3.5
-
