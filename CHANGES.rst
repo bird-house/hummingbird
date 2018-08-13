@@ -1,6 +1,14 @@
 Changes
 *******
 
+0.5.8 (2018-08-13)
+==================
+
+* Fix wsgi app init (#13).
+* Updated versions.cfg.
+* Updated setuptools 2.12.0.
+* Added cython to environment.yml.
+
 0.5.7 (2018-04-04)
 ==================
 
