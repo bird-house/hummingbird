@@ -1,5 +1,0 @@
-pywps
-cfchecker
-cdo
-netcdf4
-pytest

@@ -1,3 +1,4 @@
+import os
 from compliance_checker.runner import ComplianceChecker, CheckSuite
 from compliance_checker import __version__ as cchecker_version
 
@@ -22,7 +23,7 @@ class SpotChecker(Process):
                          min_occurs=1,
                          max_occurs=1,
                          default='CF-1.6',
-                         allowed_values=['CF-1.6', 'CORDEX', 'CMIP5', 'CMIP6']),
+                         allowed_values=['CF-1.6', ]),  # , 'CORDEX', 'CMIP5', 'CMIP6']),
             ComplexInput('dataset', 'Upload your NetCDF file here',
                          abstract='or enter a URL pointing to a NetCDF file.',
                          metadata=[Metadata('Info')],
@@ -82,20 +83,20 @@ class SpotChecker(Process):
         else:
             raise Exception("missing dataset to check.")
 
-        with open("nc_dump.txt", 'w') as fp:
+        with open(os.path.join(self.workdir, "nc_dump.txt"), 'w') as fp:
             response.outputs['ncdump'].file = fp.name
             fp.writelines(ncdump(dataset))
             response.update_status('ncdump done.', 10)
 
         if 'CF' in checker:
             # patch check_suite
-            from hummingbird.patch import patch_compliance_checker
-            patch_compliance_checker()
+            # from hummingbird.patch import patch_compliance_checker
+            # patch_compliance_checker()
             # patch end
             check_suite = CheckSuite()
             check_suite.load_all_available_checkers()
 
-            with open("report.html", 'w') as fp:
+            with open(os.path.join(self.workdir, "report.html"), 'w') as fp:
                 response.update_status("cfchecker ...", 20)
                 response.outputs['output'].file = fp.name
                 return_value, errors = ComplianceChecker.run_checker(
@@ -106,7 +107,7 @@ class SpotChecker(Process):
                     output_filename=fp.name,
                     output_format="html")
         elif 'CMIP6' in checker:
-            with open("cmip6-cmor.txt", 'w') as fp:
+            with open(os.path.join(self.workdir, "cmip6-cmor.txt"), 'w') as fp:
                 response.outputs['output'].file = fp.name
                 response.update_status("cmip6 checker ...", 20)
                 cmor_checker(dataset, output_filename=fp.name)

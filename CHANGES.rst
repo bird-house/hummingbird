@@ -1,6 +1,18 @@
 Changes
 *******
 
+0.6.0 (2018-08-16)
+==================
+
+* Using new deployment without Buildout.
+* Regenerated from Cookiecutter template.
+* Updated docs.
+* Travis tests on Python 2.7/3.x.
+* Disabled processes due to dependency conflicts:
+  * cfchecker
+  * QA checker
+  * cmor checker
+
 0.5.8 (2018-08-13)
 ==================
 

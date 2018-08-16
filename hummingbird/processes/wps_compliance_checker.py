@@ -121,24 +121,26 @@ class CChecker(Process):
         step = 100.0 / max_count
 
         # patch check_suite
-        from hummingbird.patch import patch_compliance_checker
-        patch_compliance_checker()
+        # from hummingbird.patch import patch_compliance_checker
+        # patch_compliance_checker()
         # patch end
 
         check_suite = CheckSuite()
         check_suite.load_all_available_checkers()
 
         # output
-        os.mkdir("report")
+        report_dir = os.path.join(self.workdir, "report")
+        os.mkdir(report_dir)
         # response.outputs['report'].output_format = FORMATS.TEXT
-        response.outputs['report'].file = "report/0.{0}".format(output_format)
+        response.outputs['report'].file = os.path.join(
+            report_dir, "0.{0}".format(output_format))
 
-        with open('report/summary.txt', 'w') as fp:
+        with open(os.path.join(report_dir, 'summary.txt'), 'w') as fp:
             response.outputs['output'].output_format = FORMATS.TEXT
             response.outputs['output'].file = fp.name
             for idx, ds in enumerate(datasets):
                 LOGGER.info("checking dataset %s", ds)
-                report_file = "report/{0}.{1}".format(idx, output_format)
+                report_file = os.path.join(report_dir, "{0}.{1}".format(idx, output_format))
                 return_value, errors = ComplianceChecker.run_checker(
                     ds,
                     checker_names=[checker.data for checker in request.inputs['test']],
@@ -152,10 +154,10 @@ class CChecker(Process):
                 else:
                     fp.write("{0}, PASS, {1}\n".format(ds, report_file))
                 response.update_status("checks: %d/%d" % (idx, max_count), int(idx * step))
-        with tarfile.open("report.tar", "w") as tar:
+        with tarfile.open(os.path.join(self.workdir, "report.tar"), "w") as tar:
             # response.outputs['report_tar'].output_format = FORMATS.TEXT
             response.outputs['report_tar'].file = tar.name
-            tar.add("report")
+            tar.add(report_dir)
 
         response.update_status("compliance checker finshed.", 100)
         return response
