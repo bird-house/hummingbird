@@ -1,3 +1,4 @@
+import os
 from pywps import Process
 from pywps import LiteralInput
 from pywps import ComplexInput, ComplexOutput
@@ -40,7 +41,7 @@ class NCDump(Process):
             self._handler,
             identifier="ncdump",
             title="NCDump",
-            version="4.4.1.1",
+            version="4.6.1",
             abstract="Run ncdump to retrieve NetCDF header metadata.",
             metadata=[
                 Metadata('Birdhouse', 'http://bird-house.github.io/'),
@@ -62,7 +63,7 @@ class NCDump(Process):
                 datasets.append(dataset.data)
 
         count = 0
-        with open("nc_dump.txt", 'w') as fp:
+        with open(os.path.join(self.workdir, "nc_dump.txt"), 'w') as fp:
             response.outputs['output'].output_format = FORMATS.TEXT
             response.outputs['output'].file = fp.name
             for dataset in datasets:

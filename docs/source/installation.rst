@@ -1,47 +1,108 @@
 .. _installation:
 
 Installation
-************
+============
 
-Check out code from the Hummingbird github repo and start the installation::
+Install from Anaconda
+---------------------
+
+.. todo::
+
+   Prepare Conda package.
+
+Install from GitHub
+-------------------
+
+Check out code from the Hummingbird GitHub repo and start the installation:
+
+.. code-block:: sh
 
    $ git clone https://github.com/bird-house/hummingbird.git
    $ cd hummingbird
-   $ make clean install
+   $ conda env create -f environment.yml
+   $ source activate hummingbird
+   $ python setup.py develop
 
-For other install options run ``make help`` and read the documention of the `Makefile <http://birdhousebuilderbootstrap.readthedocs.org/en/latest/usage.html#makefile>`_.
+... or do it the lazy way
++++++++++++++++++++++++++
 
-After successful installation you need to start the services. Hummingbird is using `Anaconda <https://www.continuum.io/>`_ Python distribution system. All installed files (config etc ...) are below the Anaconda root folder which is by default in your home directory ``~/anaconda``. Now, start the services::
+The previous installation instructions assume you have Anaconda installed.
+We provide also a ``Makefile`` to run this installation without additional steps:
 
-   $ make start    # starts supervisor services
-   $ make status   # shows supervisor status
+.. code-block:: sh
 
-The depolyed WPS service is by default available on http://localhost:8092/wps?service=WPS&version=1.0.0&request=GetCapabilities.
+   $ git clone https://github.com/bird-house/hummingbird.git
+   $ cd hummingbird
+   $ make clean    # cleans up a previous Conda environment
+   $ make install  # installs Conda if necessary and runs the above installation steps
+
+Start Hummingbird PyWPS service
+-------------------------------
+
+After successful installation you can start the service using the ``hummingbird`` command-line.
+
+.. code-block:: sh
+
+   $ hummingbird --help # show help
+   $ hummingbird start  # start service with default configuration
+
+   OR
+
+   $ hummingbird start --daemon # start service as daemon
+   loading configuration
+   forked process id: 42
+
+The deployed WPS service is by default available on:
+
+http://localhost:5000/wps?service=WPS&version=1.0.0&request=GetCapabilities.
+
+.. NOTE:: Remember the process ID (PID) so you can stop the service with ``kill PID``.
+
+You can find which process uses a given port using the following command (here for port 5000):
+
+.. code-block:: sh
+
+   $ netstat -nlp | grep :5000
 
 
 Check the log files for errors:
 
 .. code-block:: sh
 
-   $ tail -f  ~/birdhouse/var/log/pywps/hummingbird.log
-   $ tail -f  ~/birdhouse/var/log/supervisor/hummingbird.log
+   $ tail -f  pywps.log
 
+... or do it the lazy way
++++++++++++++++++++++++++
 
-Using docker-compose
-====================
-
-Start hummingbird with docker-compose (docker-compose version > 1.7):
+You can also use the ``Makefile`` to start and stop the service:
 
 .. code-block:: sh
 
-   $ docker-compose up
+  $ make start
+  $ make status
+  $ tail -f pywps.log
+  $ make stop
 
-By default the WPS is available on port 8080: http://localhost:8080/wps?service=WPS&version=1.0.0&request=GetCapabilities.
 
-You can change the ports and hostname with environment variables:
+Run Hummingbird as Docker container
+-----------------------------------
 
-.. code-block:: sh
+You can also run Hummingbird as a Docker container, see the :ref:`Tutorial <tutorial>`.
 
-  $ HOSTNAME=hummingbird HTTP_PORT=8092 SUPERVISOR_PORT=48092 docker-compose up
+Use Ansible to deploy Hummingbird on your System
+------------------------------------------------
 
-Now the WPS is available on port 8092: http://hummingbird:8092/wps?service=WPS&version=1.0.0&request=GetCapabilities.
+Use the `Ansible playbook`_ for PyWPS to deploy Hummingbird on your system.
+Follow the `example`_ for Hummingbird given in the playbook.
+
+Building the docs
+-----------------
+
+First install dependencies for the documentation::
+
+  $ make bootstrap_dev
+  $ make docs
+
+
+.. _Ansible playbook: http://ansible-wps-playbook.readthedocs.io/en/latest/index.html
+.. _example: http://ansible-wps-playbook.readthedocs.io/en/latest/tutorial.html

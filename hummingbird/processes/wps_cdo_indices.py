@@ -135,7 +135,7 @@ class CDOClimateIndices(Process):
         cdo_op = getattr(cdo, operator)
 
         try:
-            tar = tarfile.open("cdo_{0}.tar".format(operator), "w")
+            tar = tarfile.open(os.path.join(self.workdir, "cdo_{0}.tar".format(operator)), "w")
             num_ds = len(datasets)
             for idx, ds in enumerate(datasets):
                 outfile = output_filename(ds, addition=operator)

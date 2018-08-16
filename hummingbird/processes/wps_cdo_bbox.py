@@ -98,14 +98,16 @@ class CDOBBox(Process):
         cdo = get_cdo()
 
         try:
-            tar = tarfile.open("cdo_bbox.tar", "w")
+            tar = tarfile.open(os.path.join(self.workdir, "cdo_bbox.tar"), "w")
             num_ds = len(datasets)
             for idx, ds in enumerate(datasets):
                 try:
-                    outfile = "{0}_bbox.nc".format(os.path.basename(ds).split('.nc')[0])
+                    outfile = os.path.join(
+                        self.workdir,
+                        "{0}_bbox.nc".format(os.path.basename(ds).split('.nc')[0]))
                 except Exception as e:
                     LOGGER.warn("Could not generate output name: %s", e)
-                    _, outfile = tempfile.mkstemp(suffix=".nc", prefix="cdo_bbox", dir=".")
+                    _, outfile = tempfile.mkstemp(suffix=".nc", prefix="cdo_bbox", dir=self.workdir)
                 msg = "calculating cdo bbox on {0}...".format(os.path.basename(ds))
                 progress = int(idx * 100.0 / num_ds) + 1
                 LOGGER.debug('index = %s, max = %s, progress = %s', idx, num_ds, progress)

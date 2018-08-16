@@ -44,17 +44,17 @@ class CFChecker(Process):
                          min_occurs=0,
                          max_occurs=1024,
                          supported_formats=[Format('application/x-netcdf')]),
-            LiteralInput('dataset_opendap', 'Remote OpenDAP Data URL',
-                         data_type='string',
-                         abstract="Or provide a remote OpenDAP data URL,"
-                                  " for example:"
-                                  " http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis2.dailyavgs/surface/mslp.2016.nc",  # noqa
-                         metadata=[
-                            Metadata(
-                                'application/x-ogc-dods',
-                                'https://www.iana.org/assignments/media-types/media-types.xhtml')],
-                         min_occurs=0,
-                         max_occurs=1024),
+            # LiteralInput('dataset_opendap', 'Remote OpenDAP Data URL',
+            #              data_type='string',
+            #              abstract="Or provide a remote OpenDAP data URL,"
+            #                       " for example:"
+            #                       " http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis2.dailyavgs/surface/mslp.2016.nc",  # noqa
+            #              metadata=[
+            #                 Metadata(
+            #                     'application/x-ogc-dods',
+            #                     'https://www.iana.org/assignments/media-types/media-types.xhtml')],
+            #              min_occurs=0,
+            #              max_occurs=1024),
         ]
         outputs = [
             ComplexOutput('output', 'CF Checker Report',
@@ -99,16 +99,16 @@ class CFChecker(Process):
             for dataset in request.inputs['dataset']:
                 datasets.append(dataset.file)
         # append opendap urls
-        if 'dataset_opendap' in request.inputs:
-            for dataset in request.inputs['dataset_opendap']:
-                datasets.append(dataset.data)
+        # if 'dataset_opendap' in request.inputs:
+        #     for dataset in request.inputs['dataset_opendap']:
+        #         datasets.append(dataset.data)
 
         count = 0
         max_count = len(datasets)
         step = 100.0 / max_count
         for dataset in datasets:
             cf_report = cf_check(dataset, version=request.inputs['cf_version'][0].data)
-            with open('cfchecker_output.txt', 'a') as fp:
+            with open(os.path.join(self.workdir, 'cfchecker_output.txt'), 'a') as fp:
                 response.outputs['output'].file = fp.name
                 fp.write(cf_report + "\n\n")
                 count = count + 1

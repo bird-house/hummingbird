@@ -1,85 +1,79 @@
 .. _processes:
 
-WPS Processes
-*************
-
-We describe here the WPS processes available in Hummingbird.
-
-.. _caps:
-
-WPS Capabilities
-================
-
-Using the default Hummingbird installation the ``GetCapabilities`` request is as follows:
-
-http://localhost:8092/wps?service=WPS&version=1.0.0&request=GetCapabilities
-
-The XML response of the WPS service is the following document:
-
-.. literalinclude:: processes/wps_caps.xml
-    :language: xml
-    :emphasize-lines: 52,58,64
-    :linenos:
-
-.. _cfchecker:
-
-SpotChecker
-===========
-
-Spot Checker checks a single dataset (NetCDF or OpenDAP) against a variety of compliance standards.
-Available compliance standards are the Climate and Forecast conventions (CF) and project specific rules for CMIP6 and CORDEX.
-
-CFChecker
+Processes
 =========
 
-The `cfchecker <https://pypi.python.org/pypi/cfchecker>`_ checks NetCDF files for compliance to the Climate Forcast Conventions (CF) standard.
+.. contents::
+    :local:
+    :depth: 1
 
-The process expects one or more NetCDF files which should be checked and an optional parameter for the CF version.
+CDO BBox
+--------
 
-.. _cfchecker_description:
+.. autoprocess:: hummingbird.processes.wps_cdo_bbox.CDOBBox
+   :docstring:
+   :skiplines: 1
 
-WPS process description
------------------------
+ CDO Copy
+ --------
 
-Using the default Hummingbird installation the ``DescribeProcess`` request is as follows:
+ .. autoprocess:: hummingbird.processes.wps_cdo_copy.CDOCopy
+    :docstring:
+    :skiplines: 1
 
-http://localhost:8092/wps?service=WPS&version=1.0.0&request=DescribeProcess&identifier=cfchecker
 
-The XML response of the WPS service is the following document:
+CDO Ensembles
+-------------
 
-.. literalinclude:: processes/wps_cfchecker.xml
-    :language: xml
-    :emphasize-lines: 9,26,46
-    :linenos:
+.. autoprocess:: hummingbird.processes.wps_cdo_ensembles.CDOEnsembles
+   :docstring:
+   :skiplines: 1
 
-The WPS Parameters are:
+CDO Indices
+-----------
 
-*resource*
-     Is the input parameter to provide one or more URLs (``http://``, ``file://``) to NetCDF files.
-     It is a WPS `ComplexData <http://geopython.github.io/pywps/doc/build/html/process/puts.html#complexvalue-input-and-output>`_ type with MIME-type ``application/x-netcdf``.
+.. autoprocess:: hummingbird.processes.wps_cdo_indices.CDOClimateIndices
+   :docstring:
+   :skiplines: 1
 
-*cf_version*
-     Is an optional input parameter to provide the CF version to check against. It is a WPS `LiteralData <http://geopython.github.io/pywps/doc/build/html/process/puts.html#literalvalue-input-and-output>`_ type with a set of allowed values (1.1, 1.2, ..., auto).
+CDO Remapping
+-------------
 
-*output*
-     Is the output parameter to provide the report of the CF check as text document.
-     It is a WPS ComplexData type with MIME-type ``text/plain``.
+.. autoprocess:: hummingbird.processes.wps_cdo_inter_pywps4.CDOinter_MPI
+   :docstring:
+   :skiplines: 1
 
-WPS process execution
----------------------
+CDO Operation
+-------------
 
-An example execution of the cfchecker process with public available data:
+.. autoprocess:: hummingbird.processes.wps_cdo_op.CDOOperation
+   :docstring:
+   :skiplines: 1
 
-http://localhost:8092/wps?service=WPS&version=1.0.0&request=Execute&identifier=cfchecker&DataInputs=resource=http://www.esrl.noaa.gov/psd/thredds/fileServer/Datasets/ncep/vwnd.sfc.2015.nc&RawDataOutput=output
+CDO Info
+--------
 
-The process is called with key/value parameters, synchronously and with direct output (``RawDataOutput``).
+.. autoprocess:: hummingbird.processes.wps_cdo_sinfo.CDOInfo
+   :docstring:
+   :skiplines: 1
 
-The resulting text document of the cfchecker report looks like the following:
+Compliance Checker
+------------------
 
-.. literalinclude:: cf_output.txt
-    :linenos:
+.. autoprocess:: hummingbird.processes.wps_compliance_checker.CChecker
+   :docstring:
+   :skiplines: 1
 
-CDO
-===
+NC Dump
+-------
 
-to be continued ...
+.. autoprocess:: hummingbird.processes.wps_ncdump.NCDump
+   :docstring:
+   :skiplines: 1
+
+Spotchecker
+-----------
+
+.. autoprocess:: hummingbird.processes.wps_spotchecker.SpotChecker
+   :docstring:
+   :skiplines: 1

@@ -3,63 +3,13 @@ channels:
 - birdhouse
 - conda-forge
 - defaults
-- pcmdi
-- uvcdat
 dependencies:
-- python=2.7
-- setuptools=36.5.0
-- pyopenssl
-- cryptography
-- pyyaml
-- curl
-- icu=58.1
-# buildout
-- mako
-# tests
-- pytest
-# pep8
-- flake8=3.3
-- pycodestyle
-# ipython
-- ipython
-# docs
-- sphinx
-- sphinx_rtd_theme
-- doc8
-# wps
-- pywps=4.0.0
-- owslib
-- nginx=1.10
-- supervisor=3.3
-- gunicorn=19.7
-- gevent=1.2
-- eventlet=0.19.0
-- genshi=0.7
-- lxml=3.7
-- libxslt=1.1.29
+- pywps=4.1
+- jinja2
+- click
+- psutil
 # cdo
-- python-cdo=1.3.4
+- python-cdo
 - xarray
-- cdo=1.9.0=0
-- hdf5=1.8.18=2
-- libnetcdf=4.4.1.1
-- ecmwf_grib=1.23.1=0
-- proj4=4.9.3  # fix cdo and qa-dkrz deps
-#- jpeg=9b # fix cdo and qa-dkrz deps
-# cf checker
-- netcdf4
-- numpy
-- cfunits
-# qa dkrz
-- qa-dkrz=0.6.3
-- wget
 # compliance checker ioos
-- compliance-checker=3.1.1
-- cython
-#- pygeoif=0.6
-# cmor
-- cmor=3.2.8
-- cmip6-cmor-tables=3.2.8
-- pip:
-  - cfchecker==3.0.5
-  - sphinx-autoapi
+- compliance-checker

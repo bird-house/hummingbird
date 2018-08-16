@@ -1,6 +1,7 @@
 """
 Processes with cdo commands
 """
+import os.path
 from pywps import Process
 from pywps import LiteralInput
 from pywps import ComplexInput, ComplexOutput
@@ -89,7 +90,7 @@ class CDOOperation(Process):
         cdo = get_cdo()
         cdo_op = getattr(cdo, operator)
 
-        outfile = 'cdo_{}.nc'.format(operator)
+        outfile = os.path.join(self.workdir, 'cdo_{}.nc'.format(operator))
         cdo_op(input=datasets, output=outfile)
 
         response.outputs['output'].file = outfile

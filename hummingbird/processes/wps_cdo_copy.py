@@ -74,7 +74,7 @@ class CDOCopy(Process):
         cdo = get_cdo()
         cdo_op = getattr(cdo, 'copy')
 
-        outfile = output_filename(datasets[0], addition='copy')
+        outfile = output_filename(datasets[0], addition='copy', dir=self.workdir)
         cdo_op(input=datasets, output=outfile)
 
         response.outputs['output'].file = outfile

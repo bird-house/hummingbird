@@ -1,6 +1,8 @@
 """
 Processes with cdo commands
 """
+import os.path
+
 from pywps import Process
 from pywps import LiteralInput
 from pywps import ComplexInput, ComplexOutput
@@ -72,7 +74,7 @@ class CDOInfo(Process):
 
         cdo = get_cdo()
 
-        outfile = 'cdo_sinfo.txt'
+        outfile = os.path.join(self.workdir, 'cdo_sinfo.txt')
         with open(outfile, 'w') as fp:
             response.outputs['output'].file = outfile
             for ds in datasets:
