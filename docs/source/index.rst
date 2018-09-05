@@ -6,6 +6,7 @@
 
    installation
    configuration
+   dev_guide
    processes
    changes
 

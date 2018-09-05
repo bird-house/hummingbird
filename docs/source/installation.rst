@@ -3,12 +3,16 @@
 Installation
 ============
 
-Install from Anaconda
----------------------
+.. contents::
+    :local:
+    :depth: 1
 
-.. todo::
+Install from Conda
+------------------
 
-   Prepare Conda package.
+.. warning::
+
+   TODO: Prepare Conda package.
 
 Install from GitHub
 -------------------
@@ -87,22 +91,16 @@ You can also use the ``Makefile`` to start and stop the service:
 Run Hummingbird as Docker container
 -----------------------------------
 
-You can also run Hummingbird as a Docker container, see the :ref:`Tutorial <tutorial>`.
+You can also run Hummingbird as a Docker container.
+
+.. warning::
+
+  TODO: Describe Docker container support.
 
 Use Ansible to deploy Hummingbird on your System
 ------------------------------------------------
 
 Use the `Ansible playbook`_ for PyWPS to deploy Hummingbird on your system.
-Follow the `example`_ for Hummingbird given in the playbook.
-
-Building the docs
------------------
-
-First install dependencies for the documentation::
-
-  $ make bootstrap_dev
-  $ make docs
 
 
 .. _Ansible playbook: http://ansible-wps-playbook.readthedocs.io/en/latest/index.html
-.. _example: http://ansible-wps-playbook.readthedocs.io/en/latest/tutorial.html
