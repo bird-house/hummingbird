@@ -33,7 +33,7 @@ A Web Processing Service for general tools used in the climate science community
 Hummingbird is part of the `Birdhouse <http://bird-house.github.io>`_ project.
 
 * Free software: Apache Software License 2.0
-* Documentation: https://hummingbird.readthedocs.io.
+* Documentation: https://birdhouse-hummingbird.readthedocs.io.
 
 Credits
 -------
