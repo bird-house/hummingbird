@@ -7,7 +7,7 @@ from hummingbird.processing import ncdump, cmor_checker
 from pywps import Process
 from pywps import LiteralInput
 from pywps import ComplexInput, ComplexOutput
-from pywps import Format
+from pywps import Format, FORMATS
 from pywps.app.Common import Metadata
 
 import logging
@@ -29,27 +29,24 @@ class SpotChecker(Process):
                          metadata=[Metadata('Info')],
                          min_occurs=0,
                          max_occurs=1,
-                         supported_formats=[Format('application/x-netcdf')]),
-            LiteralInput('dataset_opendap', 'Or provide a remote OpenDAP data URL',
-                         data_type='string',
-                         abstract="Example: "
-                                  "http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis.dailyavgs/surface/slp.2017.nc",  # noqa
-                         metadata=[
-                             Metadata(
-                                 'application/x-ogc-dods',
-                                 'https://www.iana.org/assignments/media-types/media-types.xhtml')],
+                         supported_formats=[FORMATS.NETCDF]),
+            ComplexInput('dataset_opendap', 'Remote OpenDAP Data URL',
+                         abstract="Or provide a remote OpenDAP data URL,"
+                                  " for example:"
+                                  " http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis2.dailyavgs/surface/mslp.2016.nc",  # noqa
                          min_occurs=0,
-                         max_occurs=1),
+                         max_occurs=1,
+                         supported_formats=[FORMATS.DODS]),
         ]
         outputs = [
             ComplexOutput('output', 'Test Report',
                           abstract='Compliance checker test report.',
                           as_reference=True,
-                          supported_formats=[Format('text/plain'), Format('text/html')]),
+                          supported_formats=[Format('text/html'), FORMATS.TEXT]),
             ComplexOutput('ncdump', 'ncdump of metadata',
                           abstract='ncdump of header of checked dataset.',
                           as_reference=True,
-                          supported_formats=[Format('text/plain')]),
+                          supported_formats=[FORMATS.TEXT]),
         ]
 
         super(SpotChecker, self).__init__(
@@ -73,15 +70,14 @@ class SpotChecker(Process):
         )
 
     def _handler(self, request, response):
-        checker = request.inputs['test'][0].data
         if 'dataset_opendap' in request.inputs:
-            if checker in ['CORDEX', 'CMIP5']:
-                raise NotImplementedError("OpenDAP is not supported by DKRZ Quality Checker.")
-            dataset = request.inputs['dataset_opendap'][0].data
+            dataset = request.inputs['dataset_opendap'][0].url
         elif 'dataset' in request.inputs:
             dataset = request.inputs['dataset'][0].file
         else:
-            raise Exception("missing dataset to check.")
+            raise Exception("Missing Dataset Input.")
+
+        checker = request.inputs['test'][0].data
 
         with open(os.path.join(self.workdir, "nc_dump.txt"), 'w') as fp:
             response.outputs['ncdump'].file = fp.name

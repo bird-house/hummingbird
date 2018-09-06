@@ -8,7 +8,7 @@ import tempfile
 from pywps import Process
 from pywps import LiteralInput
 from pywps import ComplexInput, ComplexOutput
-from pywps import Format
+from pywps import Format, FORMATS
 from pywps.app.Common import Metadata
 
 from hummingbird.processing import cdo_version, get_cdo
@@ -23,21 +23,16 @@ class CDOBBox(Process):
         inputs = [
             ComplexInput('dataset', 'Dataset',
                          abstract='You may provide a URL or upload a NetCDF file.',
-                         metadata=[Metadata('Info')],
                          min_occurs=0,
-                         max_occurs=100,
-                         supported_formats=[Format('application/x-netcdf')]),
-            LiteralInput('dataset_opendap', 'Remote OpenDAP Data URL',
-                         data_type='string',
+                         max_occurs=10,
+                         supported_formats=[FORMATS.NETCDF]),
+            ComplexInput('dataset_opendap', 'Remote OpenDAP Data URL',
                          abstract="Or provide a remote OpenDAP data URL,"
                                   " for example:"
                                   " http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis2.dailyavgs/surface/mslp.2016.nc",  # noqa
-                         metadata=[
-                            Metadata(
-                                'application/x-ogc-dods',
-                                'https://www.iana.org/assignments/media-types/media-types.xhtml')],
                          min_occurs=0,
-                         max_occurs=100),
+                         max_occurs=10,
+                         supported_formats=[FORMATS.DODS]),
             LiteralInput('bbox', 'Bounding Box',
                          data_type='string',
                          abstract="Enter a bbox: min_lon, max_lon, min_lat, max_lat."
@@ -55,7 +50,7 @@ class CDOBBox(Process):
             ComplexOutput('output', 'Output',
                           abstract="CDO sellonlatbox result.",
                           as_reference=True,
-                          supported_formats=[Format('application/x-netcdf')]),
+                          supported_formats=[FORMATS.NETCDF]),
             ComplexOutput('output_all', 'All Subsets',
                           abstract="Tar archive containing the netCDF files",
                           as_reference=True,
@@ -92,7 +87,7 @@ class CDOBBox(Process):
         # append opendap urls
         if 'dataset_opendap' in request.inputs:
             for dataset in request.inputs['dataset_opendap']:
-                datasets.append(dataset.data)
+                datasets.append(dataset.url)
         bbox = request.inputs['bbox'][0].data
 
         cdo = get_cdo()

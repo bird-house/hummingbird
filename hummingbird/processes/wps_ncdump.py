@@ -1,8 +1,7 @@
 import os
 from pywps import Process
-from pywps import LiteralInput
 from pywps import ComplexInput, ComplexOutput
-from pywps import Format, FORMATS
+from pywps import FORMATS
 from pywps.app.Common import Metadata
 
 from hummingbird.processing import ncdump
@@ -17,24 +16,21 @@ class NCDump(Process):
             ComplexInput('dataset', 'Dataset',
                          abstract='Enter a URL pointing to a NetCDF file (optional)',
                          min_occurs=0,
-                         max_occurs=100,
-                         supported_formats=[Format('application/x-netcdf')]),
-            LiteralInput('dataset_opendap', 'Remote OpenDAP Data URL',
-                         data_type='string',
+                         max_occurs=1,
+                         supported_formats=[FORMATS.NETCDF]),
+            ComplexInput('dataset_opendap', 'Remote OpenDAP Data URL',
                          abstract="Or provide a remote OpenDAP data URL,"
-                                  " for example: http://my.opendap/thredds/dodsC/path/to/file.nc",
-                         metadata=[
-                             Metadata(
-                                 'application/x-ogc-dods',
-                                 'https://www.iana.org/assignments/media-types/media-types.xhtml')],
+                                  " for example:"
+                                  " http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis2.dailyavgs/surface/mslp.2016.nc",  # noqa
                          min_occurs=0,
-                         max_occurs=100),
+                         max_occurs=1,
+                         supported_formats=[FORMATS.DODS]),
         ]
         outputs = [
             ComplexOutput('output', 'NetCDF Metadata',
                           abstract='NetCDF Metadata',
                           as_reference=True,
-                          supported_formats=[Format('text/plain')]),
+                          supported_formats=[FORMATS.TEXT]),
         ]
 
         super(NCDump, self).__init__(
@@ -52,23 +48,16 @@ class NCDump(Process):
             store_supported=True)
 
     def _handler(self, request, response):
-        datasets = []
-        # append file url
-        if 'dataset' in request.inputs:
-            for dataset in request.inputs['dataset']:
-                datasets.append(dataset.file)
-        # append opendap urls
         if 'dataset_opendap' in request.inputs:
-            for dataset in request.inputs['dataset_opendap']:
-                datasets.append(dataset.data)
+            dataset = request.inputs['dataset_opendap'][0].url
+        elif 'dataset' in request.inputs:
+            dataset = request.inputs['dataset'][0].file
+        else:
+            raise Exception("Missing Dataset Input.")
 
-        count = 0
         with open(os.path.join(self.workdir, "nc_dump.txt"), 'w') as fp:
             response.outputs['output'].output_format = FORMATS.TEXT
             response.outputs['output'].file = fp.name
-            for dataset in datasets:
-                response.update_status("running ncdump", int(count * 100.0 / len(datasets)))
-                fp.writelines(ncdump(dataset))
-                count = count + 1
-        response.update_status('compliance checker finshed...', 100)
+            fp.writelines(ncdump(dataset))
+        response.update_status('done', 100)
         return response

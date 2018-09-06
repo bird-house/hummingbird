@@ -2,7 +2,7 @@ Hummingbird
 ===============================
 
 .. image:: https://img.shields.io/badge/docs-latest-brightgreen.svg
-   :target: http://hummingbird.readthedocs.io/en/latest/?badge=latest
+   :target: https://birdhouse-hummingbird.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 
 .. image:: https://travis-ci.org/bird-house/hummingbird.svg?branch=master

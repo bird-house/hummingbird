@@ -27,7 +27,6 @@ class CDOinter_MPI(Process):
         inputs = [
             ComplexInput('netcdf_file', 'NetCDF File',
                          abstract='You may provide a URL or upload a NetCDF file.',
-                         metadata=[Metadata('Info')],
                          min_occurs=1,
                          max_occurs=100,
                          supported_formats=[Format('application/x-netcdf')]),

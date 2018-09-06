@@ -2,9 +2,8 @@
 Processes with cdo commands
 """
 from pywps import Process
-from pywps import LiteralInput
 from pywps import ComplexInput, ComplexOutput
-from pywps import Format
+from pywps import FORMATS
 from pywps.app.Common import Metadata
 
 from hummingbird.utils import output_filename
@@ -22,24 +21,20 @@ class CDOCopy(Process):
                          abstract='You may provide a URL or upload a NetCDF file.',
                          min_occurs=0,
                          max_occurs=10,
-                         supported_formats=[Format('application/x-netcdf')]),
-            LiteralInput('dataset_opendap', 'Remote OpenDAP Data URL',
-                         data_type='string',
+                         supported_formats=[FORMATS.NETCDF]),
+            ComplexInput('dataset_opendap', 'Remote OpenDAP Data URL',
                          abstract="Or provide a remote OpenDAP data URL,"
                                   " for example:"
                                   " http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis2.dailyavgs/surface/mslp.2016.nc",  # noqa
-                         metadata=[
-                            Metadata(
-                                'application/x-ogc-dods',
-                                'https://www.iana.org/assignments/media-types/media-types.xhtml')],
                          min_occurs=0,
-                         max_occurs=10),
+                         max_occurs=10,
+                         supported_formats=[FORMATS.DODS]),
         ]
         outputs = [
             ComplexOutput('output', 'Output',
                           abstract="Copied and concatenated input datasets.",
                           as_reference=True,
-                          supported_formats=[Format('application/x-netcdf')]),
+                          supported_formats=[FORMATS.NETCDF]),
         ]
 
         super(CDOCopy, self).__init__(
@@ -69,7 +64,7 @@ class CDOCopy(Process):
         # append opendap urls
         if 'dataset_opendap' in request.inputs:
             for dataset in request.inputs['dataset_opendap']:
-                datasets.append(dataset.data)
+                datasets.append(dataset.url)
 
         cdo = get_cdo()
         cdo_op = getattr(cdo, 'copy')

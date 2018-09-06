@@ -1,8 +1,20 @@
+import os
 from pywps.tests import WpsClient, WpsTestResponse
 
+TESTS_HOME = os.path.abspath(os.path.dirname(__file__))
+
+
+def resource_file(filepath):
+    return os.path.join(TESTS_HOME, 'testdata', filepath)
+
+
 TESTDATA = {
+    'test_local_nc':
+    'file:///{}'.format(resource_file('test.nc')),
+    'test_opendap':
+    'http://test.opendap.org:80/opendap/netcdf/examples/sresa1b_ncar_ccsm3_0_run1_200001.nc',  # noqa
     'noaa_dap_1':
-    "http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis2.dailyavgs/surface/mslp.2016.nc",  # noqa
+    "http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis.derived/surface/air.mon.ltm.nc",  # noqa
     'noaa_nc_1':
     "http://www.esrl.noaa.gov/psd/thredds/fileServer/Datasets/ncep.reanalysis.dailyavgs/surface/slp.1955.nc",  # noqa
     'noaa_catalog_1':
