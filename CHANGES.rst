@@ -1,13 +1,14 @@
 Changes
 *******
 
-0.6.0 (2018-08-16)
+0.6.0 (2018-09-06)
 ==================
 
-* Using new deployment without Buildout.
+* Using new deployment without Buildout (#15)
 * Regenerated from Cookiecutter template.
 * Updated docs.
-* Travis tests on Python 2.7/3.x.
+* Travis tests on Python 2.7/3.x (#16).
+* Using PyWPS OpenDAP support (20).
 * Disabled processes due to dependency conflicts:
   * cfchecker
   * QA checker
