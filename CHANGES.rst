@@ -8,7 +8,7 @@ Changes
 * Regenerated from Cookiecutter template.
 * Updated docs.
 * Travis tests on Python 2.7/3.x (#16).
-* Using PyWPS OpenDAP support (20).
+* Using PyWPS OpenDAP support (#20).
 * Disabled processes due to dependency conflicts:
   * cfchecker
   * QA checker
