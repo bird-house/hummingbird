@@ -7,7 +7,7 @@ from .wps_cdo_copy import CDOCopy
 from .wps_cdo_bbox import CDOBBox
 from .wps_cdo_indices import CDOClimateIndices
 from .wps_cdo_ensembles import CDOEnsembles
-from .wps_cdo_inter_pywps4 import CDOinter_MPI
+from .wps_cdo_remapping import CDOinter_MPI
 from .wps_cfchecker import CFChecker
 from .wps_hdh_cfchecker import HDHCFChecker
 from .wps_hdh_qachecker import QualityChecker

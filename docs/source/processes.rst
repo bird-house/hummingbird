@@ -14,13 +14,12 @@ CDO BBox
    :docstring:
    :skiplines: 1
 
- CDO Copy
- --------
+CDO Copy
+--------
 
- .. autoprocess:: hummingbird.processes.wps_cdo_copy.CDOCopy
-    :docstring:
-    :skiplines: 1
-
+.. autoprocess:: hummingbird.processes.wps_cdo_copy.CDOCopy
+  :docstring:
+  :skiplines: 1
 
 CDO Ensembles
 -------------
@@ -39,7 +38,7 @@ CDO Indices
 CDO Remapping
 -------------
 
-.. autoprocess:: hummingbird.processes.wps_cdo_inter_pywps4.CDOinter_MPI
+.. autoprocess:: hummingbird.processes.wps_cdo_remapping.CDOinter_MPI
    :docstring:
    :skiplines: 1
 

@@ -5,7 +5,7 @@ import os.path
 from pywps import Process
 from pywps import LiteralInput
 from pywps import ComplexInput, ComplexOutput
-from pywps import Format
+from pywps import FORMATS
 from pywps.app.Common import Metadata
 
 from hummingbird.processing import cdo_version, get_cdo
@@ -20,21 +20,16 @@ class CDOEnsembles(Process):
         inputs = [
             ComplexInput('dataset', 'Dataset',
                          abstract='You may provide a URL or upload a NetCDF file.',
-                         metadata=[Metadata('Info')],
                          min_occurs=0,
-                         max_occurs=100,
-                         supported_formats=[Format('application/x-netcdf')]),
-            LiteralInput('dataset_opendap', 'Remote OpenDAP Data URL',
-                         data_type='string',
+                         max_occurs=10,
+                         supported_formats=[FORMATS.NETCDF]),
+            ComplexInput('dataset_opendap', 'Remote OpenDAP Data URL',
                          abstract="Or provide a remote OpenDAP data URL,"
                                   " for example:"
                                   " http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis2.dailyavgs/surface/mslp.2016.nc",  # noqa
-                         metadata=[
-                            Metadata(
-                                'application/x-ogc-dods',
-                                'https://www.iana.org/assignments/media-types/media-types.xhtml')],
                          min_occurs=0,
-                         max_occurs=100),
+                         max_occurs=10,
+                         supported_formats=[FORMATS.DODS]),
             LiteralInput('operator', 'Ensemble command',
                          data_type='string',
                          abstract="Choose a CDO Operator",
@@ -49,7 +44,7 @@ class CDOEnsembles(Process):
             ComplexOutput('output', 'NetCDF Output',
                           abstract="CDO ensembles result.",
                           as_reference=True,
-                          supported_formats=[Format('application/x-netcdf')]),
+                          supported_formats=[FORMATS.NETCDF]),
         ]
 
         super(CDOEnsembles, self).__init__(
@@ -79,7 +74,7 @@ class CDOEnsembles(Process):
         # append opendap urls
         if 'dataset_opendap' in request.inputs:
             for dataset in request.inputs['dataset_opendap']:
-                datasets.append(dataset.data)
+                datasets.append(dataset.url)
         operator = request.inputs['operator'][0].data
 
         cdo = get_cdo()
