@@ -1,7 +1,7 @@
 # vim:set ft=dockerfile:
 FROM continuumio/miniconda3
 MAINTAINER https://github.com/bird-house/hummingbird
-LABEL Description="Hummingbird WPS" Vendor="Birdhouse" Version="0.6.0"
+LABEL Description="Hummingbird WPS" Vendor="Birdhouse" Version="Version="0.6.0""
 
 # Update Debian system
 RUN apt-get update && apt-get install -y \
