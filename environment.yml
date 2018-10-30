@@ -4,12 +4,16 @@ channels:
 - conda-forge
 - defaults
 dependencies:
-- pywps>=4.1.6
+- six
+# pywps
+- pywps=4.1
 - jinja2
 - click
 - psutil
 # cdo
+- cdo=1.9.4
 - python-cdo
 - xarray
+- netcdf4=1.4.1
 # compliance checker ioos
-- compliance-checker
+- compliance-checker=4.1
