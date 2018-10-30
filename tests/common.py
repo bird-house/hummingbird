@@ -1,4 +1,5 @@
 import os
+import requests
 from pywps.tests import WpsClient, WpsTestResponse
 
 TESTS_HOME = os.path.abspath(os.path.dirname(__file__))
@@ -20,6 +21,20 @@ TESTDATA = {
     'noaa_catalog_1':
     "http://www.esrl.noaa.gov/psd/thredds/catalog/Datasets/ncep.reanalysis.dailyavgs/surface/catalog.xml?dataset=Datasets/ncep.reanalysis.dailyavgs/surface/air.sig995.1948.nc"  # noqa
 }
+
+
+def service_ok(url, timeout=5):
+    try:
+        ok = requests.get(url, timeout=timeout).ok
+    except requests.exceptions.ReadTimeout:
+        print('Read Timeout')
+        ok = False
+    except requests.exceptions.ConnectTimeout:
+        print('Connect Timeout')
+        ok = False
+    except Exception:
+        ok = False
+    return ok
 
 
 class WpsTestClient(WpsClient):
