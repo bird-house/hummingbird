@@ -7,10 +7,13 @@ import os
 
 from setuptools import setup, find_packages
 
-version = __import__('hummingbird').__version__
 here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.rst')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.rst')).read()
+
+about = {}
+with open(os.path.join(here, 'hummingbird', '__version__.py'), 'r') as f:
+    exec(f.read(), about)
 
 reqs = [line.strip() for line in open('requirements.txt')]
 
@@ -31,11 +34,11 @@ classifiers = [
 ]
 
 setup(name='hummingbird',
-      version=version,
+      version=about['__version__'],
       description="A Web Processing Service for general tools used in the climate science community like cdo.",
       long_description=README + '\n\n' + CHANGES,
-      author="Carsten Ehbrecht",
-      author_email='ehbrecht@dkrz.de',
+      author=about['__author__'],
+      author_email=about['__email__'],
       url='https://github.com/bird-house/hummingbird',
       classifiers=classifiers,
       license="Apache Software License 2.0",
@@ -45,5 +48,5 @@ setup(name='hummingbird',
       install_requires=reqs,
       entry_points={
           'console_scripts': [
-             'hummingbird=hummingbird.cli:cli',
+              'hummingbird=hummingbird.cli:cli',
           ]},)
