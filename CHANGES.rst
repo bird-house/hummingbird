@@ -1,6 +1,17 @@
 Changes
 *******
 
+0.6.1 (2018-12-05)
+==================
+
+Washington release.
+
+Changes:
+
+* Updated documenation for configuration (#25).
+* Integrated changes from cookiecutter template (#24).
+* Fixed conda environment (#23).
+
 0.6.0 (2018-09-06)
 ==================
 
