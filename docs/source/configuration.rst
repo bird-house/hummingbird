@@ -3,6 +3,11 @@
 Configuration
 =============
 
+.. warning::
+
+  Please read the PyWPS documentation_ to find details about possible configuration options.
+
+
 Command-line options
 --------------------
 
@@ -45,5 +50,25 @@ Start the service with your custom configuration:
    # start the service with this configuration
    $ hummingbird start -c etc/custom.cfg
 
+Example
+~~~~~~~
+
+Here is an example of a customized configuration.
+Please read the PyWPS documentation_ for a detailed description of the options, like `outputpath` and `workdir`.
+
+.. code-block:: ini
+
+  [server]
+  url = http://demo.org:5000/wps
+  outputurl = http://demo.org:5000/outputs
+  outputpath = /var/lib/pywps/outputs
+  workdir = /var/lib/pywps/tmp
+
+  [logging]
+  level = DEBUG
+
+Find more examples in `etc/`.
+
 
 .. _PyWPS: http://pywps.org/
+.. _documentation: https://pywps.readthedocs.io/en/master/configuration.html
