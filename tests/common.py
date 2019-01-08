@@ -25,7 +25,11 @@ TESTDATA = {
 
 def service_ok(url, timeout=5):
     try:
-        ok = requests.get(url, timeout=timeout).ok
+        resp = requests.get(url, timeout=timeout)
+        if 'html' in resp.headers['content-type']:
+            ok = False
+        else:
+            ok = resp.ok
     except requests.exceptions.ReadTimeout:
         print('Read Timeout')
         ok = False
