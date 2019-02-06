@@ -1,10 +1,10 @@
 language: python
 python:
-  - "2.7"
+  #- "2.7"
   - "3.6"
-branches:
-  only:
-    - master
+# branches:
+#  only:
+#    - master
 os:
   - linux
 #  - osx
@@ -26,7 +26,7 @@ install:
   - source activate hummingbird
   # Packages for testing
   - conda install pytest flake8
-  # Install Emu WPS
+  # Install WPS
   - python setup.py install
 before_script:
   # Start WPS service on port 5000 on 0.0.0.0
