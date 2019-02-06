@@ -4,9 +4,10 @@ channels:
 - conda-forge
 - defaults
 dependencies:
+- python=3.6
 - six
 # pywps
-- pywps=4.1
+- pywps=4.2
 - jinja2
 - click
 - psutil
