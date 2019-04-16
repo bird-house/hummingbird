@@ -1,6 +1,16 @@
 Changes
 *******
 
+0.7.0 (2019-04-16)
+==================
+
+San Francisco release.
+
+Changes:
+
+* Skipped cdo and Python 2.7 support (#29).
+* Updated from latest cookiecutter template.
+
 0.6.1 (2018-12-05)
 ==================
 
