@@ -14,16 +14,5 @@ def test_wps_caps():
                             '/ows:Identifier')
     assert sorted(names.split()) == [
         'cchecker',
-        'cdo_bbox',
-        'cdo_copy',
-        'cdo_indices',
-        'cdo_inter_mpi',
-        'cdo_operation',
-        'cdo_sinfo',
-        # 'cfchecker',
-        # 'cmor_checker',
-        'ensembles',
         'ncdump',
-        # 'qa_cfchecker',
-        # 'qa_checker',
         'spotchecker', ]

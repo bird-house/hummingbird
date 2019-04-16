@@ -26,9 +26,9 @@ Hummingbird (the bird)
   *Hummingbirds are among the smallest of birds. They hover in mid-air at rapid wing flapping rates,
   typically around 50 times per second, but possibly as high as 200 times per second,
   allowing them also to fly at speeds exceeding 15 m/s (54 km/h; 34 mph),
-  backwards or upside down. [..].* (`Wikipedia https://en.wikipedia.org/wiki/Hummingbird`_).
+  backwards or upside down. [..].* (Wikipedia_).
 
-A Web Processing Service for general tools used in the climate science community like cdo and cfchecker.
+A Web Processing Service for metadata compliance checks used in the climate science community.
 
 Hummingbird is part of the `Birdhouse <http://bird-house.github.io>`_ project.
 
@@ -42,3 +42,4 @@ This package was created with Cookiecutter_ and the `bird-house/cookiecutter-bir
 
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _`bird-house/cookiecutter-birdhouse`: https://github.com/bird-house/cookiecutter-birdhouse
+.. _Wikipedia: https://en.wikipedia.org/wiki/Hummingbird

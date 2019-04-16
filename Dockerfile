@@ -25,7 +25,7 @@ RUN ["/bin/bash", "-c", "source activate wps && python setup.py develop"]
 # Start WPS service on port 5000 on 0.0.0.0
 EXPOSE 5000
 ENTRYPOINT ["/bin/bash", "-c"]
-CMD ["source activate wps && exec emu start -b 0.0.0.0 -config /opt/wps/etc/demo.cfg"]
+CMD ["source activate wps && exec hummingbird start -b 0.0.0.0 -c /opt/wps/etc/demo.cfg"]
 
 # docker build -t bird-house/hummingbird .
 # docker run -p 5000:5000 bird-house/hummingbird

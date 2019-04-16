@@ -7,54 +7,6 @@ Processes
     :local:
     :depth: 1
 
-CDO BBox
---------
-
-.. autoprocess:: hummingbird.processes.wps_cdo_bbox.CDOBBox
-   :docstring:
-   :skiplines: 1
-
-CDO Copy
---------
-
-.. autoprocess:: hummingbird.processes.wps_cdo_copy.CDOCopy
-  :docstring:
-  :skiplines: 1
-
-CDO Ensembles
--------------
-
-.. autoprocess:: hummingbird.processes.wps_cdo_ensembles.CDOEnsembles
-   :docstring:
-   :skiplines: 1
-
-CDO Indices
------------
-
-.. autoprocess:: hummingbird.processes.wps_cdo_indices.CDOClimateIndices
-   :docstring:
-   :skiplines: 1
-
-CDO Remapping
--------------
-
-.. autoprocess:: hummingbird.processes.wps_cdo_remapping.CDOinter_MPI
-   :docstring:
-   :skiplines: 1
-
-CDO Operation
--------------
-
-.. autoprocess:: hummingbird.processes.wps_cdo_op.CDOOperation
-   :docstring:
-   :skiplines: 1
-
-CDO Info
---------
-
-.. autoprocess:: hummingbird.processes.wps_cdo_sinfo.CDOInfo
-   :docstring:
-   :skiplines: 1
 
 Compliance Checker
 ------------------

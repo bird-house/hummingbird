@@ -1,5 +1,4 @@
 import os
-import tarfile
 
 from compliance_checker.runner import ComplianceChecker, CheckSuite
 from compliance_checker import __version__ as cchecker_version
@@ -9,6 +8,7 @@ from pywps import LiteralInput
 from pywps import ComplexInput, ComplexOutput
 from pywps import Format, FORMATS
 from pywps.app.Common import Metadata
+from pywps.app.exceptions import ProcessError
 
 import logging
 LOGGER = logging.getLogger("PYWPS")
@@ -94,18 +94,15 @@ class CChecker(Process):
         dataset = None
         if 'dataset_opendap' in request.inputs:
             dataset = request.inputs['dataset_opendap'][0].url
+            LOGGER.debug("opendap dataset url: {}".format(dataset))
         elif 'dataset' in request.inputs:
             dataset = request.inputs['dataset'][0].file
+            LOGGER.debug("opendap dataset file: {}".format(dataset))
 
         if not dataset:
-            raise Exception("You need to provide a Dataset.")
+            raise ProcessError("You need to provide a Dataset.")
 
         output_format = request.inputs['format'][0].data
-
-        # patch check_suite
-        # from hummingbird.patch import patch_compliance_checker
-        # patch_compliance_checker()
-        # patch end
 
         check_suite = CheckSuite()
         check_suite.load_all_available_checkers()
@@ -115,7 +112,7 @@ class CChecker(Process):
             "check_report.{}".format(output_format))
 
         LOGGER.info("checking dataset {}".format(dataset))
-        return_value, errors = ComplianceChecker.run_checker(
+        ComplianceChecker.run_checker(
             dataset,
             checker_names=[checker.data for checker in request.inputs['test']],
             verbose=True,
