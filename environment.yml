@@ -1,20 +1,19 @@
 name: hummingbird
 channels:
-- birdhouse
 - conda-forge
 - defaults
 dependencies:
 - python=3.6
-- six
+- pip
 # pywps
-- pywps=4.2
 - jinja2
 - click
 - psutil
-# cdo
-- cdo=1.9.4
-- python-cdo
 - xarray
-- netcdf4=1.4.1
+- netcdf4
 # compliance checker ioos
-- compliance-checker=4.1
+- compliance-checker
+# tests
+- pytest
+- pip:
+  - -e git+https://github.com/geopython/pywps@master#egg=pywps

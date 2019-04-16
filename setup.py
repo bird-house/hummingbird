@@ -35,7 +35,7 @@ classifiers = [
 
 setup(name='hummingbird',
       version=about['__version__'],
-      description="A Web Processing Service for general tools used in the climate science community like cdo.",
+      description="A Web Processing Service for metadata compliance checks used in the climate science community.",
       long_description=README + '\n\n' + CHANGES,
       author=about['__author__'],
       author_email=about['__email__'],

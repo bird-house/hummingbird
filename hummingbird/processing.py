@@ -1,20 +1,12 @@
-import six
 import os
 import glob
 import subprocess
 from subprocess import check_output, CalledProcessError
 
-from cdo import Cdo
-cdo_version = Cdo().version()
-
 from .utils import fix_filename, make_dirs
 
 import logging
 LOGGER = logging.getLogger("PYWPS")
-
-
-def get_cdo():
-    return Cdo(env=os.environ)
 
 
 def ncdump(dataset):
@@ -26,7 +18,7 @@ def ncdump(dataset):
 
     try:
         output = check_output(['ncdump', '-h', dataset])
-        if not isinstance(output, six.string_types):
+        if not isinstance(output, str):
             output = output.decode('utf-8')
         lines = output.split('\n')
         # replace the filename for safety

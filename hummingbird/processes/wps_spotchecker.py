@@ -1,6 +1,5 @@
 import os
 from compliance_checker.runner import ComplianceChecker, CheckSuite
-from compliance_checker import __version__ as cchecker_version
 
 from hummingbird.processing import ncdump, cmor_checker
 
@@ -9,6 +8,7 @@ from pywps import LiteralInput
 from pywps import ComplexInput, ComplexOutput
 from pywps import Format, FORMATS
 from pywps.app.Common import Metadata
+from pywps.app.exceptions import ProcessError
 
 import logging
 LOGGER = logging.getLogger("PYWPS")
@@ -53,7 +53,7 @@ class SpotChecker(Process):
             self._handler,
             identifier="spotchecker",
             title="Spot Checker",
-            version="0.3.0",
+            version="0.3.1",
             abstract="Checks a single uploaded or remote dataset against a variety of compliance standards."
                      " The dataset is either in the NetCDF format or a remote OpenDAP resource."
                      " Available compliance standards are the Climate and Forecast conventions (CF)"
@@ -75,7 +75,7 @@ class SpotChecker(Process):
         elif 'dataset' in request.inputs:
             dataset = request.inputs['dataset'][0].file
         else:
-            raise Exception("Missing Dataset Input.")
+            raise ProcessError("You need to provide a Dataset.")
 
         checker = request.inputs['test'][0].data
 
@@ -85,17 +85,13 @@ class SpotChecker(Process):
             response.update_status('ncdump done.', 10)
 
         if 'CF' in checker:
-            # patch check_suite
-            # from hummingbird.patch import patch_compliance_checker
-            # patch_compliance_checker()
-            # patch end
             check_suite = CheckSuite()
             check_suite.load_all_available_checkers()
 
             with open(os.path.join(self.workdir, "report.html"), 'w') as fp:
                 response.update_status("cfchecker ...", 20)
                 response.outputs['output'].file = fp.name
-                return_value, errors = ComplianceChecker.run_checker(
+                ComplianceChecker.run_checker(
                     dataset,
                     checker_names=['cf'],
                     verbose=True,

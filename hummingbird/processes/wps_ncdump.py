@@ -3,6 +3,7 @@ from pywps import Process
 from pywps import ComplexInput, ComplexOutput
 from pywps import FORMATS
 from pywps.app.Common import Metadata
+from pywps.app.exceptions import ProcessError
 
 from hummingbird.processing import ncdump
 
@@ -37,7 +38,7 @@ class NCDump(Process):
             self._handler,
             identifier="ncdump",
             title="NCDump",
-            version="4.6.1",
+            version="4.6.2",
             abstract="Run ncdump to retrieve NetCDF header metadata.",
             metadata=[
                 Metadata('Birdhouse', 'http://bird-house.github.io/'),
@@ -53,11 +54,11 @@ class NCDump(Process):
         elif 'dataset' in request.inputs:
             dataset = request.inputs['dataset'][0].file
         else:
-            raise Exception("Missing Dataset Input.")
+            raise ProcessError("You need to provide a Dataset.")
 
         with open(os.path.join(self.workdir, "nc_dump.txt"), 'w') as fp:
+            fp.writelines(ncdump(dataset))
             response.outputs['output'].output_format = FORMATS.TEXT
             response.outputs['output'].file = fp.name
-            fp.writelines(ncdump(dataset))
         response.update_status('done', 100)
         return response
