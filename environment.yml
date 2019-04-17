@@ -1,9 +1,9 @@
 name: hummingbird
 channels:
-- conda-forge
+#- conda-forge
 - defaults
 dependencies:
-- python=3.6
+- python>=3.6
 - pip
 # pywps
 - jinja2
@@ -12,8 +12,10 @@ dependencies:
 - xarray
 - netcdf4
 # compliance checker ioos
-- compliance-checker
+#- compliance-checker
 # tests
 - pytest
 - pip:
   - -e git+https://github.com/geopython/pywps@master#egg=pywps
+  - compliance-checker
+  
