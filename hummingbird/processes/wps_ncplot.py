@@ -5,12 +5,12 @@ Processes for plotting netcdf files with matplotlib/basemap
 from netCDF4 import Dataset
 import numpy as np
 
+from pywps.Process import WPSProcess
+
 from mpl_toolkits.basemap import Basemap
 import matplotlib as mpl
 mpl.use('Agg')
-import matplotlib.pyplot as plt
-
-from pywps.Process import WPSProcess
+import matplotlib.pyplot as plt  # noqa: E402
 
 
 class SimplePlot(WPSProcess):
