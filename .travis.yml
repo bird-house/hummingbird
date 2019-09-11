@@ -3,6 +3,9 @@ language: python
 python:
   - "3.6"
   - "3.7"
+branches:
+  only:
+    - master
 os:
   - linux
 #  - osx

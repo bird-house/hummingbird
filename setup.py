@@ -16,6 +16,7 @@ with open(os.path.join(here, 'hummingbird', '__version__.py'), 'r') as f:
     exec(f.read(), about)
 
 reqs = [line.strip() for line in open('requirements.txt')]
+dev_reqs = [line.strip() for line in open('requirements_dev.txt')]
 
 classifiers = [
     'Development Status :: 3 - Alpha',
@@ -25,10 +26,10 @@ classifiers = [
     'Operating System :: POSIX',
     'Programming Language :: Python',
     'Natural Language :: English',
-    "Programming Language :: Python :: 2",
-    'Programming Language :: Python :: 2.7',
     'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3.7',
     'Topic :: Scientific/Engineering :: Atmospheric Science',
     'License :: OSI Approved :: Apache Software License',
 ]
@@ -46,6 +47,9 @@ setup(name='hummingbird',
       packages=find_packages(),
       include_package_data=True,
       install_requires=reqs,
+      extras_require={
+          "dev": dev_reqs,              # pip install ".[dev]"
+      },
       entry_points={
           'console_scripts': [
               'hummingbird=hummingbird.cli:cli',

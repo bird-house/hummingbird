@@ -1,7 +1,7 @@
 import os
 import tarfile
 
-from hummingbird.processing import cmor_checker, cmor_tables
+from hummingbird.processing import cmor_checker
 
 from pywps import Process
 from pywps import LiteralInput
