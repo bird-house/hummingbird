@@ -3,9 +3,9 @@ language: python
 python:
   - "3.6"
   - "3.7"
-branches:
-  only:
-    - master
+# branches:
+#   only:
+#     - master
 os:
   - linux
 #  - osx
@@ -17,6 +17,7 @@ install:
   - export PATH="$HOME/miniconda/bin:$PATH"
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
+  - conda install setuptools
   - conda update -q conda
   # Useful for debugging any issues with conda
   - conda info -a
