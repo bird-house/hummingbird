@@ -32,8 +32,26 @@ A Web Processing Service for metadata compliance checks used in the climate scie
 
 Hummingbird is part of the `Birdhouse <http://bird-house.github.io>`_ project.
 
-* Free software: Apache Software License 2.0
-* Documentation: https://birdhouse-hummingbird.readthedocs.io.
+.. _Wikipedia: https://en.wikipedia.org/wiki/Hummingbird
+
+Documentation
+-------------
+
+Learn more about Hummingbird in its official documentation at
+https://hummingbird.readthedocs.io.
+
+Contributing
+------------
+
+You can find information about contributing in our `Developer Guide`_.
+
+Please use bumpversion_ to release a new version.
+
+License
+-------
+
+Free software: Apache Software License 2.0
+>>>>>>>
 
 Credits
 -------
@@ -42,4 +60,5 @@ This package was created with Cookiecutter_ and the `bird-house/cookiecutter-bir
 
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _`bird-house/cookiecutter-birdhouse`: https://github.com/bird-house/cookiecutter-birdhouse
-.. _Wikipedia: https://en.wikipedia.org/wiki/Hummingbird
+.. _`Developer Guide`: https://hummingbird.readthedocs.io/en/latest/dev_guide.html
+.. _bumpversion: https://hummingbird.readthedocs.io/en/latest/dev_guide.html#bump-a-new-version

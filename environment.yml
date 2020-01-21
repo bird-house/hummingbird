@@ -3,9 +3,10 @@ channels:
 #- defaults
 - conda-forge
 dependencies:
-- python>=3.6
+- python=3.6
 - pip
 # pywps
+- pywps=4.2
 - jinja2
 - click
 - psutil
@@ -15,5 +16,5 @@ dependencies:
 - compliance-checker
 # tests
 - pytest
-- pip:
-  - -e git+https://github.com/geopython/pywps@master#egg=pywps
+#- pip:
+#  - -e git+https://github.com/geopython/pywps@master#egg=pywps
