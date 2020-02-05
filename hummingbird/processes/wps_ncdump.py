@@ -56,7 +56,7 @@ class NCDump(Process):
         else:
             raise ProcessError("You need to provide a Dataset.")
 
-        with open(os.path.join(self.workdir, "nc_dump.txt"), 'w') as fp:
+        with open(os.path.join(self.workdir, "nc_dump.cdl"), 'w') as fp:
             fp.writelines(ncdump(dataset))
             response.outputs['output'].output_format = FORMATS.TEXT
             response.outputs['output'].file = fp.name
