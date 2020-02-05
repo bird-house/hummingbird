@@ -1,0 +1,11 @@
+# conda env update -f environment.yml
+name: hummingbird
+channels:
+  - conda-forge
+dependencies:
+  - pip
+  - ipython
+  - jupyterlab
+  - ipywidgets
+  - nodejs
+  - birdy
