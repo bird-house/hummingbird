@@ -23,8 +23,8 @@ class CChecker(Process):
                                   " Default: cf (climate forecast conventions)",
                          min_occurs=1,
                          max_occurs=1,
-                         default='cf',
-                         allowed_values=['cf', 'ioos']),
+                         default='cf:1.7',
+                         allowed_values=['cf:1.7', 'cf:1.6']),
             LiteralInput('criteria', 'Criteria',
                          data_type='string',
                          abstract="Define the criteria for the checks.  Either Strict, Normal or Lenient."
