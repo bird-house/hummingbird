@@ -17,6 +17,18 @@ LOGGER = logging.getLogger("PYWPS")
 class CChecker(Process):
     def __init__(self):
         inputs = [
+            ComplexInput('dataset', 'Dataset',
+                         abstract='You may provide a URL or upload a NetCDF/CDL file.',
+                         min_occurs=0,
+                         max_occurs=1,
+                         supported_formats=[FORMATS.NETCDF, FORMATS.TEXT]),
+            ComplexInput('dataset_opendap', 'Remote OpenDAP Data URL',
+                         abstract="Or provide a remote OpenDAP data URL,"
+                                  " for example:"
+                                  " http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis2.dailyavgs/surface/mslp.2016.nc",  # noqa
+                         min_occurs=0,
+                         max_occurs=1,
+                         supported_formats=[FORMATS.DODS]),
             LiteralInput('test', 'Test Suite',
                          data_type='string',
                          abstract="Select the test you want to run."
@@ -33,18 +45,6 @@ class CChecker(Process):
                          max_occurs=1,
                          default='normal',
                          allowed_values=['strict', 'normal', 'lenient']),
-            ComplexInput('dataset', 'Dataset',
-                         abstract='You may provide a URL or upload a NetCDF/CDL file.',
-                         min_occurs=0,
-                         max_occurs=1,
-                         supported_formats=[FORMATS.NETCDF, FORMATS.TEXT]),
-            ComplexInput('dataset_opendap', 'Remote OpenDAP Data URL',
-                         abstract="Or provide a remote OpenDAP data URL,"
-                                  " for example:"
-                                  " http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis2.dailyavgs/surface/mslp.2016.nc",  # noqa
-                         min_occurs=0,
-                         max_occurs=1,
-                         supported_formats=[FORMATS.DODS]),
             LiteralInput('format', 'Output Format',
                          data_type='string',
                          abstract="The format of the check reporst. Either text, json or html. Defaults to html.",
