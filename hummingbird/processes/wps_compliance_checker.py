@@ -34,10 +34,10 @@ class CChecker(Process):
                          default='normal',
                          allowed_values=['strict', 'normal', 'lenient']),
             ComplexInput('dataset', 'Dataset',
-                         abstract='You may provide a URL or upload a NetCDF file.',
+                         abstract='You may provide a URL or upload a NetCDF/CDL file.',
                          min_occurs=0,
                          max_occurs=1,
-                         supported_formats=[FORMATS.NETCDF]),
+                         supported_formats=[FORMATS.NETCDF, FORMATS.TEXT]),
             ComplexInput('dataset_opendap', 'Remote OpenDAP Data URL',
                          abstract="Or provide a remote OpenDAP data URL,"
                                   " for example:"
