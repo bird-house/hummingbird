@@ -16,5 +16,5 @@ dependencies:
 - compliance-checker
 # tests
 - pytest
-#- pip:
-#  - -e git+https://github.com/geopython/pywps@master#egg=pywps
+- pip:
+  - cfchecker
