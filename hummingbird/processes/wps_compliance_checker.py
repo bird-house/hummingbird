@@ -17,6 +17,18 @@ LOGGER = logging.getLogger("PYWPS")
 class CChecker(Process):
     def __init__(self):
         inputs = [
+            ComplexInput('dataset', 'Dataset',
+                         abstract='You may provide a URL or upload a NetCDF/CDL file.',
+                         min_occurs=0,
+                         max_occurs=1,
+                         supported_formats=[FORMATS.NETCDF, FORMATS.TEXT]),
+            ComplexInput('dataset_opendap', 'Remote OpenDAP Data URL',
+                         abstract="Or provide a remote OpenDAP data URL,"
+                                  " for example:"
+                                  " http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis2.dailyavgs/surface/mslp.2016.nc",  # noqa
+                         min_occurs=0,
+                         max_occurs=1,
+                         supported_formats=[FORMATS.DODS]),
             LiteralInput('test', 'Test Suite',
                          data_type='string',
                          abstract="Select the test you want to run."
@@ -24,7 +36,7 @@ class CChecker(Process):
                          min_occurs=1,
                          max_occurs=1,
                          default='cf',
-                         allowed_values=['cf', 'ioos']),
+                         allowed_values=['cf', 'cf:1.7', 'cf:1.6', 'uc_test']),
             LiteralInput('criteria', 'Criteria',
                          data_type='string',
                          abstract="Define the criteria for the checks.  Either Strict, Normal or Lenient."
@@ -33,18 +45,6 @@ class CChecker(Process):
                          max_occurs=1,
                          default='normal',
                          allowed_values=['strict', 'normal', 'lenient']),
-            ComplexInput('dataset', 'Dataset',
-                         abstract='You may provide a URL or upload a NetCDF file.',
-                         min_occurs=0,
-                         max_occurs=1,
-                         supported_formats=[FORMATS.NETCDF]),
-            ComplexInput('dataset_opendap', 'Remote OpenDAP Data URL',
-                         abstract="Or provide a remote OpenDAP data URL,"
-                                  " for example:"
-                                  " http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/ncep.reanalysis2.dailyavgs/surface/mslp.2016.nc",  # noqa
-                         min_occurs=0,
-                         max_occurs=1,
-                         supported_formats=[FORMATS.DODS]),
             LiteralInput('format', 'Output Format',
                          data_type='string',
                          abstract="The format of the check reporst. Either text, json or html. Defaults to html.",
@@ -67,21 +67,9 @@ class CChecker(Process):
             title="IOOS Compliance Checker",
             version=cchecker_version,
             abstract="Runs the IOOS Compliance Checker tool to"
-                     " check datasets against compliance standards."
-                     " Each compliance standard is executed"
-                     " by a Check Suite, which functions similar to a"
-                     " Python standard Unit Test."
-                     " A Check Suite runs one or more checks against a dataset,"
-                     " returning a list of Results which are then aggregated"
-                     " into a summary."
-                     " Development and maintenance for the compliance"
-                     " checker is done by the Integrated Ocean Observing System (IOOS).",
+                     " check datasets against compliance standards.",
             metadata=[
-                Metadata('Birdhouse', 'http://bird-house.github.io/'),
-                Metadata('User Guide', 'http://birdhouse-hummingbird.readthedocs.io/en/latest/'),
                 Metadata('CF Conventions', 'http://cfconventions.org/'),
-                Metadata('IOOS', 'https://ioos.noaa.gov/'),
-                Metadata('Compliance Checker on GitHub', 'https://github.com/ioos/compliance-checker'),
                 Metadata('IOOS Compliance Online Checker', 'http://data.ioos.us/compliance/index.html'),
             ],
             inputs=inputs,
@@ -106,6 +94,8 @@ class CChecker(Process):
 
         check_suite = CheckSuite()
         check_suite.load_all_available_checkers()
+        if not request.inputs['test'][0].data in check_suite.checkers:
+            raise ProcessError("Test {} is not available.".format(request.inputs['test'][0].data))
 
         output_file = os.path.join(
             self.workdir,

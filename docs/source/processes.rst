@@ -21,10 +21,3 @@ NC Dump
 .. autoprocess:: hummingbird.processes.wps_ncdump.NCDump
    :docstring:
    :skiplines: 1
-
-Spotchecker
------------
-
-.. autoprocess:: hummingbird.processes.wps_spotchecker.SpotChecker
-   :docstring:
-   :skiplines: 1

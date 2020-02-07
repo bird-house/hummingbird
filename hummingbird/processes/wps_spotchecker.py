@@ -17,13 +17,6 @@ LOGGER = logging.getLogger("PYWPS")
 class SpotChecker(Process):
     def __init__(self):
         inputs = [
-            LiteralInput('test', 'Select the test you want to run.',
-                         data_type='string',
-                         abstract="CF-1.6=Climate and Forecast Conventions (CF)",
-                         min_occurs=1,
-                         max_occurs=1,
-                         default='CF-1.6',
-                         allowed_values=['CF-1.6', ]),  # , 'CORDEX', 'CMIP5', 'CMIP6']),
             ComplexInput('dataset', 'Upload your NetCDF file here',
                          abstract='or enter a URL pointing to a NetCDF file.',
                          metadata=[Metadata('Info')],
@@ -37,6 +30,13 @@ class SpotChecker(Process):
                          min_occurs=0,
                          max_occurs=1,
                          supported_formats=[FORMATS.DODS]),
+            LiteralInput('test', 'Select the test you want to run.',
+                         data_type='string',
+                         abstract="CF-1.6=Climate and Forecast Conventions (CF)",
+                         min_occurs=1,
+                         max_occurs=1,
+                         default='CF-1.6',
+                         allowed_values=['CF-1.6', ]),  # , 'CORDEX', 'CMIP5', 'CMIP6']),
         ]
         outputs = [
             ComplexOutput('output', 'Test Report',
