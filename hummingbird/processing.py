@@ -9,6 +9,19 @@ import logging
 LOGGER = logging.getLogger("PYWPS")
 
 
+def ncgen(cdl_file, output_file=None):
+    '''
+    Returns NetCDF file from CDL file.
+    '''
+    output_file = output_file or 'output.nc'
+
+    try:
+        subprocess.run(['ncgen', '-k', 'nc4', '-o', output_file, cdl_file], check=True)
+    except Exception as err:
+        LOGGER.error("Could not generate ncdump: {}".format(err))
+        pass
+
+
 def ncdump(dataset):
     '''
     Returns the metadata of the dataset

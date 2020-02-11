@@ -5,7 +5,7 @@ from pywps import FORMATS
 from pywps.app.Common import Metadata
 from pywps.app.exceptions import ProcessError
 
-from hummingbird.processing import ncdump
+from hummingbird.processing import ncdump, ncgen
 
 import logging
 LOGGER = logging.getLogger("PYWPS")
@@ -32,13 +32,17 @@ class NCDump(Process):
                           abstract='NetCDF Metadata',
                           as_reference=True,
                           supported_formats=[FORMATS.TEXT]),
+            ComplexOutput('ncgen', 'NetCDF file generated from Metadata',
+                          abstract='NetCDF file generated from Metadata',
+                          as_reference=True,
+                          supported_formats=[FORMATS.NETCDF]),
         ]
 
         super(NCDump, self).__init__(
             self._handler,
             identifier="ncdump",
             title="NCDump",
-            version="4.6.2",
+            version="4.7.3",
             abstract="Run ncdump to retrieve NetCDF header metadata.",
             metadata=[
                 Metadata('Birdhouse', 'http://bird-house.github.io/'),
@@ -56,9 +60,14 @@ class NCDump(Process):
         else:
             raise ProcessError("You need to provide a Dataset.")
 
-        with open(os.path.join(self.workdir, "nc_dump.cdl"), 'w') as fp:
+        cdl_file = os.path.join(self.workdir, "nc_dump.cdl")
+        with open(cdl_file, 'w') as fp:
             fp.writelines(ncdump(dataset))
             response.outputs['output'].output_format = FORMATS.TEXT
             response.outputs['output'].file = fp.name
+        output_file = os.path.join(self.workdir, "nc_dump.nc")
+        ncgen(cdl_file, output_file)
+        response.outputs['ncgen'].output_format = FORMATS.NETCDF
+        response.outputs['ncgen'].file = output_file
         response.update_status('done', 100)
         return response
