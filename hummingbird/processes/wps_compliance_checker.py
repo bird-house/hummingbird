@@ -36,7 +36,7 @@ class CChecker(Process):
                          min_occurs=1,
                          max_occurs=1,
                          default='cf',
-                         allowed_values=['cf', 'cf:1.7', 'cf:1.6', 'cmip6_cv']),
+                         allowed_values=['cf:1.7', 'cf:1.6', 'cmip6_cv:1.0']),
             LiteralInput('criteria', 'Criteria',
                          data_type='string',
                          abstract="Define the criteria for the checks.  Either Strict, Normal or Lenient."
