@@ -9,6 +9,7 @@ from pywps import ComplexInput, ComplexOutput
 from pywps import Format, FORMATS
 from pywps.app.Common import Metadata
 from pywps.app.exceptions import ProcessError
+from pywps.validator.mode import MODE
 
 import logging
 LOGGER = logging.getLogger("PYWPS")
@@ -31,6 +32,7 @@ class CChecker(Process):
                          supported_formats=[FORMATS.DODS]),
             LiteralInput('test', 'Test Suite',
                          data_type='string',
+                         mode=MODE.NONE,
                          abstract="Select the test you want to run."
                                   " Default: cf (climate forecast conventions)",
                          min_occurs=1,
