@@ -1,6 +1,17 @@
 Changes
 *******
 
+0.9.0 (2020-04-01)
+==================
+
+Oxford Release.
+
+Changes:
+
+* Added ceda cfchecker (#37).
+* Updated cchecker (#36, #39).
+* Updated cookiecutter template with cruft (#35).
+
 0.8.0 (2019-09-27)
 ==================
 
