@@ -56,7 +56,7 @@ class CFChecker(Process):
             identifier="cfchecker",
             title="CF Checker by CEDA",
             version="4.0.0",
-            abstract="The NetCDF Climate Forcast Conventions compliance checker by CEDA."
+            abstract="The NetCDF Climate Forecast Conventions compliance checker by CEDA."
                      " This process allows you to run the compliance checker"
                      " to check that the contents of a NetCDF file comply"
                      " with the Climate and Forecasts (CF) Metadata Convention.",
