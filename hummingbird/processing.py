@@ -69,9 +69,9 @@ def cmor_dump_output(dataset, status, output, output_filename):
     converted_lines = []
     converted_lines.append('## Checking NetCDF file {}\n\n'.format(dataset_id))
     if status is True:
-        converted_lines.append("Dateset *passed* CMIP6 cmor checks:\n")
+        converted_lines.append("Dataset *passed* CMIP6 cmor checks:\n")
     else:
-        converted_lines.append("Dateset *failed* CMIP6 cmor checks:\n")
+        converted_lines.append("Dataset *failed* CMIP6 cmor checks:\n")
     # decode to ascii
     for line in output.split('\n'):
         line = line.translate(None, '!')
