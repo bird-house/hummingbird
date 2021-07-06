@@ -2,4 +2,5 @@ pywps>=4.2
 jinja2
 click
 psutil
+netCDF4
 compliance-checker
