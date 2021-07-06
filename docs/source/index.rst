@@ -6,7 +6,6 @@
 
    installation
    configuration
-   notebooks/index
    dev_guide
    processes
    authors
