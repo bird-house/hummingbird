@@ -19,6 +19,7 @@ custom.cfg
 *.egg-info
 *.sqlite
 *.bak
+*.eggs/
 __pycache__
 
 # Unit test / Coverage reports

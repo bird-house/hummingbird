@@ -6,7 +6,7 @@ dependencies:
 - python=3.6
 - pip
 # pywps
-- pywps=4.2
+- pywps=4.4
 - jinja2
 - click
 - psutil
@@ -14,7 +14,7 @@ dependencies:
 - netcdf4
 # compliance checker ioos
 - compliance-checker
+# cfchecker ceda
+- cfchecker
 # tests
 - pytest
-- pip:
-  - cfchecker
