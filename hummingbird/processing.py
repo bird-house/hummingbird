@@ -3,7 +3,7 @@ import glob
 import subprocess
 from subprocess import check_output, CalledProcessError
 
-from .utils import fix_filename, make_dirs
+# from .utils import fix_filename, make_dirs
 
 import logging
 LOGGER = logging.getLogger("PYWPS")
