@@ -1,5 +1,5 @@
 Hummingbird
-===============================
+===========
 
 .. image:: https://img.shields.io/badge/docs-latest-brightgreen.svg
    :target: https://birdhouse-hummingbird.readthedocs.io/en/latest/?badge=latest
@@ -40,6 +40,9 @@ Documentation
 Learn more about Hummingbird in its official documentation at
 https://hummingbird.readthedocs.io.
 
+Submit bug reports, questions and feature requests at
+https://github.com/bird-house/hummingbird/issues
+
 Contributing
 ------------
 
@@ -51,7 +54,6 @@ License
 -------
 
 Free software: Apache Software License 2.0
->>>>>>>
 
 Credits
 -------
