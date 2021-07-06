@@ -1,17 +1,13 @@
 Hummingbird
-===============================
+===========
 
 .. image:: https://img.shields.io/badge/docs-latest-brightgreen.svg
    :target: https://birdhouse-hummingbird.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 
-.. image:: https://travis-ci.org/bird-house/hummingbird.svg?branch=master
-   :target: https://travis-ci.org/bird-house/hummingbird
-   :alt: Travis Build
-
-.. image:: https://api.codacy.com/project/badge/Grade/d58645e272dc4d448058c6cddca99ce1
-   :target: https://www.codacy.com/project/cehbrecht/hummingbird/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=bird-house/hummingbird&amp;utm_campaign=Badge_Grade_Dashboard
-   :alt: Codacy Check
+.. image:: https://github.com/bird-house/hummingbird/actions/workflows/main.yml/badge.svg
+   :target: https://github.com/bird-house/hummingbird/actions
+   :alt: Build Status
 
 .. image:: https://img.shields.io/github/license/bird-house/hummingbird.svg
     :target: https://github.com/bird-house/hummingbird/blob/master/LICENSE.txt
@@ -40,6 +36,9 @@ Documentation
 Learn more about Hummingbird in its official documentation at
 https://hummingbird.readthedocs.io.
 
+Submit bug reports, questions and feature requests at
+https://github.com/bird-house/hummingbird/issues
+
 Contributing
 ------------
 
@@ -51,7 +50,6 @@ License
 -------
 
 Free software: Apache Software License 2.0
->>>>>>>
 
 Credits
 -------

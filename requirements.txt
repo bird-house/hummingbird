@@ -1,5 +1,8 @@
-pywps>=4.2.0<4.3
+pywps>=4.4
 jinja2
 click
 psutil
 compliance-checker
+netCDF4
+numpy
+cf-units
