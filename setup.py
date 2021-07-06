@@ -55,8 +55,8 @@ setup(name='hummingbird',
       include_package_data=True,
       install_requires=requirements,
       setup_requires=setup_requirements,
-      test_suite = 'tests',
-      tests_require = test_requirements,
+      test_suite='tests',
+      tests_require=test_requirements,
       extras_require={
           "dev": dev_reqs,  # pip install ".[dev]"
       },
