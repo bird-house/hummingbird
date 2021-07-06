@@ -6,3 +6,4 @@ compliance-checker
 netCDF4
 numpy
 cf-units
+cfchecker
