@@ -6,4 +6,4 @@ compliance-checker
 netCDF4
 numpy
 cf-units
-cfchecker
+cfchecker>=4.1.0
