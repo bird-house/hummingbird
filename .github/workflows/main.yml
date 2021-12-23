@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9]
+        python-version: [3.7, 3.8, 3.9]
     steps:
     - name: Checkout repository and submodules
       uses: actions/checkout@v2
@@ -31,15 +31,15 @@ jobs:
       run: make test
     - name: Lint with flake8 ⚙️
       run: make lint
-      if: matrix.python-version == 3.6
+      if: matrix.python-version == 3.7
     # - name: Check formatting with black ⚙️
-    #   run: black --check --target-version py36 birdy tests
-    #   if: matrix.python-version == 3.6
+    #   run: black --check --target-version py37 birdy tests
+    #   if: matrix.python-version == 3.7
     - name: Build docs 🏗️
       run: make docs
-      if: matrix.python-version == 3.6
+      if: matrix.python-version == 3.7
     # - name: Run smoke tests ⚙️
     #   run: |
     #     export PYWPS_CFG=$PWD/etc/smoke-pywps.cfg
     #     make smoke
-    #   if: matrix.python-version == 3.6
+    #   if: matrix.python-version == 3.7
