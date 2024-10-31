@@ -7,3 +7,4 @@ netCDF4
 numpy
 cf-units
 cfchecker>=4.1.0
+werkzeug>=3.0.6 # not directly required, pinned by Snyk to avoid a vulnerability
